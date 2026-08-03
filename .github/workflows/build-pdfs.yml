@@ -24,7 +24,7 @@ jobs:
 
       - name: Compile LaTeX documents
         id: latex
-        # Permite llegar al paso de verificación aunque latex-action falle.
+        # Permite llegar a stage/publish/verify aunque latex-action falle.
         continue-on-error: true
         uses: xu-cheng/latex-action@v4
         with:
@@ -41,7 +41,51 @@ jobs:
           # Compilar el resto aunque falle uno; la verificación final falla el job.
           continue_on_error: true
 
-      - name: Verify expected PDFs were generated
+      - name: Stage available PDFs preserving directory structure
+        id: stage
+        run: |
+          set -euo pipefail
+
+          EXPECTED_PDFS=(
+            "Apunte/Latex/main.pdf"
+            "Auxiliar/Latex-Enunciado/main.pdf"
+            "Auxiliar/Latex-Pauta/main.pdf"
+            "RP-Modelamiento/Latex/main.pdf"
+            "RP-Modelos-Avanzados/Latex/main.pdf"
+          )
+
+          rm -rf pdf-staging
+          mkdir -p pdf-staging
+          count=0
+
+          for pdf in "${EXPECTED_PDFS[@]}"; do
+            if [[ -f "${pdf}" ]]; then
+              mkdir -p "pdf-staging/$(dirname "${pdf}")"
+              cp "${pdf}" "pdf-staging/${pdf}"
+              echo "Copiado -> pdf-staging/${pdf}"
+              count=$((count + 1))
+            else
+              echo "Aún no disponible: ${pdf}"
+            fi
+          done
+
+          echo "Contenido de pdf-staging:"
+          find pdf-staging -type f -name '*.pdf' | sort || true
+          echo "pdf_count=${count}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish available PDFs to pdf-output branch
+        if: steps.stage.outputs.pdf_count != '0'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: ./pdf-staging
+          publish_branch: pdf-output
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: "Publish compiled LaTeX PDFs from ${{ github.sha }}"
+
+      - name: Verify all expected PDFs were generated
         run: |
           set -euo pipefail
 
@@ -71,38 +115,3 @@ jobs:
           fi
 
           echo "Todos los PDFs esperados están presentes."
-
-      - name: Stage PDFs preserving directory structure
-        run: |
-          set -euo pipefail
-
-          EXPECTED_PDFS=(
-            "Apunte/Latex/main.pdf"
-            "Auxiliar/Latex-Enunciado/main.pdf"
-            "Auxiliar/Latex-Pauta/main.pdf"
-            "RP-Modelamiento/Latex/main.pdf"
-            "RP-Modelos-Avanzados/Latex/main.pdf"
-          )
-
-          rm -rf pdf-staging
-          mkdir -p pdf-staging
-
-          for pdf in "${EXPECTED_PDFS[@]}"; do
-            mkdir -p "pdf-staging/$(dirname "${pdf}")"
-            cp "${pdf}" "pdf-staging/${pdf}"
-            echo "Copiado -> pdf-staging/${pdf}"
-          done
-
-          echo "Contenido de pdf-staging:"
-          find pdf-staging -type f -name '*.pdf' | sort
-
-      - name: Publish PDFs to pdf-output branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ github.token }}
-          publish_dir: ./pdf-staging
-          publish_branch: pdf-output
-          force_orphan: true
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          commit_message: "Publish compiled LaTeX PDFs from ${{ github.sha }}"
