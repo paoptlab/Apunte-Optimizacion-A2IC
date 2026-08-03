@@ -1,5 +1,4 @@
 % Fuente: Pauta del Auxiliar 10, «KKT — Pregunta 2».
-{\color{MidnightBlue}
 \begin{enumerate}
   \item[(a)] La unicidad se tiene ya que la función objetivo es estrictamente convexa, para esto basta ver que el hessiano es definido positivo. Notamos que el hessiano es una matriz diagonal donde el término $i$ de la diagonal corresponde a $\alpha_i^2 \beta_i e^{\alpha_i x_i}$, el cual es positivo ya que todas sus componentes son positivas, de esta forma se tiene $\forall z \neq 0, z^T H z = \sum_{i=1}^{n} z_i^2 \alpha_i^2 \beta_i e^{\alpha_i x_i} > 0$ y de esta manera se concluye que el hessiano es definido positivo\footnote{Se puede conlcuir tambien a partir de que sus valores propios son positivos.}.
   \item[(b)] \begin{itemize}
@@ -34,4 +33,3 @@ Donde asumimos que $a_i > 0$ debido a que es el impacto por disminuir $x_i$ unid
 desde donde se puede obtener $\mu$. Cabe destacar que existe una única solución para $\mu$ dada la unicidad del óptimo $x$.
   \item[(e)] En este caso se debía despejar $\mu$ de la ecuación anterior en función de los parámetros, posteriormente se concluía que $x_i = u$ si $\frac{1}{u} \ln(\mu \gamma) > \alpha_i$, $x_i = \frac{1}{\alpha_i} \ln(\mu \gamma)$ si $\frac{1}{u} \ln(\mu \gamma) \leq \alpha_i$. Notar que el caso $x_i = 0$ se descarta ya que si alguna componente es 0 todas las demás también lo son y no se cumple con la restricción de la calidad del agua.
 \end{enumerate}
-}

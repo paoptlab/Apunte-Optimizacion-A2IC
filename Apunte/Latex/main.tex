@@ -16,13 +16,13 @@
 ]{article}
 
 % INFORMACIÓN DEL DOCUMENTO
-\def\documenttitle {Título del informe}
+\def\documenttitle {Optimización}
 \def\documentsubtitle {}
-\def\documentsubject {Tema a tratar}
+\def\documentsubject {Apuntes del curso}
 
-\def\documentauthor {Nombre del autor}
-\def\coursename {Curso}
-\def\coursecode {CO-1234}
+\def\documentauthor {}
+\def\coursename {Optimización}
+\def\coursecode {EL4114}
 
 \def\universityname {Universidad de Chile}
 \def\universityfaculty {Facultad de Ciencias Físicas y Matemáticas}
@@ -31,34 +31,8 @@
 \def\universitydepartmentimagecfg {height=1.57cm}
 \def\universitylocation {Santiago de Chile}
 
-% INTEGRANTES, PROFESORES Y FECHAS
-\def\authortable {
-	\begin{tabular}{ll}
-		Integrantes:
-		& \begin{tabular}[t]{l}
-			Integrante 1 \\
-			Integrante 2
-		\end{tabular} \\
-		Profesor:
-		& \begin{tabular}[t]{l}
-			Profesor 1
-		\end{tabular} \\
-		Auxiliar:
-		& \begin{tabular}[t]{l}
-			Auxiliar 1
-		\end{tabular} \\
-		Ayudantes:
-		& \begin{tabular}[t]{l}
-			Ayudante 1 \\
-			Ayudante 2
-		\end{tabular} \\
-		\multicolumn{2}{l}{Ayudante de laboratorio: Ayudante 1} \\
-		& \\
-		\multicolumn{2}{l}{Fecha de realización: \today} \\
-		\multicolumn{2}{l}{Fecha de entrega: \today} \\
-		\multicolumn{2}{l}{\universitylocation}
-	\end{tabular}
-}
+% La portada del apunte no incluye autoría ni datos de contacto.
+\def\authortable {}
 
 \usepackage{graphicx}
 
@@ -73,6 +47,43 @@
 % IMPORTACIÓN DEL TEMPLATE
 \input{template}
 
+% Portada inspirada en el formato de apuntes del DIE: conserva el encabezado
+% institucional del template y presenta solamente el código, curso y bajada.
+\newcommand{\apuntePortrait}{%
+	\clearpage
+	\renewcommand{\thepage}{\nameportraitpage}%
+	\setpagemargincm{\pagemarginleft}{\firstpagemargintop}{\pagemarginright}{\pagemarginbottom}%
+	\fancypagestyle{apuntePortraitStyle}{%
+		\fancyhf{}%
+		\fancyhead[L]{%
+			\corewriteheaderitem{\universityname}%
+			\corewriteheaderitem{\universityfaculty}%
+			\corewriteheaderitem{\universitydepartment}%
+			\vspace{-0.95\baselineskip}%
+		}%
+		\fancyhead[R]{%
+			\hspace{-0.255cm}%
+			\coreinsertkeyimage{\universitydepartmentimagecfg}{\universitydepartmentimage}%
+			\vspace{-0.175cm}%
+		}%
+	}%
+	\thispagestyle{apuntePortraitStyle}%
+	\begin{spacing}{1.025}%
+		\vspace*{0.45cm}%
+		\noindent
+		\rule{0.8pt}{0.88\textheight}%
+		\hspace{0.07\linewidth}%
+		\parbox[b][0.88\textheight][t]{0.78\linewidth}{%
+			\vspace{0pt}%
+			{\fontsize{28pt}{32pt}\selectfont\bfseries \coursecode\par}%
+			\vspace{0.35cm}%
+			{\fontsize{28pt}{34pt}\selectfont\bfseries \coursename\par}%
+			\vspace{1.15cm}%
+			{\Large \documentsubject\par}%
+		}%
+	\end{spacing}%
+}
+
 % RECURSOS PARA LOS EJERCICIOS GRÁFICOS
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc}
@@ -81,7 +92,7 @@
 \begin{document}
 
 % PORTADA
-\templatePortrait
+\apuntePortrait
 
 % CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
 \templatePagecfg
