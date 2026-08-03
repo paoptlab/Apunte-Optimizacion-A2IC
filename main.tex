@@ -1,9 +1,16 @@
 % Documento principal de Overleaf.
-% Deje activa exactamente una de las cinco líneas \import siguientes.
+% Deje activa exactamente una de las cinco líneas \documentoOverleaf.
 \RequirePackage{import}
 
-\import{Apunte/Latex/}{main.tex}
-% \import{Auxiliar/Latex-Enunciado/}{main.tex}
-% \import{Auxiliar/Latex-Pauta/}{main.tex}
-% \import{RP-Modelamiento/Latex/}{main.tex}
-% \import{RP-Modelos-Avanzados/Latex/}{main.tex}
+% El segundo argumento restaura las rutas de imágenes que cada documento
+% configura suponiendo que la compilación comienza dentro de su subcarpeta.
+\newcommand{\documentoOverleaf}[2]{%
+  \AtBeginDocument{\graphicspath{{#2img/}{#2}}}%
+  \import{#1}{main.tex}%
+}
+
+\documentoOverleaf{Apunte/Latex/}{Apunte/Latex/}
+% \documentoOverleaf{Auxiliar/Latex-Enunciado/}{Apunte/Latex/}
+% \documentoOverleaf{Auxiliar/Latex-Pauta/}{Apunte/Latex/}
+% \documentoOverleaf{RP-Modelamiento/Latex/}{RP-Modelamiento/Latex/}
+% \documentoOverleaf{RP-Modelos-Avanzados/Latex/}{RP-Modelos-Avanzados/Latex/}

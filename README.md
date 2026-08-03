@@ -20,7 +20,7 @@ La sincronización entre Overleaf y GitHub no es continua: las operaciones **Pul
 | Presentación de modelamiento MILP | `Formato-Presentaciones/modelamiento-milp/index.html` | [RP-Modelamiento/Modelamiento-MILP.pdf](./RP-Modelamiento/Modelamiento-MILP.pdf) |
 | Presentación de optimización bajo incertidumbre | `Formato-Presentaciones/optimizacion-bajo-incertidumbre/index.html` | [RP-Modelos-Avanzados/Optimizacion-bajo-incertidumbre.pdf](./RP-Modelos-Avanzados/Optimizacion-bajo-incertidumbre.pdf) |
 
-[`main.tex`](./main.tex) es el único documento principal de Overleaf. Usa `\import` para conservar las rutas relativas internas aunque las cinco fuentes reales estén en subcarpetas.
+[`main.tex`](./main.tex) es el único documento principal de Overleaf. Su comando `\documentoOverleaf` usa `\import` y ajusta las rutas de imágenes para conservar las referencias internas aunque las cinco fuentes reales estén en subcarpetas.
 
 ## Trabajar con Overleaf
 
@@ -43,7 +43,7 @@ En **Settings → Compiler** configura:
 - **TeX Live:** 2025;
 - **Main document:** `main.tex`, situado en la raíz.
 
-Overleaf sólo mantiene un documento activo por proyecto. Para cambiarlo, edita `main.tex`: comenta la línea `\import` actual y descomenta exactamente una de las otras cuatro. No cambies **Main document** ni elimines `\RequirePackage{import}`. Los archivos HTML Reveal.js y los notebooks no se ejecutan en Overleaf.
+Overleaf sólo mantiene un documento activo por proyecto. Para cambiarlo, edita `main.tex`: comenta la línea `\documentoOverleaf` actual y descomenta exactamente una de las otras cuatro. No cambies **Main document**, los dos argumentos de las opciones ni elimines `\RequirePackage{import}`. Los archivos HTML Reveal.js y los notebooks no se ejecutan en Overleaf.
 
 ### 3. Sincronizar sin conflictos
 
