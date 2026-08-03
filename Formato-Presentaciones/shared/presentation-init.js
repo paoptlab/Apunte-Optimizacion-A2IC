@@ -17,7 +17,9 @@
 
   async function initialize() {
     if (!window.Reveal) {
-      throw new Error('No se pudo cargar Reveal.js. Ejecuta npm install en Formato-Presentaciones.');
+      throw new Error(
+        'No se pudo cargar Reveal.js. Ejecuta npm ci --prefix Formato-Presentaciones desde la raíz.'
+      );
     }
 
     renderTex();

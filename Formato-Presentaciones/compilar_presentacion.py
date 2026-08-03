@@ -101,8 +101,8 @@ def validate_target(deck: Path) -> tuple[Path, int]:
     reveal = ROOT / "node_modules" / "reveal.js" / "dist" / "reveal.js"
     if not reveal.is_file():
         raise SystemExit(
-            "Falta Reveal.js. Active actividad1-a2ic y ejecute "
-            "`npm install` dentro de Formato-Presentaciones."
+            "Falta Reveal.js. Active apunte-optimizacion-a2ic y ejecute "
+            "`npm ci --prefix Formato-Presentaciones` desde la raíz del repositorio."
         )
     index = deck / "index.html"
     if not index.is_file():

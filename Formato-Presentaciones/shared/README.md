@@ -8,4 +8,6 @@ Recursos reutilizados por ambos decks Reveal.js:
 - `vendor/ibm-plex/`: tipografías locales;
 - `vendor/katex/`: fórmulas y fuentes matemáticas locales.
 
-Reveal.js se instala en `Formato-Presentaciones/node_modules` mediante `npm install`. Los HTML enlazan todos estos recursos con rutas relativas, por lo que deben previsualizarse con la raíz completa del repositorio abierta en VS Code.
+Reveal.js se instala en `Formato-Presentaciones/node_modules` mediante `npm ci --prefix Formato-Presentaciones` desde la raíz. Los HTML enlazan todos estos recursos con rutas relativas, por lo que deben previsualizarse con la raíz completa del repositorio abierta en VS Code.
+
+Usa el [`environment.yml` raíz](../../environment.yml) y `npm ci --prefix Formato-Presentaciones` para instalar las dependencias reproducibles. Estos recursos HTML no se ejecutan en Overleaf.

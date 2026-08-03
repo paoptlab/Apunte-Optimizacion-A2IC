@@ -1,5 +1,29 @@
 __pycache__/
 *.py[cod]
 node_modules/
+.ipynb_checkpoints/
 .DS_Store
 
+# Credenciales y licencias locales
+**/gurobi.lic
+.env
+.env.*
+
+# Artefactos temporales de LaTeX; los PDF publicados sí se versionan.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*/Latex/main.pdf
+*/Latex-*/main.pdf
+/main.pdf

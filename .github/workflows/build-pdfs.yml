@@ -30,11 +30,13 @@ jobs:
 
       - name: Compile LaTeX documents
         id: latex
-        continue-on-error: true
         uses: xu-cheng/latex-action@v4
         with:
-          # Fuentes en Latex/; los PDFs se copian después a las carpetas finales.
+          # Misma versión que debe seleccionarse en Overleaf.
+          texlive_version: 2025
+          # Valida el selector de Overleaf y compila todas las fuentes publicadas.
           root_file: |
+            main.tex
             Apunte/Latex/main.tex
             Auxiliar/Latex-Enunciado/main.tex
             Auxiliar/Latex-Pauta/main.tex
@@ -82,6 +84,7 @@ jobs:
           fi
 
       - name: Commit and push PDFs to main
+        if: github.ref == 'refs/heads/main'
         run: |
           set -euo pipefail
 
