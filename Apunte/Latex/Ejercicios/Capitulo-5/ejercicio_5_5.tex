@@ -1,0 +1,26 @@
+% Fuente: Control 2, Pregunta 1.
+El operador de una planta industrial quiere instalar dos tipos de alimentadores
+eléctricos para maximizar el número de cargas críticas en hora punta:
+
+\begin{itemize}[nosep]
+  \item $x_1$: Alimentadores de distribución tipo A --- energizan $5$ cargas cada uno, demandan $6$\,A de la protección termomagnética principal y ocupan $1$ módulo en el tablero de distribución.
+  \item $x_2$: Alimentadores de distribución Tipo B --- energizan $4$ cargas cada uno, demandan $4$\,A de la protección termomagnética principal y ocupan $2$ módulos en el tablero de distribución.
+\end{itemize}
+
+La protección termomagnética principal soporta un máximo de $24$\,A y el tablero de distribución solo dispone de $6$ módulos de espacio libre.
+ 
+\begin{enumerate}[label=(\alph*)]
+  \item Formule el problema de programación entera. Dibuje la envoltura convexa de las soluciones factibles y encuentre el valor
+  óptimo del problema lineal relajado.
+  
+  \item Proponga un corte o cortes sobre el conjunto factible de modo que el óptimo del problema relajado coincida con el óptimo entero y obtenga el óptimo del problema de forma gráfica.
+  
+  \textit{No considere (b) para los siguientes incisos}
+        
+  \item Aplique el primer plano de corte de Gomory sobre el problema original. Muestre y explique cómo afecta al conjunto factible.
+  
+  \item Resuelva mediante Branch \& Bound (B\&B) usando búsqueda en amplitud. Dibuje el
+   árbol de decisiones, indicando en cada nodo la solución de la relajación lineal,
+   identifique cada hoja y justifique por qué no se ramifica.
+  \item ¿Qué tolerancia de \emph{gap} de optimalidad es necesaria  para que el algoritmo B\&B termine analizando solo $3$ problemas (incluyendo la relajación original), usando búsqueda en amplitud? Analice su respuesta a partir del \textit{trade off} entre un mayor \textit{gap} con una respuesta más precisa.
+\end{enumerate}

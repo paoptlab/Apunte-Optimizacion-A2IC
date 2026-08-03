@@ -1,0 +1,17 @@
+{
+  "name": "a2ic-presentaciones",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Presentaciones Reveal.js para las actividades A2IC de EL4114.",
+  "scripts": {
+    "pdf": "python compilar_presentacion.py --tema todos",
+    "pdf:incertidumbre": "python compilar_presentacion.py --tema incertidumbre",
+    "pdf:modelamiento": "python compilar_presentacion.py --tema modelamiento"
+  },
+  "dependencies": {
+    "reveal.js": "6.0.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

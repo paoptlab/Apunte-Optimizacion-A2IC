@@ -1,0 +1,765 @@
+% Fuente: Auxiliar 4, Pregunta 2.
+{\color{MidnightBlue}
+\begin{enumerate}[label=\alph*)]
+
+\item
+Definimos las variables de decisión como:
+\[
+x_g := \text{producción de la turbina a gas [MW]},
+\]
+\[
+x_v := \text{producción del bloque de vapor [MW]}.
+\]
+
+La energía producida por ambos componentes se remunera a un precio de
+\(5\;[\$/\mathrm{MWh}]\). Además, los costos de operación son
+\(4\;[\$/\mathrm{MWh}]\) para la turbina a gas y \(2\;[\$/\mathrm{MWh}]\)
+para el bloque de vapor. Por lo tanto, el beneficio operativo es:
+\[
+5(x_g+x_v)-4x_g-2x_v.
+\]
+
+Simplificando:
+\[
+5x_g+5x_v-4x_g-2x_v
+=
+x_g+3x_v.
+\]
+
+Luego, el problema de optimización lineal queda dado por:
+\[
+\begin{aligned}
+\max_{x_g,x_v} \quad & x_g+3x_v \\
+\text{s.a.} \quad
+& x_g \geq 4, \\
+& x_g \leq 16, \\
+& x_g+x_v \leq 20, \\
+& x_v \leq 0.5x_g, \\
+& x_g,x_v \geq 0.
+\end{aligned}
+\]
+
+La primera restricción representa el mínimo de generación requerido para la
+turbina a gas. La segunda corresponde al límite máximo de producción de la
+turbina a gas. La tercera indica que la producción total de la central no puede
+superar los \(20\;[\mathrm{MW}]\). Finalmente, la cuarta restricción representa
+el acoplamiento físico del ciclo combinado, donde la producción del bloque de
+vapor no puede exceder la mitad de la producción de la turbina a gas.
+
+Para escribir el problema en forma estándar, primero transformamos la función
+objetivo de maximización en una de minimización:
+\[
+\max \; x_g+3x_v
+\quad \Longleftrightarrow \quad
+\min \; -x_g-3x_v.
+\]
+
+Luego, incorporamos variables de holgura. Para la restricción
+\(x_g \geq 4\), se introduce una variable \(s_1 \geq 0\):
+\[
+x_g - s_1 = 4.
+\]
+
+Para las restricciones de tipo menor o igual, se agregan variables de holgura
+\(s_2,s_3,s_4 \geq 0\):
+\[
+x_g+s_2=16,
+\]
+\[
+x_g+x_v+s_3=20,
+\]
+\[
+-0.5x_g+x_v+s_4=0.
+\]
+
+Por lo tanto, la forma estándar es:
+\[
+\begin{aligned}
+\min_{x_g,x_v,s_1,s_2,s_3,s_4} \quad
+& -x_g-3x_v \\
+\text{s.a.} \quad
+& x_g-s_1 = 4, \\
+& x_g+s_2 = 16, \\
+& x_g+x_v+s_3 = 20, \\
+& -0.5x_g+x_v+s_4 = 0, \\
+& x_g,x_v,s_1,s_2,s_3,s_4 \geq 0.
+\end{aligned}
+\]
+
+Equivalentemente, definiendo
+\[
+x =
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2\\
+s_3\\
+s_4
+\end{pmatrix},
+\]
+el problema puede escribirse como:
+\[
+\begin{aligned}
+\min_x \quad & c^\top x \\
+\text{s.a.} \quad & Ax=b, \\
+& x \geq 0,
+\end{aligned}
+\]
+donde
+\[
+c =
+\begin{pmatrix}
+-1\\
+-3\\
+0\\
+0\\
+0\\
+0
+\end{pmatrix},
+\]
+\[
+A =
+\begin{pmatrix}
+1 & 0 & -1 & 0 & 0 & 0 \\
+1 & 0 & 0 & 1 & 0 & 0 \\
+1 & 1 & 0 & 0 & 1 & 0 \\
+-0.5 & 1 & 0 & 0 & 0 & 1
+\end{pmatrix},
+\qquad
+b =
+\begin{pmatrix}
+4\\
+16\\
+20\\
+0
+\end{pmatrix}.
+\]
+
+\item
+A partir del modelo de la parte anterior, se tiene el siguiente problema en las
+variables originales:
+\[
+\begin{aligned}
+\max_{x_g,x_v} \quad & x_g+3x_v \\
+\text{s.a.} \quad
+& x_g \geq 4, \\
+& x_g \leq 16, \\
+& x_g+x_v \leq 20, \\
+& x_v \leq 0.5x_g, \\
+& x_g,x_v \geq 0.
+\end{aligned}
+\]
+
+La región factible está delimitada por las rectas
+\[
+x_g=4, 
+\qquad
+x_g=16,
+\qquad
+x_g+x_v=20,
+\qquad
+x_v=0.5x_g,
+\qquad
+x_v=0.
+\]
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{ejercicios/Capitulo-3/ejercicio_3_5_grap1.png}
+    \caption{Método Gráfico P2.b}
+    \label{ex:3:5:metodo-grafico}
+\end{figure}
+
+
+Los vértices de la región factible son:
+\[
+A=(4,0),
+\]
+\[
+B=(16,0),
+\]
+\[
+C=(16,4),
+\]
+\[
+D=\left(\frac{40}{3},\frac{20}{3}\right),
+\]
+\[
+E=(4,2).
+\]
+
+El punto \(D\) se obtiene de la intersección entre las restricciones activas
+\[
+x_g+x_v=20
+\]
+y
+\[
+x_v=0.5x_g.
+\]
+Resolviendo:
+\[
+x_g+0.5x_g=20,
+\]
+\[
+1.5x_g=20,
+\]
+\[
+x_g=\frac{40}{3}.
+\]
+Luego,
+\[
+x_v=0.5x_g
+=
+0.5\left(\frac{40}{3}\right)
+=
+\frac{20}{3}.
+\]
+
+Evaluando la función objetivo en cada vértice:
+\[
+z=x_g+3x_v,
+\]
+se obtiene:
+\[
+\begin{array}{c|c}
+\text{Vértice} & z=x_g+3x_v \\ \hline
+A=(4,0) & 4 \\
+B=(16,0) & 16 \\
+C=(16,4) & 28 \\
+D=\left(\frac{40}{3},\frac{20}{3}\right) & \frac{100}{3} \\
+E=(4,2) & 10
+\end{array}
+\]
+
+Por lo tanto, el óptimo gráfico es
+\[
+(x_g^\star,x_v^\star)
+=
+\left(\frac{40}{3},\frac{20}{3}\right),
+\]
+con valor óptimo
+\[
+z^\star
+=
+\frac{100}{3}.
+\]
+
+En la forma estándar de minimización. Del análisis gráfico, en el óptimo se activan las restricciones
+\[
+x_g+x_v=20,
+\qquad
+-\frac{1}{2}x_g+x_v=0.
+\]
+Por lo tanto,
+\[
+s_3=0,
+\qquad
+s_4=0.
+\]
+Así, las variables no básicas son
+\[
+\mathcal{N}=\{s_3,s_4\}.
+\]
+
+En consecuencia, las variables básicas son
+\[
+\mathcal{B}=\{x_g,x_v,s_1,s_2\}.
+\]
+
+La matriz base \(B\) se obtiene tomando desde \(A\) las columnas asociadas a las variables básicas:
+\[
+B =
+\begin{pmatrix}
+\vert & \vert & \vert & \vert \\
+A_{x_g} & A_{x_v} & A_{s_1} & A_{s_2} \\
+\vert & \vert & \vert & \vert
+\end{pmatrix}.
+\]
+
+Es decir,
+\[
+B =
+\begin{pmatrix}
+1 & 0 & -1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 1 & 0 & 0 \\
+-\frac{1}{2} & 1 & 0 & 0
+\end{pmatrix}.
+\]
+
+Luego, la solución básica asociada a esta base se obtiene resolviendo
+\[
+x_B = B^{-1}b,
+\]
+donde
+\[
+x_B =
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2
+\end{pmatrix},
+\qquad
+b =
+\begin{pmatrix}
+4\\
+16\\
+20\\
+0
+\end{pmatrix}.
+\]
+
+Por lo tanto,
+\[
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2
+\end{pmatrix}
+=
+B^{-1}b
+=
+\begin{pmatrix}
+\frac{40}{3}\\
+\frac{20}{3}\\
+\frac{28}{3}\\
+\frac{8}{3}
+\end{pmatrix}.
+\]
+
+Como las variables no básicas son cero,
+\[
+s_3=0,
+\qquad
+s_4=0,
+\]
+la solución básica factible óptima completa es
+\[
+x^\star =
+\begin{pmatrix}
+x_g^\star\\
+x_v^\star\\
+s_1^\star\\
+s_2^\star\\
+s_3^\star\\
+s_4^\star
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{40}{3}\\
+\frac{20}{3}\\
+\frac{28}{3}\\
+\frac{8}{3}\\
+0\\
+0
+\end{pmatrix}.
+\]
+
+En dimensión mayor que dos no es práctico resolver el problema mediante el método
+gráfico. En su lugar, se puede utilizar el método simplex, que recorre soluciones
+básicas factibles del poliedro hasta encontrar una solución óptima.
+
+La idea del método simplex es comenzar desde una solución básica factible, es decir, 
+desde un vértice de la región factible. Luego, el algoritmo revisa si es posible 
+mejorar el valor de la función objetivo moviéndose hacia un vértice vecino. Si existe 
+una dirección que mejora la función objetivo, el método avanza hacia ese nuevo vértice.
+
+Este procedimiento se repite hasta llegar a un vértice donde ya no es posible mejorar 
+el valor de la función objetivo moviéndose a otro vértice vecino. En ese caso, dicho 
+vértice corresponde a una solución óptima del problema.
+
+\item
+Ahora se agrega la condición operativa adicional:
+\[
+x_g+\frac{1}{2}x_v \geq 17.
+\]
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{ejercicios/Capitulo-3/ejercicio_3_5_mgp2c.png}
+    \caption{Método Gráfico P2.c}
+    \label{ex:3:5:restriccion-adicional}
+\end{figure}
+
+Por lo tanto, el problema actualizado queda dado por:
+\[
+\begin{aligned}
+\max_{x_g,x_v} \quad & x_g+3x_v \\
+\text{s.a.} \quad
+& x_g \geq 4, \\
+& x_g \leq 16, \\
+& x_g+x_v \leq 20, \\
+& x_v \leq \frac{1}{2}x_g, \\
+& x_g+\frac{1}{2}x_v \geq 17, \\
+& x_g,x_v \geq 0.
+\end{aligned}
+\]
+
+Notemos que el óptimo anterior,
+\[
+\left(\frac{40}{3},\frac{20}{3}\right),
+\]
+ya no es factible, pues
+\[
+\frac{40}{3}
++
+\frac{1}{2}\frac{20}{3}
+=
+\frac{50}{3}
+<
+17.
+\]
+
+La nueva restricción elimina parte de la región factible anterior. Los vértices
+relevantes de la nueva región factible son:
+\[
+F=(16,2),
+\]
+\[
+C=(16,4),
+\]
+\[
+G=(14,6).
+\]
+
+Evaluamos la función objetivo original:
+\[
+z=x_g+3x_v.
+\]
+
+\[
+\begin{array}{c|c}
+\text{Vértice} & z=x_g+3x_v \\ \hline
+F=(16,2) & 22 \\
+C=(16,4) & 28 \\
+G=(14,6) & 32
+\end{array}
+\]
+
+Por lo tanto, el nuevo óptimo es
+\[
+(x_g^\star,x_v^\star)=(14,6),
+\]
+con valor óptimo
+\[
+z^\star=14+3(6)=32.
+\]
+
+Para actualizar la forma estándar, se agrega una variable de exceso
+\(s_5\geq 0\) asociada a la nueva restricción:
+\[
+x_g+\frac{1}{2}x_v \geq 17.
+\]
+
+Por lo tanto,
+\[
+x_g+\frac{1}{2}x_v-s_5=17.
+\]
+
+Así, la forma estándar actualizada queda dada por:
+\[
+\begin{aligned}
+\min \quad & -x_g-3x_v\\
+\text{s.a.}\quad
+& x_g-s_1=4,\\
+& x_g+s_2=16,\\
+& x_g+x_v+s_3=20,\\
+& -\frac{1}{2}x_g+x_v+s_4=0,\\
+& x_g+\frac{1}{2}x_v-s_5=17,\\
+& x_g,x_v,s_1,s_2,s_3,s_4,s_5\geq 0.
+\end{aligned}
+\]
+
+
+La solución básica factible óptima es
+\[
+x^\star=
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2\\
+s_3\\
+s_4\\
+s_5
+\end{pmatrix}
+=
+\begin{pmatrix}
+14\\
+6\\
+10\\
+2\\
+0\\
+1\\
+0
+\end{pmatrix}.
+\]
+
+Como en el óptimo se cumplen con igualdad las restricciones
+\[
+x_g+x_v=20,
+\qquad
+x_g+\frac{1}{2}x_v=17,
+\]
+se tiene que
+\[
+s_3=0,
+\qquad
+s_5=0.
+\]
+
+Luego, las variables no básicas son
+\[
+\mathcal{N}=\{s_3,s_5\},
+\]
+y la base óptima es
+\[
+\mathcal{B}=\{x_g,x_v,s_1,s_2,s_4\}.
+\]
+
+\item
+Ahora el costo del bloque de vapor aumenta a
+\[
+c_v=6 \; [\$/\mathrm{MWh}].
+\]
+
+Por lo tanto, el beneficio operativo queda dado por
+\[
+5(x_g+x_v)-4x_g-6x_v=x_g-x_v.
+\]
+
+Luego, el nuevo problema es
+\[
+\max \; x_g-x_v
+\]
+sobre la misma región factible obtenida en la parte (c).
+
+Los vértices factibles relevantes son
+\[
+F=(14,6), \qquad C=(16,4), \qquad E=(16,2).
+\]
+
+Evaluando la nueva función objetivo:
+\[
+\begin{array}{c|c}
+\text{Vértice} & z=x_g-x_v \\ \hline
+F=(14,6) & 8 \\
+C=(16,4) & 12 \\
+E=(16,2) & 14
+\end{array}
+\]
+
+Por lo tanto, el nuevo óptimo es
+\[
+(x_g^\star,x_v^\star)=(16,2),
+\]
+con valor óptimo
+\[
+z^\star=14.
+\]
+
+En forma estándar, este punto se obtiene haciendo activas las restricciones
+\[
+x_g=16,
+\qquad
+x_g+\frac{1}{2}x_v=17.
+\]
+
+Por lo tanto,
+\[
+s_2=0,
+\qquad
+s_5=0.
+\]
+
+Además,
+\[
+s_1=x_g-4=12,
+\]
+\[
+s_3=20-x_g-x_v=20-16-2=2,
+\]
+\[
+s_4=\frac{1}{2}x_g-x_v=8-2=6.
+\]
+
+Así, la solución básica factible óptima es
+\[
+x^\star=
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2\\
+s_3\\
+s_4\\
+s_5
+\end{pmatrix}
+=
+\begin{pmatrix}
+16\\
+2\\
+12\\
+0\\
+2\\
+6\\
+0
+\end{pmatrix}.
+\]
+
+Comparando con la base óptima de la parte (c), se tiene que
+\[
+s_2 \text{ sale de la base},
+\]
+y
+\[
+s_3 \text{ entra a la base}.
+\]
+
+Por lo tanto, la nueva base óptima es
+\[
+\mathcal{B}=\{x_g,x_v,s_1,s_3,s_4\},
+\]
+mientras que las variables no básicas son
+\[
+\mathcal{N}=\{s_2,s_5\}.
+\]
+
+\item
+Ahora se agrega la restricción térmica adicional:
+\[
+x_v \leq 4.5.
+\]
+
+Como se parte del problema de la parte (c), con \(c_v=2\), la función objetivo sigue siendo
+\[
+\max \; x_g+3x_v.
+\]
+
+El óptimo obtenido en la parte (c) era
+\[
+(x_g,x_v)=(14,6).
+\]
+
+Sin embargo, este punto ya no es factible, pues
+\[
+x_v=6>4.5.
+\]
+
+Por lo tanto, la base óptima anterior deja de ser factible.
+
+La nueva restricción en forma estándar se escribe como
+\[
+x_v+s_6=4.5,
+\qquad s_6\geq 0.
+\]
+
+El nuevo óptimo se obtiene en la intersección entre
+\[
+x_g+x_v=20
+\]
+y
+\[
+x_v=4.5.
+\]
+
+Así,
+\[
+x_g=20-4.5=15.5.
+\]
+
+Luego, el nuevo punto óptimo es
+\[
+(x_g^\star,x_v^\star)=(15.5,4.5).
+\]
+
+Evaluando la función objetivo:
+\[
+z^\star
+=
+x_g^\star+3x_v^\star
+=
+15.5+3(4.5)
+=
+29.
+\]
+
+En forma estándar, la solución queda dada por
+\[
+x^\star=
+\begin{pmatrix}
+x_g\\
+x_v\\
+s_1\\
+s_2\\
+s_3\\
+s_4\\
+s_5\\
+s_6
+\end{pmatrix}
+=
+\begin{pmatrix}
+15.5\\
+4.5\\
+11.5\\
+0.5\\
+0\\
+3.25\\
+0.75\\
+0
+\end{pmatrix}.
+\]
+
+En efecto:
+\[
+s_1=x_g-4=11.5,
+\]
+\[
+s_2=16-x_g=0.5,
+\]
+\[
+s_3=20-x_g-x_v=0,
+\]
+\[
+s_4=\frac{1}{2}x_g-x_v=3.25,
+\]
+\[
+s_5=x_g+\frac{1}{2}x_v-17=0.75,
+\]
+\[
+s_6=4.5-x_v=0.
+\]
+
+Por lo tanto, las restricciones activas son
+\[
+x_g+x_v=20,
+\qquad
+x_v=4.5.
+\]
+
+Así, las variables no básicas son
+\[
+\mathcal{N}=\{s_3,s_6\}.
+\]
+
+La nueva base óptima es
+\[
+\mathcal{B}
+=
+\{x_g,x_v,s_1,s_2,s_4,s_5\}.
+\]
+
+Por lo tanto, al agregar la restricción térmica, la solución óptima de la parte (c)
+se vuelve infactible y el nuevo óptimo corresponde a
+\[
+(x_g^\star,x_v^\star)=(15.5,4.5),
+\qquad
+z^\star=29.
+\]
+
+\end{enumerate}
+}
+

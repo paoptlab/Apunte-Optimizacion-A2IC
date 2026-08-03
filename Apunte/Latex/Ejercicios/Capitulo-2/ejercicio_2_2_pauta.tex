@@ -1,0 +1,98 @@
+% Fuente: Auxiliar 1, P2 (pauta).
+{\color{MidnightBlue}
+La estructura del problema MILP será la siguiente:
+
+\textbf{Conjuntos:}
+\begin{itemize}
+    \item $T$: Conjunto que representa el tiempo en horas.
+\end{itemize}
+
+\textbf{Variables de decisión:}
+\begin{itemize}
+    \item $m^B \in \mathbb{R}^{+}$: Masa de la batería.
+
+    \item $P^{PV}_{\max} \in \mathbb{R}^{+}$: Potencia máxima del panel.
+
+    \item $E_t^B \in \mathbb{R}^{+}$: Energía almacenada en el tiempo $t$, con $t \in T$.
+
+    \item $P_t^{PV} \in \mathbb{R}^{+}$: Potencia inyectada por el panel en el tiempo $t$, con $t \in T$.
+
+    \item $P_t^{ch} \in \mathbb{R}^{+}$: Potencia de carga (retirada desde el panel PV) de la batería en el tiempo $t$, con $t \in T$.
+
+    \item $P_t^{dis} \in \mathbb{R}^{+}$: Potencia de descarga (inyectada al cubeSat) de la batería en el tiempo $t$, con $t \in T$.
+
+    \item $u_t^{ch} \in \{0,1\}$: Indicador de carga de batería en instante t, con $t \in T$. Es decir, $u_t^{ch}=1$ si se elige cargar la batería en $t$, $u_t^{ch}=0$ en caso contrario.
+
+    \item $u_t^{dis} \in \{0,1\}$: Indicador de descarga de batería en instante t, con $t \in T$. Es decir, $u_t^{dis}=1$ si se elige descargar la batería en $t$, $u_t^{dis}=0$ en caso contrario.
+\end{itemize}
+
+\textbf{Función objetivo}
+
+Dado que se nos pide determinar $P^{PV}_{\max}$ y $m^B$ minimizando el costo del satélite, la función objetivo es:
+
+\[
+\min \; c^{bat}\cdot m^B + c^{PV}\cdot P^{PV}_{\max}
+\]
+
+\textbf{Restricciones}
+\begin{itemize}
+    \item Restricción masa satélite:
+    \begin{equation}
+        m^B + \beta \cdot P^{PV}_{\max} \leq \overline{w}
+    \end{equation}
+
+    \item Balance energético entre generación, almacenamiento y demanda:
+    \begin{equation}
+        P_t^{PV} + (P_t^{dis} - P_t^{ch}) = P_t^L
+    \quad \forall t \in \{1,\ldots,T\}
+    \end{equation}
+    Notar que esta ecuación actúa como una Ley de Corrientes de Kirchhoff (LCK) en el nodo principal del satélite (donde la generación PV y batería se conectan con la carga interna $P_t^L$ del satélite). Para este problema consideraremos que la batería no puede cargarse y descargarse en un mismo instante $t$, por lo que en el balance nunca se dará que $P_t^{dis}$ y $P_t^{ch}$ sean distintos de cero simultáneamente. Esto último se modela en conjunto a las restricciones \eqref{ex:2:2:eq:carga}, \eqref{ex:2:2:eq:descarga} y \eqref{ex:2:2:eq:exclusion}.
+
+    \item Capacidad generación panel fotovoltaico:
+    \begin{equation}
+        P_t^{PV} \leq \alpha_t \cdot P^{PV}_{\max}
+    \quad \forall t \in \{1,\ldots,T\}
+    \end{equation}
+
+    \item Capacidad almacenamiento batería:
+    \begin{equation}
+        \gamma \cdot (\rho \cdot m^B) \leq E_t^B \leq (\rho \cdot m^B)
+    \quad \forall t \in \{1,\ldots,T\}
+    \end{equation}
+
+    \item Balance energía en la batería:
+    \begin{equation}
+        E_t^B = E_{t-1}^B + \eta \cdot P_t^{ch} \cdot (t-(t-1)) - \frac{P_t^{dis} \cdot (t-(t-1)) }{\eta} = E_{t-1}^B \, + \, \eta \cdot P_t^{ch} \, - \, \frac{P_t^{dis}}{\eta}
+    \quad \forall t \in \{2,\ldots,T\}
+    \end{equation}
+    y la condición inicial
+    \begin{equation}
+        E_1^B = E_0^B  + \, \eta \cdot P_1^{ch} \, - \, \frac{P_1^{dis}}{\eta}= \rho \cdot m^B + \, \eta \cdot P_1^{ch} \, - \, \frac{P_1^{dis}}{\eta}
+    \end{equation}
+
+    Notar que en la carga, solo una fracción $\eta$ de la potencia retirada del sistema de paneles PV llega efectivamente a almacenarse como energía química ($\eta \cdot P_t^{ch}$). En la descarga, para entregar una potencia $P_t^{dis}$ al satélite, la batería debe extraer internamente una cantidad mayor de energía ($P_t^{dis}/\eta$) para compensar las pérdidas por calor y resistencia interna.
+
+    \item Capacidad potencia batería:
+    \begin{equation}
+        P_t^{ch} \leq (\mu \cdot m^B) \cdot u_t^{ch}
+    \quad \forall t \in \{1,\ldots,T\}
+    \label{ex:2:2:eq:carga}
+    \end{equation}
+    \begin{equation}
+        P_t^{dis} \leq (\mu \cdot m^B) \cdot u_t^{dis}
+    \quad \forall t \in \{1,\ldots,T\}
+    \label{ex:2:2:eq:descarga}
+    \end{equation}
+
+    Observar que la inclusión de las variables binarias $u_t^{ch}$ y $u_t^{dis}$ permite al optimizador encender o apagar los flujos. Es decir, si el modelo decide que en el instante $t$ no se debe cargar ($u_t^{ch}=0$), la restricción fuerza a que $P_t^{ch}$ sea estrictamente cero (recordar que $P_t^{ch}$ y $P_t^{dis}$ son variables no negativas).
+
+    \item Exclusión mutua carga y descarga batería:
+    \begin{equation}
+        u_t^{ch} + u_t^{dis} \leq 1
+    \quad \forall t \in \{1,\ldots,T\}
+    \label{ex:2:2:eq:exclusion}
+    \end{equation}
+
+    Un banco de baterías no puede estar en un estado neto de carga y descarga al mismo tiempo. Esta restricción asegura que el sistema de baterías esté en proceso de carga, descarga o reposo ($u_t^{ch} = u_t^{dis}= 0$).
+\end{itemize}
+}

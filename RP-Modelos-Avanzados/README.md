@@ -2,21 +2,21 @@
 
 Material de la resolución de problemas sobre optimización bajo incertidumbre.
 
-## Presentación de la Actividad 1
+## Presentación: Optimización bajo incertidumbre
 
-- [PDF para visualizar en GitHub](./Actividad-1-A2IC.pdf)
-- [Presentación HTML editable](../RP-Presentaciones/presentacion-actividad-1/index.html)
-- [Instrucciones de visualización y edición](../RP-Presentaciones/presentacion-actividad-1/README.md)
+- [PDF para visualizar en GitHub](./Optimizacion-bajo-incertidumbre.pdf)
+- [Presentación HTML editable](../Formato-Presentaciones/optimizacion-bajo-incertidumbre/index.html)
+- [Instrucciones de visualización y edición](../Formato-Presentaciones/optimizacion-bajo-incertidumbre/README.md)
 
-En esta carpeta se conserva únicamente el PDF compilado de la presentación. Las fuentes HTML, recursos y herramientas de actualización están centralizados en [`RP-Presentaciones`](../RP-Presentaciones/README.md).
+En esta carpeta se conserva únicamente el PDF compilado de la presentación. Las fuentes HTML, recursos y herramientas de actualización están centralizados en [`Formato-Presentaciones`](../Formato-Presentaciones/README.md).
 
 Los gráficos y las cifras se regeneran desde el notebook solución con:
 
 ```bash
-python RP-Presentaciones/actualizar_presentacion.py --pdf
+python Formato-Presentaciones/actualizar_presentacion.py --pdf
 ```
 
-Dentro del editor de la presentación, **Actualizar datos y gráficos** permite recargar manualmente el JSON recién generado sin reiniciar la presentación.
+La presentación consume directamente el `nb-data.js` generado; no requiere una copia JSON ni un editor integrado.
 
 ## Notebooks
 

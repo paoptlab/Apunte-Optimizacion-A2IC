@@ -1,0 +1,419 @@
+% Fuente: Auxiliar 1, P3 (pauta).
+{\color{MidnightBlue}
+\begin{enumerate}
+\item
+La estructura del problema MILP será la siguiente:
+
+\textbf{Variables de decisión}
+\begin{itemize}
+    \item $P_{G_i}$: Potencia/Despacho del generador $i$ ($i \in \{1,2\}$). Solo puede tomar valores positivos. 
+    
+    \item $x_{G_i}$: Variable que indica el status o commitment del generador $i$ ($i \in \{1,2\}$). Es decir, $x_{G_i}=1$ si está encendido, y será 0 en caso contrario.
+    
+    \item $F_{1,2}$: Flujo de potencia que viaja desde el centro 1 hacia el centro 2. Puede tomar valores positivos y negativos.
+\end{itemize}
+
+Observación: Se puede definir el flujo de 2 a 1 pero es necesario ser consistente. Note que $F_{1,2}=-F_{2,1}$
+
+\textbf{Parámetros}
+\begin{itemize}
+    \item $C_i$: Costo variable del generador $i$.
+    
+    \item $P_{max}^{G_i}$: Potencia máxima del generador $i$.
+    
+    \item $P_{min}^{G_i}$: Potencia mínima del generador $i$.
+    
+    \item $P_{D_i}$: Demanda en la zona $i$.
+    
+    \item $F_{max}$: Flujo máximo en la línea.
+\end{itemize}
+
+\textbf{Función objetivo}
+
+Los costos operativos corresponden al costo de producción de energía de ambos generadores, en la hora de operación en estudio. Por lo tanto, dado que se busca minimizar costos, la función objetivo es la siguiente:
+
+\begin{equation}
+    \min \sum_{i=1}^{2} C_i P_{G_i}.
+\end{equation}
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item Límites técnicos de los generadores:
+    \begin{equation}
+        P_{G_i} \leq P_{max}^{G_i}\cdot x_{G_i}
+    \qquad \forall i \in \{1,2\}
+    \end{equation}
+    \begin{equation}
+        P_{G_i} \geq P_{min}^{G_i}\cdot x_{G_i}
+    \qquad \forall i \in \{1,2\}
+    \end{equation}
+
+    Similarmente al caso de los límites superiores de las potencias de carga y descarga en batería de la pregunta anterior, utilizamos $x_{G_i}$ para modelar la lógica de: $\text{generador apagado} \implies \text{despacho de potencia nulo}$.
+
+    \item Balance nodal:
+    \begin{align}
+    &P_{G_1}=P_{D_1}+F_{1,2} \quad \text{(Centro 1)}\\
+    &P_{G_2}+F_{1,2}=P_{D_2} \quad \text{(Centro 2)}
+    \end{align}
+
+    Estas ecuaciones nuevamente se obtienen de utilizar LCK en los nodos de ambos centros. Importante aquí la consistencia con la definición de $F_{1,2}=-F_{2,1}$.
+
+    \item Dominio de variables:
+    \begin{align}
+        &P_{G_i}\geq 0\qquad \forall i \in \{1,2\}\\
+        &F_{1,2} \in \mathbb{R} \\
+        &x_{G_i}\in\{0,1\} \quad \forall i \in \{1,2\}
+    \end{align}
+\end{itemize}
+
+
+Finalmente, el problema de optimización MILP será:
+
+\[
+\begin{aligned}
+\min \ & \sum_{i=1}^{2} C_i P_{G_i}. \\
+\text{s.a } \ & P_{G_i}\leq P_{max}^{G_i}\cdot x_{G_i} \qquad \forall i \in \{1,2\} \\
+& P_{G_i}\geq P_{min}^{G_i}\cdot x_{G_i} \qquad \forall i \in \{1,2\} \\
+& P_{G_1}=P_{D_1}+F_{1,2} \\
+& P_{G_2}+F_{1,2}=P_{D_2} \\
+& P_{G_i}\geq 0 \qquad \forall i \in \{1,2\} \\
+& x_{G_i}\in\{0,1\} \qquad \forall i \in \{1,2\}
+\end{aligned}
+\]
+
+Observación: El problema aún no considera la Ley de Voltajes de Kirchhoff (LVK). Para una modelación más precisa, se debe tener en cuenta el acoplamiento angular entre nodos.
+
+\item
+
+Para incorporar de manera más realista la red de transmisión, ahora no basta con modelar el flujo $F_{1,2}$ solo como una variable libre, sino que debe representarse el \textbf{acople angular entre nodos}. Esto surge al considerar la física de la línea mediante la Ley de Voltajes de Kirchhoff (LVK), la cual establece que el flujo de potencia activa entre dos nodos depende de la diferencia angular de sus tensiones.
+
+
+OJO: En el siguiente extracto se explica por qué se añade la ecuación \eqref{ex:2:3:eq:flujos-dc} a la formulación, con el fin de modelar el acople angular de los flujos de potencia en la línea de transmisión. Para comprender en detalle el fundamento físico de esta expresión se requieren conocimientos más avanzados de sistemas eléctricos de potencia, que exceden los prerrequisitos de este curso. Por ello, no es necesario dominar su derivación, pero sí es importante tener presente la idea central: en el modelo de flujos DC (corrientes continuas), el flujo entre dos nodos queda determinado por su diferencia angular y la reactancia de la línea.
+
+\textbf{Idea física del acople angular}
+
+Si se modela la línea como predominantemente reactiva (componente resistiva despreciable), entonces el flujo de potencia activa entre los nodos 1 y 2 puede escribirse, en una formulación AC simplificada, como:
+
+\begin{equation}
+    F_{1,2} = \frac{|V_1||V_2|}{X_L}\sin(\theta_1-\theta_2),
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $|V_1|$ y $|V_2|$ son las magnitudes normalizadas de tensión normalizadas en los nodos 1 y 2.
+    \item $\theta_1$ y $\theta_2$ son sus ángulos de fase. Es decir, el ángulo del fasor de tensión en los nodos 1 y 2.
+    \item $X_L$ es la reactancia de la línea.
+\end{itemize}
+
+Esta expresión muestra que el flujo no es arbitrario, sino que queda determinado por la diferencia angular entre nodos. Sin embargo, para problemas de operación se suele emplear la \textbf{aproximación de Flujo DC}, que asume:
+\begin{itemize}
+    \item Magnitudes de tensión aproximadamente constantes y cercanas a 1 p.u.
+    \item Diferencias angulares pequeñas, por lo que $\sin(\theta_1-\theta_2)\approx \theta_1-\theta_2$.
+    \item Pérdidas resistivas despreciables.
+\end{itemize}
+
+Bajo estas hipótesis, el flujo queda aproximado por:
+
+\begin{equation}
+    F_{1,2} = \frac{\theta_1-\theta_2}{X_L}.
+    \label{ex:2:3:eq:flujos-dc}
+\end{equation}
+
+\textbf{Concepto de ENS}
+
+Como ambos centros poseen cargas críticas, se incorpora la variable \textbf{ENS} (\emph{Energía No Suministrada}), que representa la fracción de demanda que no puede ser abastecida. Esta variable permite que el modelo siga siendo factible incluso si la generación disponible y la capacidad de transmisión no alcanzan para cubrir toda la demanda.
+
+Desde el punto de vista económico, la ENS se penaliza con un costo muy alto, ya que corresponde a desabastecimiento. En este problema se utiliza:
+
+\begin{equation}
+    C^{\text{ENS}} = 100 \ \$/\text{MWh}.
+\end{equation}
+
+Por tanto, el modelo preferirá abastecer la demanda con generación y transmisión antes que recurrir a déficit, excepto cuando ello sea físicamente inevitable o económicamente forzado por las restricciones.
+
+\textbf{Variables de decisión}
+
+\begin{itemize}
+    \item $P_{G_i}$: potencia generada por la unidad del centro $i$, con $i\in\{1,2\}$.
+    \item $x_{G_i}$: variable binaria de compromiso de la unidad $i$.
+    \item $F_{1,2}$: flujo de potencia desde el centro 1 hacia el centro 2.
+    \item $\theta_i$: ángulo de fase en el centro $i$.
+    \item $ENS_i$: energía no suministrada en el centro $i$.
+\end{itemize}
+
+\textbf{Parámetros}
+
+\begin{itemize}
+    \item $C_i$: costo variable del generador $i$.
+    \item $P_{max}^{G_i}$: potencia máxima del generador $i$.
+    \item $P_{min}^{G_i}$: potencia mínima del generador $i$.
+    \item $P_{D_i}$: demanda del centro $i$.
+    \item $F_{max}^{L1}=4$ MW: capacidad máxima de la línea.
+    \item $X_L$: reactancia de la línea.
+    \item $C^{\text{ENS}}=100$ \$/MWh: costo de energía no suministrada.
+\end{itemize}
+
+\textbf{Función objetivo}
+
+El costo total de operación corresponde al costo de generación más la penalización por desabastecimiento:
+
+\begin{equation}
+    \min \sum_{i=1}^{2} C_i P_{G_i} + \sum_{i=1}^{2} C^{\text{ENS}} ENS_i.
+\end{equation}
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item Límites técnicos de generación:
+    \begin{equation}
+        P_{G_i} \leq P_{max}^{G_i}x_{G_i}
+        \qquad \forall i\in\{1,2\}
+    \end{equation}
+    \begin{equation}
+        P_{G_i} \geq P_{min}^{G_i}x_{G_i}
+        \qquad \forall i\in\{1,2\}
+    \end{equation}
+
+    \item Balance nodal con posibilidad de déficit:
+    \begin{align}
+        P_{G_1} + ENS_1 &= P_{D_1} + F_{1,2}
+        \qquad \text{(Nodo 1)} \\
+        P_{G_2} + F_{1,2} + ENS_2 &= P_{D_2}
+        \qquad \text{(Nodo 2)}
+    \end{align}
+
+    En estas ecuaciones, si la generación local más la importación no alcanzan para cubrir la demanda, la diferencia se representa mediante $ENS_i$.
+
+    \item Acople angular (modelo DC de la línea):
+    \begin{equation}
+        F_{1,2} = \frac{\theta_1-\theta_2}{X_L}
+    \end{equation}
+
+    \item Límite de capacidad física de la línea:
+    \begin{equation}
+        -F_{max}^{L1} \leq F_{1,2} \leq F_{max}^{L1}
+    \end{equation}
+
+    Como en este caso $F_{max}^{L1}=4$ MW:
+    \begin{equation}
+        -4 \leq F_{1,2} \leq 4
+    \end{equation}
+
+    \item Barra de referencia angular:
+
+    Dado que los ángulos solo están definidos de manera relativa, se debe fijar una referencia. Por ejemplo:
+    \begin{equation}
+        \theta_2 = 0
+    \end{equation}
+
+    \item Dominio de variables:
+    \begin{align}
+        &P_{G_i}\geq 0 \qquad \forall i\in\{1,2\} \\
+        &ENS_i\geq 0 \qquad \forall i\in\{1,2\} \\
+        &F_{1,2}\in\mathbb{R} \\
+        &\theta_i\in\mathbb{R} \qquad \forall i\in\{1,2\} \\
+        &x_{G_i}\in\{0,1\} \qquad \forall i\in\{1,2\}
+    \end{align}
+\end{itemize}
+
+\textbf{Formulación final del problema MILP}
+
+\[
+\begin{aligned}
+\min \ & \sum_{i=1}^{2} C_i P_{G_i} + \sum_{i=1}^{2} C^{\text{ENS}} ENS_i \\
+\text{s.a. } 
+& P_{G_i} \leq P_{max}^{G_i}x_{G_i} \qquad \forall i\in\{1,2\} \\
+& P_{G_i} \geq P_{min}^{G_i}x_{G_i} \qquad \forall i\in\{1,2\} \\
+& P_{G_1} + ENS_1 = P_{D_1} + F_{1,2} \\
+& P_{G_2} + F_{1,2} + ENS_2 = P_{D_2} \\
+& F_{1,2} = \frac{\theta_1-\theta_2}{X_L} \\
+& -4 \leq F_{1,2} \leq 4 \\
+& \theta_2 = 0 \\
+& P_{G_i}\geq 0 \qquad \forall i\in\{1,2\} \\
+& ENS_i\geq 0 \qquad \forall i\in\{1,2\} \\
+& F_{1,2}\in\mathbb{R} \\
+& \theta_i\in\mathbb{R} \qquad \forall i\in\{1,2\} \\
+& x_{G_i}\in\{0,1\} \qquad \forall i\in\{1,2\}
+\end{aligned}
+\]
+
+
+Como comentario final, la diferencia principal respecto del inciso anterior es que ahora:
+\begin{enumerate}
+    \item[a)] El flujo en la línea ya no es completamente libre, sino que queda determinado por la diferencia angular entre nodos.
+    \item[b)] La línea posee una capacidad máxima de 4 MW.
+    \item[c)] Se incorpora explícitamente la posibilidad de desabastecimiento mediante las variables $ENS_i$, penalizadas en la función objetivo.
+\end{enumerate}
+
+De este modo, la formulación representa de mejor forma tanto la física de la red como el costo de no abastecer cargas críticas.
+
+\item
+
+Para formular el problema de operación en un sistema general, se modela el despacho de generación, el estado encendido/apagado de cada unidad, los flujos por las líneas y la energía no suministrada (ENS) en cada nodo y periodo. Dado que el enunciado solicita una formulación general para una red de transmisión, una forma rigurosa y compacta de representarla es mediante flujo DC, incorporando los ángulos nodales y el acople angular entre barras.
+
+\textbf{Conjuntos e índices}
+\begin{itemize}
+    \item \(g \in \mathcal{G}\): generadores, con \(|\mathcal{G}|=G\).
+    \item \(n \in \mathcal{N}\): nodos o barras, con \(|\mathcal{N}|=N\).
+    \item \(\ell \in \mathcal{L}\): líneas de transmisión, con \(|\mathcal{L}|=L\).
+    \item \(t \in \mathcal{T}\): periodos de operación, con \(|\mathcal{T}|=H\).
+\end{itemize}
+
+\textbf{Parámetros}
+\begin{itemize}
+    \item \(C_g\): costo variable de generación de la unidad \(g\) [\$/MWh].
+    \item \(P_g^{\min}\): potencia mínima de la unidad \(g\) [MW].
+    \item \(P_g^{\max}\): potencia máxima de la unidad \(g\) [MW].
+    \item \(D_{n,t}\): demanda en el nodo \(n\) en el periodo \(t\) [MW].
+    \item \(C^{\text{ENS}}\): costo de energía no suministrada [\$/MWh].
+    \item \(F_\ell^{\max}\): capacidad máxima de flujo en la línea \(\ell\) [MW].
+    \item \(X_\ell\): reactancia serie de la línea \(\ell\).
+    \item \(B_\ell = \frac{1}{X_\ell}\): susceptancia de la línea \(\ell\).
+\end{itemize}
+
+Además, se definen:
+\begin{itemize}
+    \item \(\mathcal{G}(n)\subseteq \mathcal{G}\): conjunto de generadores conectados al nodo \(n\).
+    \item \(o(\ell)\): nodo de origen de la línea \(\ell\).
+    \item \(d(\ell)\): nodo de destino de la línea \(\ell\).
+\end{itemize}
+
+\textbf{Variables de decisión}
+\begin{itemize}
+    \item \(P_{g,t}\): potencia generada por la unidad \(g\) en el periodo \(t\) [MW].
+    \item \(x_{g,t}\): variable binaria de compromiso de la unidad \(g\) en el periodo \(t\), donde
+    \[
+    x_{g,t}=
+    \begin{cases}
+    1, & \text{si la unidad está encendida en } t,\\
+    0, & \text{si la unidad está apagada en } t.
+    \end{cases}
+    \]
+    \item \(F_{\ell,t}\): flujo de potencia activa por la línea \(\ell\) en el periodo \(t\) [MW].
+    \item \(\theta_{n,t}\): ángulo de fase en el nodo \(n\) en el periodo \(t\) [rad].
+    \item \(ENS_{n,t}\): energía no suministrada en el nodo \(n\) en el periodo \(t\) [MW].
+\end{itemize}
+
+\textbf{Función objetivo}
+
+El objetivo es minimizar el costo total de operación durante todo el horizonte temporal, incluyendo tanto el costo de generación como la penalización por déficit de suministro:
+
+\begin{equation}
+\min \sum_{t\in\mathcal{T}} \left(
+\sum_{g\in\mathcal{G}} C_g\,P_{g,t}
++
+\sum_{n\in\mathcal{N}} C^{\text{ENS}}\,ENS_{n,t}
+\right).
+\end{equation}
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item \textbf{Límites técnicos de generación}
+    \begin{equation}
+        P_g^{\min}\,x_{g,t} \le P_{g,t} \le P_g^{\max}\,x_{g,t}
+        \qquad \forall g\in\mathcal{G},\ \forall t\in\mathcal{T}.
+    \end{equation}
+
+    Esta restricción impone que, si la unidad está apagada (\(x_{g,t}=0\)), entonces necesariamente \(P_{g,t}=0\); y si está encendida (\(x_{g,t}=1\)), su despacho debe permanecer entre sus límites mínimo y máximo.
+
+    \item \textbf{Balance nodal de potencia con ENS}
+
+    Para cada nodo y cada periodo, la suma de la generación local, más la energía no suministrada, más la potencia que entra desde otras barras, debe igualar la demanda más la potencia que sale hacia otras barras:
+
+    \begin{equation}
+    \sum_{g\in\mathcal{G}(n)} P_{g,t}
+    + ENS_{n,t}
+    + \sum_{\ell\,:\,d(\ell)=n} F_{\ell,t}
+    - \sum_{\ell\,:\,o(\ell)=n} F_{\ell,t}
+    = D_{n,t}
+    \qquad \forall n\in\mathcal{N},\ \forall t\in\mathcal{T}.
+    \end{equation}
+
+    Esta ecuación corresponde a aplicar LCK en cada nodo.
+
+    \item \textbf{Acople angular en las líneas (modelo DC)}
+
+    Para cada línea \(\ell\) que conecta el nodo \(o(\ell)\) con el nodo \(d(\ell)\), el flujo se aproxima mediante:
+
+    \begin{equation}
+    F_{\ell,t} = B_\ell\left(\theta_{o(\ell),t}-\theta_{d(\ell),t}\right)
+    = \frac{\theta_{o(\ell),t}-\theta_{d(\ell),t}}{X_\ell}
+    \qquad \forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T}.
+    \end{equation}
+
+    Esta ecuación representa la aproximación de flujos DC explicada anteriormente.
+
+    \item \textbf{Límites de capacidad de las líneas}
+    \begin{equation}
+        -F_\ell^{\max} \le F_{\ell,t} \le F_\ell^{\max}
+        \qquad \forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T}.
+    \end{equation}
+
+    \item \textbf{Barra de referencia angular}
+
+    Como los ángulos solo están definidos de manera relativa, se debe fijar una barra de referencia \(n_0\in\mathcal{N}\), por ejemplo:
+
+    \begin{equation}
+        \theta_{n_0,t}=0
+        \qquad \forall t\in\mathcal{T}.
+    \end{equation}
+
+    \item \textbf{Dominio de las variables}
+    \begin{align}
+        &P_{g,t}\ge 0
+        &&\forall g\in\mathcal{G},\ \forall t\in\mathcal{T},\\
+        &ENS_{n,t}\ge 0
+        &&\forall n\in\mathcal{N},\ \forall t\in\mathcal{T},\\
+        &F_{\ell,t}\in\mathbb{R}
+        &&\forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T},\\
+        &\theta_{n,t}\in\mathbb{R}
+        &&\forall n\in\mathcal{N},\ \forall t\in\mathcal{T},\\
+        &x_{g,t}\in\{0,1\}
+        &&\forall g\in\mathcal{G},\ \forall t\in\mathcal{T}.
+    \end{align}
+\end{itemize}
+
+\textbf{Formulación compacta final}
+
+\[
+\begin{aligned}
+\min \quad &
+\sum_{t\in\mathcal{T}} \left(
+\sum_{g\in\mathcal{G}} C_g\,P_{g,t}
++
+\sum_{n\in\mathcal{N}} C^{\text{ENS}}\,ENS_{n,t}
+\right)\\[1mm]
+\text{s.a.}\quad
+& P_g^{\min}\,x_{g,t} \le P_{g,t} \le P_g^{\max}\,x_{g,t}
+&& \forall g\in\mathcal{G},\ \forall t\in\mathcal{T},\\
+& \sum_{g\in\mathcal{G}(n)} P_{g,t}
++ ENS_{n,t}
++ \sum_{\ell:\,d(\ell)=n} F_{\ell,t}
+- \sum_{\ell:\,o(\ell)=n} F_{\ell,t}
+= D_{n,t}
+&& \forall n\in\mathcal{N},\ \forall t\in\mathcal{T},\\
+& F_{\ell,t}
+= \frac{\theta_{o(\ell),t}-\theta_{d(\ell),t}}{X_\ell}
+&& \forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T},\\
+& -F_\ell^{\max}\le F_{\ell,t}\le F_\ell^{\max}
+&& \forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T},\\
+& \theta_{n_0,t}=0
+&& \forall t\in\mathcal{T},\\
+& P_{g,t}\ge 0
+&& \forall g\in\mathcal{G},\ \forall t\in\mathcal{T},\\
+& ENS_{n,t}\ge 0
+&& \forall n\in\mathcal{N},\ \forall t\in\mathcal{T},\\
+& F_{\ell,t}\in\mathbb{R}
+&& \forall \ell\in\mathcal{L},\ \forall t\in\mathcal{T},\\
+& \theta_{n,t}\in\mathbb{R}
+&& \forall n\in\mathcal{N},\ \forall t\in\mathcal{T},\\
+& x_{g,t}\in\{0,1\}
+&& \forall g\in\mathcal{G},\ \forall t\in\mathcal{T}.
+\end{aligned}
+\]
+
+Esta formulación corresponde a un problema MILP de operación de corto plazo con red DC, compromiso binario de unidades y posibilidad de desabastecimiento penalizado. Importante recalcar que la variable \(ENS_{n,t}\) actúa como variable de holgura del balance nodal y garantiza factibilidad del modelo aun en situaciones de insuficiencia de generación o congestión de red, pero su alto costo hace que el modelo solo la utilice cuando ello sea estrictamente necesario.
+\end{enumerate}
+}

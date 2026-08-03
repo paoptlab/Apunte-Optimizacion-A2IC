@@ -1,0 +1,130 @@
+ % Template:     Auxiliar LaTeX
+% Documento:    Archivo principal
+% Versión:      8.3.4 (07/02/2025)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R.
+%        pablo@ppizarror.com
+%
+% Manual template: [https://latex.ppizarror.com/auxiliares]
+% Licencia MIT:    [https://opensource.org/licenses/MIT]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[
+	spanish, % Idioma: spanish, english, etc.
+	letterpaper, oneside
+]{article}
+
+
+\usepackage{amsmath}
+\usepackage{breqn}
+
+\newif\ifshowcomments
+\showcommentstrue % Set to \showcommentsfalse to hide all comments
+
+\usepackage{xcolor} % For colored text
+\usepackage{marginnote} % Optional: for margin notes
+
+% Define inline comment
+\newcommand{\comment}[1]{%
+  \ifshowcomments
+    {\textcolor{red}{\textbf{ Solución:} }\\ #1 }%
+  \fi
+}
+ 
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\documenttitle {Pauta Actividad 2 A2IC}
+\def\documentsubject{Sesión RP de Modelamiento}
+
+\def\documentauthor {Joaquín Ormazábal}
+\def\coursename {Optimización}
+\def\coursecode {EL4114}
+
+\def\universityname {Universidad de Chile}
+\def\universityfaculty {Facultad de Ciencias Físicas y Matemáticas}
+\def\universitydepartment {Departamento de Ingeniería Eléctrica}
+\def\universitydepartmentimage {departamentos/die}
+\def\universitydepartmentimagecfg {height=1.75cm}
+\def\universitylocation {Santiago de Chile}
+
+% EQUIPO DOCENTE
+\def\teachingstaff {
+	\textbf{Profesor: Heraldo Rozas} \\
+	Auxiliares: Diego Carez, Joaquín Ormazábal
+}
+
+% IMPORTACIÓN DEL TEMPLATE
+\input{template}
+
+% INICIO DE PÁGINAS
+\begin{document}
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\templatePagecfg
+
+\fbox{\begin{minipage}{\textwidth}
+\noindent\textbf{Instrucciones:} Formule los siguientes problemas de optimización, trabajando en grupos de 4 o 5 personas. Acuda al cuerpo docente en caso de consultas.
+\end{minipage}}
+
+
+% ======================= INICIO DEL DOCUMENTO ================
+\begin{comment}
+\newboxquestion{P1} \textbf{(Dificultad: Baja, Tiempo: 20 min)} Un observatorio astronómico debe planificar una noche de observación, decidiendo qué instrumentos científicos montar en el telescopio principal y qué observaciones realizar con cada uno, de modo de maximizar la utilidad científica.
+
+El telescopio dispone de un conjunto $I$ de instrumentos posibles (por ejemplo, una cámara óptica, un espectrógrafo y una cámara infrarroja), los cuales deben montarse antes del inicio de la jornada. Por razones operativas y de espacio, sólo se pueden instalar a lo más $M$ instrumentos. Cada instrumento $i$ tiene un tiempo máximo de operación $\bar{t}_i$ (en horas), un costo fijo $f_i$ que se incurre si el instrumento se utiliza, y un costo variable $v_i$ por cada hora de operación. El observatorio dispone de un presupuesto total $B$ para cubrir los costos de operación de la noche.
+
+Durante la noche pueden programarse observaciones pertenecientes al conjunto $O$, cada una asociada a distintos objetos astronómicos que pueden ser estudiados con algunos de los instrumentos disponibles. No todas las observaciones pueden realizarse con todos los instrumentos: para cada par $(o,i)$ se cuenta con un parámetro $a_{o,i}$ que indica si la observación $o$ puede efectuarse con el instrumento $i$. Además, si la observación $o$ se realiza con el instrumento $i$, requiere un tiempo de exposición $t_{o,i}$ (en horas). Cada observación aporta una utilidad científica $u_o$.
+
+Plantee un problema de optimización que permita determinar qué instrumentos montar y qué observaciones realizar con cada uno, de modo de maximizar la utilidad científica total de la noche, respetando las limitaciones técnicas y económicas.
+\end{comment}
+
+\newboxquestion{P1} \textbf{(Tiempo: 45 min)} La empresa \textit{Maintenance} debe optimizar el calendario de reparaciones para una flota de $N_G$ turbinas de viento ubicadas en las costas de Inglaterra. 
+
+Cada turbina $g \in \mathcal{G}=\{1,\ldots,N_G\}$ debe obligatoriamente recibir mantenimiento en una única fecha $t \in \mathcal{T}=\{1,\ldots,T_{\max}\}$ dentro de un horizonte de planificación. El tiempo de falla conocido de cada turbina es $\tau_g \in \mathcal{T}$. Si el mantenimiento se realiza antes de este tiempo de falla, la turbina continuará operando sin fallar durante todo el horizonte de planificación; sin embargo, si una turbina alcanza su tiempo de falla sin haber recibido mantenimiento, estará indisponible hasta que se le realice el mantenimiento correspondiente. Se asume que la reparación de cada turbina inicia y termina en tiempo tiempo $t$. Durante este periodo la turbina no está disponible.
+
+Cuando una turbina $g$ está activa en el tiempo $t$, puede generar una potencia máxima conocida $P_{gt}[\mathrm{MWh}]$. No obstante, una turbina no está activa en tiempo $t$ si  ha fallado antes y aún no ha sido reparada, o se encuentra en mantenimiento en instante $t$. La energía generada por el parque eólico en cada instante $t$ es vendida a un precio unitario 
+$\pi_t[\$/\mathrm{MWh}]$, el cual es conocido. La reparación de una turbina $g$ en el instante $t$ tiene un costo $C_{gt}$.
+
+Las actividades de mantenimiento pueden ser calendarizadas solo cuando el equipo de mantenimiento está desplegado. El despliegue del equipo de mantenimiento en $t$ trae consigo un costo fijo adicional $A_t$. Notar que el equipo solo puede ser desplegado cuando las condiciones climáticas así lo permitan. En particular, se ha pronosticado que solo los días $\mathcal{K} \subset \mathcal{T}$ proveen condiciones seguras para el despliegue del equipo. Para un tiempo $t$, el equipo de mantenimiento tiene una capacidad máxima $M_t$. Por lo tanto, no se puede calendarizar la reparación de más de $M_t$ turbinas en tiempo $t$.
+
+
+Existe una demanda de energía en cada instante de tiempo $t$, la cual conocida y se denota como $D_t$. Esta demanda constituye un requerimiento mínimo de generación, es decir el parque eólico en su conjunto debe producir al menos $D_t$.
+
+Formule de forma ordenada un MILP que permita a la empresa \textit{Maintenance} coordinar las decisiones de operación y mantenimiento del parque eólico, de forma que se minimicen los costos netos. 
+
+
+% PAUTA
+\input{Pauta_P1}
+
+%\newpage
+\newboxquestion{P2} \textbf{(Tiempo: 45 min)} Una empresa de telecomunicaciones desea desplegar una red 5G en una ciudad. Para ello cuenta con un conjunto de sitios candidatos $J$ donde podrían instalarse estaciones base, y con un conjunto de zonas de demanda $K$, cada una con un número de usuarios $D_k$. El objetivo es determinar qué antenas instalar y en qué sitios, y cómo asignar la demanda de las distintas zonas a las antenas instaladas.
+
+En cada sitio puede instalarse a lo más una antena, pudiendo esta ser de banda baja (tipo $L$), caracterizada por un mayor alcance pero menor capacidad, o de banda alta (tipo $H$), que tiene un alcance más reducido pero admite un volumen mayor de usuarios. Instalar una antena tipo $L$ en el sitio $j$ tiene un costo fijo $F_j^L$, mientras que instalar una antena tipo $H$ en el sitio $j$ tiene un costo fijo $F_j^H$. La empresa dispone de un presupuesto total $B$. Cada antena posee una capacidad nominal $C_j^L$ o $C_j^H$, dependiendo del tipo, que corresponde al número máximo de usuarios que puede atender en total.
+
+Para cada zona $k$ y sitio $j$, los parámetros $a_{kj}^L$ y $a_{kj}^H$ indican si una antena tipo $L$ o $H$ instalada en $j$ podría atender usuarios de esa zona (por visibilidad y alcance). La demanda de una zona puede dividirse entre distintas antenas, y el modelo no exige que todas las zonas sean atendidas: se puede decidir no atender una zona. Una zona se considera \textit{atendida completamente} solo cuando la totalidad de su demanda $D_k$ es asignada a antenas instaladas con cobertura sobre ella. Únicamente en ese caso se obtiene una utilidad $u_k$ asociada a la zona. Es decir, no se genera utilidad parcial por atender solo una fracción de su demanda.
+
+Además, la empresa desea que la red posea cierto grado de redundancia operativa. Para ello se considera que una zona queda ``bien cubierta'' únicamente cuando está atendida completamente y, además, al menos dos antenas instaladas, de cualquier tipo, tienen asignada una fracción mínima $\alpha$ de la demanda de dicha zona. La empresa exige que al menos $R$ zonas cumplan esta condición.
+
+\begin{itemize}
+    \item[a)] Formule un modelo de optimización lineal entero mixto que permita planificar la red maximizando las utilidades.
+    \item[b)] Discuta qué ocurre con el valor óptimo del problema cuando se incrementa el requisito de zonas bien cubiertas, es decir, si $R$ aumenta.
+\end{itemize}
+
+% PAUTA
+\input{Pauta_P2}
+
+\begin{comment}
+\newboxquestion{P3} \textbf{(Dificultad: Alta, Tiempo: 40 min)} Una máquina puede realizar $m$ operaciones, indexadas de $1$ a $m$. Cada operación $j$ requiere una única herramienta $j$. La máquina puede alojar simultáneamente $B$ herramientas en su almacén de herramientas, donde $B < m$. Cargar o descargar la herramienta $j$ en el almacén de la máquina requiere $s_j$ unidades de tiempo de preparación. Sólo se puede cargar o descargar una herramienta cada vez.
+
+Al comienzo del día, $n$ trabajos esperan a ser procesados por la máquina. Cada trabajo $i$ requiere varias operaciones. Sea $J_i$ el conjunto de operaciones requeridas por el trabajo $i$, y supongamos por simplicidad que para todo $i$, $|J_i|$ no es mayor que la capacidad del almacén $B$ de la máquina. Antes de que la máquina pueda empezar a procesar el trabajo $i$, todas las herramientas necesarias pertenecientes al conjunto $J_i$ deben
+estar preparadas en la máquina. Si una herramienta $j \in J_i$ ya está cargada en la máquina, evitamos el tiempo de preparación de la herramienta $j$. Si la herramienta $j \in J_i$ no está cargada, debemos prepararla, posiblemente (si el almacén de herramientas está lleno) después de descargar una herramienta existente que el trabajo $i$ no necesita.
+
+Una vez preparadas las herramientas, se procesan todas las operaciones $|J_i|$ del trabajo $i$. Hay que tener en cuenta que, debido a los requisitos comunes de las herramientas para los distintos trabajos y a la capacidad limitada del almacén, el tiempo de preparación necesario antes de cada secuencia de trabajo depende de cada trabajo. Formule un problema de programación entera para determinar la secuencia óptima de trabajos que minimice el tiempo total de preparación para completar todos los trabajos. Suponga que al principio del día, el almacén de herramientas está completamente vacío.
+
+% PAUTA
+\input{Pauta_P3}
+\end{comment}
+
+% FIN DEL DOCUMENTO
+\end{document}

@@ -1,0 +1,56 @@
+% Fuente: Auxiliar 1, P1 (pauta).
+{\color{MidnightBlue}
+El primer paso para formular este problema como un problema de programación lineal es definir las variables de decisión. Sean $x_t$ e $y_t$ la cantidad de capacidad a carbón (respectivamente, nuclear) que entra en operación al comienzo del año $t$. Sean $w_t$ y $z_t$ la capacidad total a carbón (respectivamente, nuclear) disponible en el año $t$. El costo de un plan de expansión de capacidad es, por lo tanto,
+
+\[
+\sum_{t=1}^{T} \left(c_t x_t + n_t y_t\right).
+\]
+
+Dado que las plantas a carbón duran $20$ años, tenemos
+
+\begin{equation}
+w_t = \sum_{s=\max\{1,t-19\}}^{t} x_s, \qquad t=1,\ldots,T.
+\end{equation}
+
+De manera similar, para las plantas de energía nuclear,
+
+\begin{equation}
+z_t = \sum_{s=\max\{1,t-14\}}^{t} y_s, \qquad t=1,\ldots,T.
+\end{equation}
+
+Dado que la capacidad disponible debe satisfacer la demanda pronosticada, requerimos
+
+\begin{equation}
+    w_t + z_t + e_t \ge d_t, \qquad t=1,\ldots,T.
+\end{equation}
+
+Notar que permitimos excedente de capacidad porque plantear un balance estricto podría llevar a un problema infactible dada la naturaleza acumulativa de $w_t$ y $z_t$. Esto último ocurriría en escenarios donde el valor de $d_t$ desciende respecto al año $t-1$. Por otro lado, en la práctica es deseable tener mayor capacidad de lo demandado para proteger el suministro eléctrico del sistema frente a contingencias críticas, como desconexiones intempestivas de bloques de generación.
+
+Finalmente, dado que no más del $20\%$ de la capacidad total debe ser nunca nuclear, tenemos
+
+\[
+\frac{z_t}{w_t + z_t + e_t} \le 0.2,
+\]
+
+lo cual puede escribirse como
+
+\begin{equation}
+    0.8z_t - 0.2w_t \le 0.2e_t.
+\end{equation}
+
+Resumiendo, el problema LP de expansión de capacidad es el siguiente:
+
+\[
+\begin{aligned}
+\text{min} \quad & \sum_{t=1}^{T} \left(c_t x_t + n_t y_t\right) \\
+\text{s.a} \quad
+& w_t - \sum_{s=\max\{1,t-19\}}^{t} x_s = 0, \qquad t=1,\ldots,T, \\
+& z_t - \sum_{s=\max\{1,t-14\}}^{t} y_s = 0, \qquad t=1,\ldots,T, \\
+& w_t + z_t \ge d_t - e_t, \qquad t=1,\ldots,T, \\
+& 0.8z_t - 0.2w_t \le 0.2e_t, \qquad t=1,\ldots,T, \\
+& x_t, y_t, w_t, z_t \ge 0, \qquad t=1,\ldots,T.
+\end{aligned}
+\]
+
+Observamos que esta formulación no es completamente realista, porque ignora ciertas economías de escala que pueden favorecer plantas de mayor tamaño. Sin embargo, puede proporcionar una estimación aproximada del costo verdadero.
+}

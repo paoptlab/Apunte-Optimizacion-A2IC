@@ -1,0 +1,37 @@
+% Fuente: Pauta del Auxiliar 10, «KKT — Pregunta 2».
+{\color{MidnightBlue}
+\begin{enumerate}
+  \item[(a)] La unicidad se tiene ya que la función objetivo es estrictamente convexa, para esto basta ver que el hessiano es definido positivo. Notamos que el hessiano es una matriz diagonal donde el término $i$ de la diagonal corresponde a $\alpha_i^2 \beta_i e^{\alpha_i x_i}$, el cual es positivo ya que todas sus componentes son positivas, de esta forma se tiene $\forall z \neq 0, z^T H z = \sum_{i=1}^{n} z_i^2 \alpha_i^2 \beta_i e^{\alpha_i x_i} > 0$ y de esta manera se concluye que el hessiano es definido positivo\footnote{Se puede conlcuir tambien a partir de que sus valores propios son positivos.}.
+  \item[(b)] \begin{itemize}
+    \item \textbf{Estacionaridad:} $\alpha_i \beta_i e^{\alpha_i x_i} - \mu a_i + \lambda_i - \delta_i = 0 \quad \forall i \in \{1, \ldots, n\}$.
+    \item \textbf{Factibilidad primal:} $0 \leq x_i \leq u_i, \quad \sum_{i=1}^{n} a_i x_i \geq b$.
+    \item \textbf{Factibilidad dual:} $\mu \geq 0, \lambda_i \geq 0, \delta_i \geq 0 \quad \forall i \in \{1, \ldots, n\}$.
+    \item \textbf{Holgura complementaria:} $\mu (b - \sum_{i=1}^{n} a_i x_i) = 0, \quad \lambda_i (x_i - u_i) = 0, \quad -\delta_i x_i = 0$.
+\end{itemize}
+
+Para ver que $\mu > 0$, ocupamos la condición de estacionaridad evaluada en algún $x_i > 0$. De esta forma 
+\[
+\mu = \frac{\alpha_i \beta_i e^{\alpha_i x_i} + \lambda_i}{a_i} > 0.
+\]
+Donde asumimos que $a_i > 0$ debido a que es el impacto por disminuir $x_i$ unidades las emisiones de la planta $i$, por lo que si fuera negativo es mejor no hacer disminución por lo que esa planta se elimina del problema.
+  \item[(c)] Para el desarrollo de esta pregunta hay que notar que existen 3 casos:
+
+\begin{itemize}
+    \item Si $x_i \in (0, u_i)$ por holgura complementaria se tiene que $\lambda_i = \delta_i = 0$. De esta manera despejando $x_i$ de la condición de estacionaridad se llega a $x_i = \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right)$ lo que es consistente con lo pedido.
+
+    \item Si $x_i = 0$ se tiene que $\lambda_i = 0$, en este caso se llega a $x_i = \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i + \delta_i}{\beta_i \alpha_i} \right)$, dada la monotonía del logaritmo (recordar que los multiplicadores son no negativos) se desprende que 
+    \[
+    x_i = \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i + \delta_i}{\beta_i \alpha_i} \right) = 0 \geq \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right),
+    \]
+    de esta manera se trunca hacia arriba $\frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right)$ en 0 para tener la igualdad.
+
+    \item Análogamente si $x_i = u_i$ se tiene $\delta_i = 0$, luego $x_i = \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i - \lambda_i}{\beta_i \alpha_i} \right) = u_i \leq \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right)$ y nuevamente para tener la igualdad se trunca hacia abajo en $u_i$.
+\end{itemize}
+  \item[(d)] De la parte b se tiene que en el óptimo $\sum_{i=1}^{n} a_i x_i = b$, sean $I_1, I_2$ e $I_3$ los índices tales que $\frac{\mu a_i}{\beta_i \alpha_i} \leq 1$ ($x_i = 0$) $\ \forall i \in I_1$, $\quad 0 < \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right) < u_i \quad (x_i = \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right)) \quad \forall i \in I_2$ y $\quad \frac{1}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right) \geq u_i \quad (x_i = u_i) \quad \forall i \in I_3$. Se tiene que 
+\[
+\sum_{i \in I_2} \frac{a_i}{\alpha_i} \ln \left( \frac{\mu a_i}{\beta_i \alpha_i} \right) = b - \sum_{i \in I_3} a_i u_i,
+\]
+desde donde se puede obtener $\mu$. Cabe destacar que existe una única solución para $\mu$ dada la unicidad del óptimo $x$.
+  \item[(e)] En este caso se debía despejar $\mu$ de la ecuación anterior en función de los parámetros, posteriormente se concluía que $x_i = u$ si $\frac{1}{u} \ln(\mu \gamma) > \alpha_i$, $x_i = \frac{1}{\alpha_i} \ln(\mu \gamma)$ si $\frac{1}{u} \ln(\mu \gamma) \leq \alpha_i$. Notar que el caso $x_i = 0$ se descarta ya que si alguna componente es 0 todas las demás también lo son y no se cumple con la restricción de la calidad del agua.
+\end{enumerate}
+}

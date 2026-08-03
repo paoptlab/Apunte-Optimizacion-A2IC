@@ -1,0 +1,79 @@
+% Fuente: Pauta del Auxiliar 10, «Conceptual».
+{\color{MidnightBlue}
+\begin{enumerate}
+  \item \textbf{Verdadero.} Las condiciones necesarias de primer orden establecen que si $x^*$ es un mínimo local, entonces $\nabla f(x^*) = 0$. Sin embargo, el recíproco no es cierto: el que $\nabla f(x^*) = 0$ no implica que $x^*$ sea un mínimo local. La condición $\nabla f(x^*) = 0$ sólo garantiza que no hay dirección de descenso en primera orden, pero no da información sobre la curvatura. Si el Hessiano no es positivo semidefinido, el punto puede ser un punto de silla o un máximo. Por tanto, la afirmación es verdadera.
+  \item \textbf{Falso}. Se requiere un ejemplo no convexo donde el mínimo no sea global. Una función será no convexa si tiene más de un punto donde el gradiente se anula. Por ejemplo:
+    \[
+    f(x)=x^2+x^3
+    \]
+    se tiene que 0 es mínimo, ya que su derivada se anula y a su vez $f''(0)=0$, por lo que es mínimo local. Pero no es global, ya que $f(x)<f(0)$ si $x<1$.
+  \item \textbf{Falso}
+    El siguiente problema no lineal es acotado:
+\[
+\min \left\{ \frac{1}{x} \right\} \quad \text{sujeto a } x \geq 1
+\]
+
+Notamos que \( f(x) = \frac{1}{x} \) es convexo si:
+\[
+\lambda \in [0, 1]
+\]
+\[
+f(\lambda x + (1 - \lambda)y) \leq \lambda f(x) + (1 - \lambda)f(y)
+\]
+
+Como \( x, y \geq 1 \) basta corroborar que se cumple:
+\[
+xy \leq (\lambda y + (1 - \lambda)x)(\lambda x + (1 - \lambda)y)
+\]
+
+Efectivamente:
+\[
+(\lambda y + (1 - \lambda)x)(\lambda x + (1 - \lambda)y) = \lambda^2 xy + (\lambda - \lambda^2)x^2 + (1 - \lambda)^2xy + (\lambda - \lambda^2)y^2
+\]
+\[
+= -\lambda^2(x - y)^2 + \lambda(x - y)^2 + xy = \lambda(1 - \lambda)(x - y)^2 + xy \geq xy.
+\]
+
+\[
+\Rightarrow f(x) \text{ es convexa, pero el mínimo está indeterminado.}
+\]
+  \item \textbf{Falso} Un ejemplo clásico donde se cumple que el gradiente es cero pero no se tiene un mínimo local, debido a que el problema no es acotado, es el siguiente:
+\begin{align*}
+\min \quad & -(x - 2)^2 \\
+\text{s.a.} \quad & x \geq 1
+\end{align*}
+Calculamos las condiciones de Karush-Kuhn-Tucker (KKT). Sea $\lambda$ el multiplicador de la restricción \( x \geq 1 \). La condición de estacionaridad es:
+
+\[
+\frac{d}{dx} [-(x - 2)^2 + \lambda(1-x)] = 0 \Rightarrow -2(x - 2) - \lambda = 0
+\]
+
+La condición de complementariedad:
+
+\[
+\lambda(1 - x) = 0
+\]
+
+Y las condiciones de factibilidad:
+
+\[
+x \geq 1, \quad \lambda \geq 0
+\]
+
+Proponemos el punto \( x = 2 \), entonces:
+
+\[
+-2(2 - 2) - \lambda = 0 \Rightarrow \lambda = 0
+\]
+\[
+\lambda(1 - x) = 0(1 - 2) = 0
+\]
+\[
+x = 2 \geq 1, \quad \lambda = 0 \geq 0
+\]
+
+El punto \( x = 2 \) satisface todas las condiciones KKT, pero no es un mínimo global ni local, ya que la función es estrictamente cóncava (el problema no es convexo) y no está acotado superiormente. En este caso, al aumentar \( x \), la función \( -(x - 2)^2 \) decrece indefinidamente.
+
+\textbf{Observación:} El hecho de que un punto satisfaga las condiciones de KKT no garantiza que sea una solución óptima en un problema no convexo.
+\end{enumerate}
+}

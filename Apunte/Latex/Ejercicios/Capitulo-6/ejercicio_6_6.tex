@@ -1,0 +1,28 @@
+% Fuente: Control 2, Pregunta 2.
+Considere el siguiente problema de optimización no lineal:
+
+\begin{equation*}
+\begin{aligned}
+    (\bar{P})\quad \min_{x_1,x_2} \quad 
+    & \frac{1}{2}k_1x_1^2
+    + \frac{1}{2}k_2(x_2-x_1)^2
+    + \frac{1}{2}k_3(l-x_2)^2 \\
+    \text{s.a.} \quad 
+    & \frac{w}{2}-x_1 \leq 0, \qquad (R1) \\
+    & w+x_1-x_2 \leq 0, \qquad (R2) \\
+    & \frac{w}{2}-l+x_2 \leq 0. \qquad (R3)
+\end{aligned}
+\end{equation*}
+
+donde $w,l,k_1,k_2,k_3$ son parámetros positivos y se cumple que $l>2w$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item Demuestre que $(\bar{P})$ es convexo y encuentre al menos un punto que satisfaga la condición de \textit{Slater}.
+
+    \item Plantee el problema dual lagrangiano. Indique cómo se relaciona el valor óptimo de este problema con el de $(\bar{P})$. 
+
+    \item Plantee las condiciones de KKT para $(\bar{P})$ y justifique por qué es posible encontrar una solución óptima en base a ellas.
+
+    \item Suponga que $w=2$, $l=10$, $k_1=k_2=k_3=1$ y, 
+    además, que las variables duales asociadas a las restricciones (R1) y (R2) son cero. Demuestre que el problema tiene solución y determínela.
+\end{enumerate}

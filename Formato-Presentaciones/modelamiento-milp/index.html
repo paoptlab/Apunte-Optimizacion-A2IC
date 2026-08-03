@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelamiento MILP</title>
+<link rel="icon" href="../shared/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../node_modules/reveal.js/dist/reset.css">
+<link rel="stylesheet" href="../node_modules/reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="../shared/vendor/ibm-plex/fonts.css">
+<link rel="stylesheet" href="../shared/deck.css">
+<link rel="stylesheet" href="../shared/vendor/katex/katex.min.css">
+<script defer src="../shared/vendor/katex/katex.min.js"></script>
+<script defer src="../shared/vendor/katex/auto-render.min.js"></script>
+<style>
+  .a2-prompt-chips{ display:flex; gap:12px; flex-wrap:wrap; }
+  .a2-prompt-chips .chip{ font-size:18px; padding:7px 14px; }
+  .a2-split{ display:grid; grid-template-columns:1fr 1fr; gap:42px; min-height:0; }
+  .a2-split .card{
+    display:grid;
+    grid-template-rows:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:start;
+  }
+  .a2-split .math{ grid-row:2; align-self:center; width:100%; }
+  .a2-table td:first-child{ width:220px; }
+  .a2-table td:nth-child(2){ width:230px; }
+  .a2-parameter-list{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .a2-parameter-row{ display:grid; grid-template-columns:290px 1fr; gap:26px; align-items:center; padding:11px 4px; border-bottom:1px solid var(--line); }
+  .a2-parameter-row .symbol{ font-size:25px; white-space:nowrap; }
+  .a2-parameter-row .desc{ font-size:22px; color:var(--ink-soft); }
+  .a2-center-formula .katex-display, .a2-center-formula .katex-display>.katex{ text-align:center; }
+  .a2-question-list{ display:flex; flex-direction:column; gap:28px; margin:0; padding:0; list-style:none; counter-reset:question; }
+  .a2-question-list li{ display:grid; grid-template-columns:54px 1fr; gap:22px; align-items:start; font-size:28px; line-height:1.4; }
+  .a2-question-list li::before{ counter-increment:question; content:counter(question,decimal-leading-zero); color:var(--accent-soft); font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding-top:5px; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- 01 · PORTADA -->
+  <section class="dark" data-screen-label="01 Portada">
+    <div class="cover-grid"></div>
+    <div class="col grow" style="justify-content:space-between; position:relative; z-index:1;">
+      <div class="row" style="justify-content:flex-end;">
+        <div class="row" style="gap:18px; align-items:stretch;">
+          <div class="logo-solo" style="width:380px;"><img src="../shared/assets/logo-a2ic.jpg" alt="A2IC — Área para el Aprendizaje de Ingeniería y Ciencias" style="height:60px;"></div>
+          <div class="logo-solo" style="width:380px;"><img src="../shared/assets/logo-fcfm-die.png" alt="FCFM · Departamento de Ingeniería Eléctrica · Universidad de Chile" style="height:60px;"></div>
+        </div>
+      </div>
+      <div class="col" style="gap:28px;">
+        <div class="kicker">EL4114 · Optimización · A2IC</div>
+        <h1 class="title" style="font-size:104px; line-height:1;">Modelamiento MILP</h1>
+        <div class="subtitle" style="max-width:1220px;">Formulación de modelos de optimización</div>
+      </div>
+      <div class="row between" style="align-items:flex-end;">
+        <div class="row" style="gap:72px;">
+          <div class="col" style="gap:6px;"><div class="small mono muted">Profesor</div><div class="small">Heraldo Rozas</div></div>
+          <div class="col" style="gap:6px;"><div class="small mono muted">Auxiliares</div><div class="small">Diego Carez · Joaquín Ormazábal</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Modelamiento MILP</span><span>01</span></div></div>
+  </section>
+
+  <!-- 02 · AGENDA -->
+  <section data-screen-label="02 Agenda">
+    <div class="head">
+      <div class="kicker">Índice</div>
+      <h2 class="title">Agenda de la sesión</h2>
+    </div>
+    <div class="agenda grow" style="align-content:center;">
+      <div class="ai"><span class="n">01</span><span class="t">Organización e instrucciones</span></div>
+      <div class="ai act"><span class="n">04</span><span class="t">Trabajo en grupo<span class="s">Problema 2</span></span></div>
+      <div class="ai act"><span class="n">02</span><span class="t">Trabajo en grupo<span class="s">Problema 1</span></span></div>
+      <div class="ai"><span class="n">05</span><span class="t">Solución y análisis<span class="s">Problema 2</span></span></div>
+      <div class="ai"><span class="n">03</span><span class="t">Solución y análisis<span class="s">Problema 1</span></span></div>
+      <div class="ai"><span class="n">06</span><span class="t">Cierre</span></div>
+    </div>
+    <aside class="notes">Recorrer el orden: primero Problema 1 completo (enunciado, trabajo en grupo y solución), luego Problema 2 completo. Ajustar tiempos según el ritmo del curso.</aside>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Agenda</span><span>02</span></div></div>
+  </section>
+
+  <!-- 03 · INSTRUCCIONES -->
+  <section data-screen-label="03 Instrucciones">
+    <div class="head">
+      <div class="kicker">Organización</div>
+      <h2 class="title">Instrucciones de trabajo en grupo</h2>
+    </div>
+    <ul class="clean num grow" style="justify-content:center; gap:28px; max-width:1640px;">
+      <li><span>Formen grupos de <strong>4 o 5 personas</strong>.</span></li>
+      <li><span>Formulen un <strong>MILP ordenado</strong>: conjuntos e índices, parámetros, variables de decisión, función objetivo y restricciones.</span></li>
+      <li><span>Dejen <strong>explícitos los supuestos</strong> que hagan al definir variables o restricciones.</span></li>
+      <li><span>Acudan al <strong>cuerpo docente</strong> ante cualquier duda sobre el enunciado.</span></li>
+      <li><span>Resolveremos <strong>un problema completo a la vez</strong>: primero P1 (enunciado → grupo → solución) y luego P2.</span></li>
+    </ul>
+    <aside class="notes">Enfatizar que deben dejar explícitos los supuestos y que resolveremos un problema completo a la vez: P1 primero, luego P2.</aside>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Organización</span><span>03</span></div></div>
+  </section>
+
+  <!-- 04 · SEPARADOR PROBLEMA 1 -->
+  <section class="dark" data-screen-label="04 Problema 1">
+    <div class="cover-grid"></div>
+    <div class="col grow center" style="align-items:flex-start; position:relative; z-index:1; gap:24px;">
+      <div class="kicker">Problema 1</div>
+      <h2 class="title" style="font-size:86px;">Mantenimiento de turbinas eólicas</h2>
+      <div class="subtitle">Empresa Maintenance — parque eólico costero en Inglaterra</div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1</span><span>04</span></div></div>
+  </section>
+
+  <!-- 05 · ENUNCIADO P1 -->
+  <section data-screen-label="05 Enunciado P1">
+    <div class="head">
+      <div class="kicker">Problema 1 · Enunciado</div>
+      <h2 class="title">Lectura del problema</h2>
+    </div>
+    <div class="col grow center" style="align-items:flex-start; gap:34px; max-width:1600px;">
+      <p class="lead" style="font-size:36px;">Formulen, de manera ordenada, un <strong>MILP</strong> que permita a Maintenance coordinar sus decisiones de operación y mantenimiento, <strong>minimizando los costos netos</strong>.</p>
+      <div class="a2-prompt-chips">
+        <span class="chip">Conjuntos</span><span class="chip">Parámetros</span><span class="chip">Variables</span><span class="chip">Función objetivo</span><span class="chip">Restricciones</span>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Enunciado</span><span>05</span></div></div>
+  </section>
+
+  <!-- 06 · TRABAJO EN GRUPO P1 -->
+  <section class="dark" data-screen-label="06 Trabajo en grupo P1">
+    <div class="cover-grid"></div>
+    <div class="col grow center" style="position:relative; z-index:1; gap:22px; text-align:center;">
+      <div class="bignum" style="color:var(--accent-soft);">30 min</div>
+      <h2 class="title">Trabajo en grupo</h2>
+      <p class="lead muted" style="max-width:1320px;">Formulen el MILP de mantenimiento: conjuntos, parámetros, variables, función objetivo y restricciones.</p>
+    </div>
+    <aside class="notes">~20 minutos. Circular entre los grupos resolviendo dudas puntuales sobre notación, sin adelantar la resolución de P1.</aside>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Trabajo en grupo</span><span>06</span></div></div>
+  </section>
+
+  <!-- 07 · VARIABLES P1 -->
+  <section data-screen-label="07 Variables P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1</div>
+      <h2 class="title">Variables de decisión</h2>
+    </div>
+    <table class="t a2-table grow" style="font-size:25px; align-self:center;">
+      <thead><tr><th>Variable</th><th>Dominio</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>\(x_{g,t}\)</td><td>\(\{0,1\}\)</td><td>Indica si la turbina \(g\) se encuentra en mantenimiento en el período \(t\).</td></tr>
+        <tr><td>\(y_{g,t}\)</td><td>\(\{0,1\}\)</td><td>Indica si la turbina \(g\) se encuentra disponible (operativa) en el período \(t\).</td></tr>
+        <tr><td>\(z_t\)</td><td>\(\{0,1\}\)</td><td>Indica si el equipo de mantenimiento se encuentra desplegado en el período \(t\).</td></tr>
+        <tr><td>\(p_{g,t}\)</td><td>\(\mathbb{R}_{\ge 0}\)</td><td>Energía producida por la turbina \(g\) en el período \(t\).</td></tr>
+      </tbody>
+    </table>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Solución · Problema 1</span><span>07</span></div></div>
+  </section>
+
+  <!-- 08 · OBJETIVO P1 -->
+  <section data-screen-label="08 Objetivo P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1 · Función objetivo</div>
+      <h2 class="title">Minimizar los costos netos</h2>
+    </div>
+    <div class="col grow center" style="gap:30px;">
+      <div class="math a2-center-formula" style="width:100%; padding:52px 40px; font-size:43px;">
+        \[\min\; \sum_{g\in G}\sum_{t\in T} C_{g,t}x_{g,t}
+        + \sum_{t\in T} A_tz_t
+        - \sum_{g\in G}\sum_{t\in T}\pi_t p_{g,t}\]
+      </div>
+      <div class="legend" style="justify-content:center; gap:46px;">
+        <span class="it"><strong>\(C_{g,t}x_{g,t}\)</strong> — costo de reparación</span>
+        <span class="it"><strong>\(A_tz_t\)</strong> — costo de desplegar el equipo</span>
+        <span class="it"><strong>\(\pi_t p_{g,t}\)</strong> — ingresos por venta de energía</span>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Función objetivo</span><span>08</span></div></div>
+  </section>
+
+  <!-- 09 · REPARACIÓN Y DESPLIEGUE P1 -->
+  <section data-screen-label="09 Reparación y despliegue P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1 · Restricciones</div>
+      <h2 class="title">Reparación única y despliegue del equipo</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Reparación única</span><p class="lead" style="font-size:28px; margin:0;">Cada turbina recibe mantenimiento en una única fecha del horizonte.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{t\in T}x_{g,t}=1 \qquad \forall g\in G\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Despliegue del equipo</span><p class="lead" style="font-size:28px; margin:0;">Si una turbina se repara en \(t\), el equipo debe estar desplegado en \(t\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[x_{g,t}\le z_t \qquad \forall g\in G,\;t\in T\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Restricciones</span><span>09</span></div></div>
+  </section>
+
+  <!-- 10 · CAPACIDAD Y CLIMA P1 -->
+  <section data-screen-label="10 Capacidad y clima P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1 · Restricciones</div>
+      <h2 class="title">Capacidad máxima y condición de clima</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Capacidad máxima</span><p class="lead" style="font-size:28px; margin:0;">No se puede calendarizar más de \(M_t\) turbinas en un tiempo \(t\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{g\in G}x_{g,t}\le M_t \qquad \forall t\in T\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Mal clima</span><p class="lead" style="font-size:28px; margin:0;">El equipo solo se despliega en los días \(K\) con condiciones seguras.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[z_t=0 \qquad \forall t\notin K\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Restricciones</span><span>10</span></div></div>
+  </section>
+
+  <!-- 11 · DEMANDA Y GENERACIÓN P1 -->
+  <section data-screen-label="11 Demanda y generación P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1 · Restricciones</div>
+      <h2 class="title">Cumplir demanda y límites de generación</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Cumplir demanda</span><p class="lead" style="font-size:28px; margin:0;">El parque eólico debe producir al menos \(D_t\) en cada instante \(t\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{g\in G}p_{g,t}\ge D_t \qquad \forall t\in T\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Límites de generación</span><p class="lead" style="font-size:28px; margin:0;">La generación está acotada por la potencia máxima si la turbina está disponible.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[p_{g,t}\le P_{g,t}y_{g,t} \qquad \forall g\in G,\;t\in T\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Restricciones</span><span>11</span></div></div>
+  </section>
+
+  <!-- 12 · DISPONIBILIDAD P1 -->
+  <section data-screen-label="12 Disponibilidad P1">
+    <div class="head">
+      <div class="kicker">Solución · Problema 1 · Restricciones</div>
+      <h2 class="title">Disponibilidad de las turbinas</h2>
+    </div>
+    <p class="lead" style="margin:0 0 24px; max-width:1640px;">Una turbina no está activa mientras se repara, y queda inactiva desde su falla (\(t\ge\tau_g\)) hasta que efectivamente se repare.</p>
+    <div class="math a2-center-formula grow center" style="display:flex; flex-direction:column; justify-content:center; gap:30px; font-size:40px;">
+      \[y_{g,t}+x_{g,t}\le 1 \qquad \forall g\in G,\;t\in T\]
+      \[y_{g,t}\le\sum_{s=1}^{t}x_{g,s} \qquad \forall g\in G,\;t\ge\tau_g\]
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 1 · Restricciones</span><span>12</span></div></div>
+  </section>
+
+  <!-- 13 · SEPARADOR PROBLEMA 2 -->
+  <section class="dark" data-screen-label="13 Problema 2">
+    <div class="cover-grid"></div>
+    <div class="col grow center" style="align-items:flex-start; position:relative; z-index:1; gap:24px;">
+      <div class="kicker">Problema 2</div>
+      <h2 class="title" style="font-size:86px;">Despliegue de una red 5G</h2>
+      <div class="subtitle">Selección de antenas y asignación de demanda por zona</div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2</span><span>13</span></div></div>
+  </section>
+
+  <!-- 14 · ENUNCIADO P2 -->
+  <section data-screen-label="14 Enunciado P2">
+    <div class="head">
+      <div class="kicker">Problema 2 · Enunciado</div>
+      <h2 class="title">Lectura de enunciado</h2>
+    </div>
+    <div class="col grow center" style="align-items:flex-start; gap:36px; max-width:1600px;">
+      <div class="col" style="gap:18px;">
+        <p class="lead" style="font-size:34px; margin:0;">Formulen un <strong>MILP</strong> que planifique la red <strong>maximizando las utilidades</strong>.</p>
+        <div class="a2-prompt-chips"><span class="chip">Conjuntos</span><span class="chip">Parámetros</span><span class="chip">Variables</span><span class="chip">Función objetivo</span><span class="chip">Restricciones</span></div>
+      </div>
+      <div class="activity" style="width:100%;">
+        <span class="atag">Parte B · Análisis</span>
+        <p class="q">Discutan qué ocurre con el <strong>valor óptimo</strong> cuando aumenta el requisito \(R\) de zonas bien cubiertas.</p>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Enunciado</span><span>14</span></div></div>
+  </section>
+
+  <!-- 15 · TRABAJO EN GRUPO P2 -->
+  <section class="dark" data-screen-label="15 Trabajo en grupo P2">
+    <div class="cover-grid"></div>
+    <div class="col grow center" style="position:relative; z-index:1; gap:22px; text-align:center;">
+      <div class="bignum" style="color:var(--accent-soft);">30 min</div>
+      <h2 class="title">Trabajo en grupo</h2>
+      <p class="lead muted" style="max-width:1320px;">Formulen el MILP de la red 5G: conjuntos, parámetros, variables, función objetivo y restricciones.</p>
+    </div>
+    <aside class="notes">~20 minutos. Circular entre los grupos resolviendo dudas puntuales sobre notación, sin adelantar la resolución de P2.</aside>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Trabajo en grupo</span><span>15</span></div></div>
+  </section>
+
+  <!-- 16 · CONJUNTOS Y PARÁMETROS P2 -->
+  <section data-screen-label="16 Conjuntos y parámetros P2" style="--type-body:25px;">
+    <div class="head" style="margin-bottom:28px;">
+      <div class="kicker">Solución · Problema 2</div>
+      <h2 class="title">Conjuntos y parámetros</h2>
+    </div>
+    <div class="row grow" style="gap:48px; min-height:0;">
+      <div class="col" style="flex:none; width:520px; gap:18px;">
+        <span class="card lab" style="border:0; padding:0;">Conjuntos</span>
+        <div class="card" style="padding:24px 28px;"><div class="lead">\(j\in J\)</div><div class="small muted">Sitios candidatos</div></div>
+        <div class="card" style="padding:24px 28px;"><div class="lead">\(k\in K\)</div><div class="small muted">Zonas de demanda</div></div>
+      </div>
+      <div class="col grow" style="gap:18px;">
+        <span class="card lab" style="border:0; padding:0;">Parámetros</span>
+        <div class="a2-parameter-list">
+          <div class="a2-parameter-row"><div class="symbol">\(D_k\)</div><div class="desc">Demanda (usuarios) de la zona \(k\)</div></div>
+          <div class="a2-parameter-row"><div class="symbol">\(F^L_j,\;F^H_j\)</div><div class="desc">Costo fijo de instalar una antena tipo L / H en el sitio \(j\)</div></div>
+          <div class="a2-parameter-row"><div class="symbol">\(C^L_j,\;C^H_j\)</div><div class="desc">Capacidad nominal de una antena tipo L / H</div></div>
+          <div class="a2-parameter-row"><div class="symbol">\(a^L_{kj},\;a^H_{kj}\)</div><div class="desc">Cobertura de una antena tipo L / H en \(j\) sobre la zona \(k\)</div></div>
+          <div class="a2-parameter-row"><div class="symbol">\(u_k\)</div><div class="desc">Utilidad obtenida si la zona \(k\) es atendida</div></div>
+          <div class="a2-parameter-row"><div class="symbol">\(B,\;\alpha,\;R\)</div><div class="desc">Presupuesto total, umbral de respaldo y mínimo de zonas con redundancia</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Solución · Problema 2</span><span>16</span></div></div>
+  </section>
+
+  <!-- 17 · VARIABLES P2 -->
+  <section data-screen-label="17 Variables P2" style="--type-body:24px;">
+    <div class="head" style="margin-bottom:28px;">
+      <div class="kicker">Solución · Problema 2</div>
+      <h2 class="title">Variables de decisión</h2>
+    </div>
+    <table class="t a2-table grow" style="font-size:23px; align-self:center;">
+      <thead><tr><th>Variable</th><th>Dominio</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>\(w^L_j,\;w^H_j\)</td><td>\(\{0,1\}\)</td><td>Instala una antena tipo L / H en el sitio \(j\).</td></tr>
+        <tr><td>\(d_{kj}\)</td><td>\(\mathbb{R}_{\ge 0}\)</td><td>Demanda de la zona \(k\) asignada a la antena del sitio \(j\).</td></tr>
+        <tr><td>\(v_k\)</td><td>\(\{0,1\}\)</td><td>Zona \(k\) totalmente atendida (100% de su demanda asignada).</td></tr>
+        <tr><td>\(e_{kj}\)</td><td>\(\{0,1\}\)</td><td>La antena \(j\) respalda a la zona \(k\) con al menos \(\alpha\) de su demanda.</td></tr>
+        <tr><td>\(r_k\)</td><td>\(\{0,1\}\)</td><td>Zona \(k\) está “bien cubierta” (atendida y con \(\ge 2\) respaldos).</td></tr>
+      </tbody>
+    </table>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Solución · Problema 2</span><span>17</span></div></div>
+  </section>
+
+  <!-- 18 · OBJETIVO P2 -->
+  <section data-screen-label="18 Objetivo P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Función objetivo</div>
+      <h2 class="title">Maximizar la utilidad</h2>
+    </div>
+    <div class="col grow center" style="gap:34px;">
+      <div class="math a2-center-formula" style="width:100%; padding:56px 40px; font-size:52px;">\[\max\;\sum_{k\in K}u_kv_k\]</div>
+      <p class="lead muted" style="margin:0; text-align:center;">Solo se suma \(u_k\) si la zona \(k\) queda completamente atendida — no hay utilidad parcial.</p>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Función objetivo</span><span>18</span></div></div>
+  </section>
+
+  <!-- 19 · ANTENA Y PRESUPUESTO P2 -->
+  <section data-screen-label="19 Antena y presupuesto P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Restricciones</div>
+      <h2 class="title">A lo más una antena por sitio y presupuesto</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">A lo más una antena</span><p class="lead" style="font-size:28px; margin:0;">En cada sitio \(j\) se instala como máximo un tipo de antena.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[w^L_j+w^H_j\le1 \qquad \forall j\in J\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Presupuesto</span><p class="lead" style="font-size:28px; margin:0;">El costo total de instalación no puede superar el presupuesto \(B\).</p></div>
+        <div class="math a2-center-formula" style="font-size:31px;">\[\sum_{j\in J}\!\left(F^L_jw^L_j+F^H_jw^H_j\right)\le B\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Restricciones</span><span>19</span></div></div>
+  </section>
+
+  <!-- 20 · COBERTURA Y CAPACIDAD P2 -->
+  <section data-screen-label="20 Cobertura y capacidad P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Restricciones</div>
+      <h2 class="title">Cobertura habilitante y capacidad de antena</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Cobertura habilitante</span><p class="lead" style="font-size:27px; margin:0;">Solo se puede asignar demanda a una antena instalada que efectivamente cubra la zona.</p></div>
+        <div class="math a2-center-formula" style="font-size:27px;">\[d_{kj}\le D_k\!\left(a^L_{kj}w^L_j+a^H_{kj}w^H_j\right) \quad \forall k,j\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Capacidad de la antena</span><p class="lead" style="font-size:27px; margin:0;">La demanda total asignada a una antena no puede superar su capacidad nominal.</p></div>
+        <div class="math a2-center-formula" style="font-size:27px;">\[\sum_{k\in K}d_{kj}\le C^L_jw^L_j+C^H_jw^H_j \quad \forall j\in J\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Restricciones</span><span>20</span></div></div>
+  </section>
+
+  <!-- 21 · DEMANDA Y ZONA P2 -->
+  <section data-screen-label="21 Demanda y zona P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Restricciones</div>
+      <h2 class="title">Demanda máxima asignable y activación de zona</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Demanda máxima asignable</span><p class="lead" style="font-size:28px; margin:0;">No se puede asignar más del 100% de la demanda de una zona.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{j\in J}d_{kj}\le D_k \qquad \forall k\in K\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Activación de zona atendida</span><p class="lead" style="font-size:28px; margin:0;">\(v_k\) solo puede activarse si se asignó exactamente el 100% de \(D_k\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{j\in J}d_{kj}\ge D_kv_k \qquad \forall k\in K\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Restricciones</span><span>21</span></div></div>
+  </section>
+
+  <!-- 22 · REDUNDANCIA P2 -->
+  <section data-screen-label="22 Redundancia P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Restricciones</div>
+      <h2 class="title">Redundancia: conteo de antenas y zona atendida</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Conteo de respaldos</span><p class="lead" style="font-size:28px; margin:0;">\(r_k\) solo se activa si al menos 2 antenas respaldan a la zona \(k\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\sum_{j\in J}e_{kj}\ge2r_k \qquad \forall k\in K\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Redundancia implica atención</span><p class="lead" style="font-size:28px; margin:0;">Una zona solo puede ser “bien cubierta” si primero está totalmente atendida.</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[r_k\le v_k \qquad \forall k\in K\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Restricciones</span><span>22</span></div></div>
+  </section>
+
+  <!-- 23 · UMBRAL Y MÍNIMO P2 -->
+  <section data-screen-label="23 Umbral y mínimo P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Restricciones</div>
+      <h2 class="title">Umbral de fracción y mínimo de zonas bien cubiertas</h2>
+    </div>
+    <div class="a2-split grow">
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Umbral de respaldo (\(\alpha\))</span><p class="lead" style="font-size:27px; margin:0;">\(e_{kj}\) solo puede activarse si la antena \(j\) asigna al menos \(\alpha D_k\) a la zona \(k\).</p></div>
+        <div class="math a2-center-formula" style="font-size:34px;">\[\alpha D_ke_{kj}\le d_{kj} \qquad \forall k,j\]</div>
+      </div>
+      <div class="card">
+        <div class="col" style="gap:16px;"><span class="lab">Mínimo de zonas redundantes</span><p class="lead" style="font-size:27px; margin:0;">Al menos \(R\) zonas deben quedar “bien cubiertas”.</p></div>
+        <div class="math a2-center-formula" style="font-size:38px;">\[\sum_{k\in K}r_k\ge R\]</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Restricciones</span><span>23</span></div></div>
+  </section>
+
+  <!-- 24 · ANÁLISIS P2 -->
+  <section data-screen-label="24 Análisis P2">
+    <div class="head">
+      <div class="kicker">Solución · Problema 2 · Análisis (parte B)</div>
+      <h2 class="title">¿Qué pasa con el óptimo al aumentar \(R\)?</h2>
+    </div>
+    <div class="col grow center" style="gap:40px;">
+      <div class="math a2-center-formula" style="width:100%; padding:50px 40px; font-size:48px;">\[R_1\le R_2 \quad\Longrightarrow\quad Z^*(R_1)\ge Z^*(R_2)\]</div>
+      <p class="lead muted" style="max-width:1580px; text-align:center; margin:0;">Aumentar \(R\) <strong style="color:var(--ink);">restringe el conjunto factible</strong> (exige más zonas con redundancia), por lo que el valor óptimo de utilidad <strong style="color:var(--ink);">no puede aumentar</strong>: es una función no creciente de \(R\).</p>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Problema 2 · Análisis</span><span>24</span></div></div>
+  </section>
+
+  <!-- 25 · CIERRE -->
+  <section class="dark" data-screen-label="25 Cierre">
+    <div class="cover-grid"></div>
+    <div class="head" style="position:relative; z-index:1;">
+      <div class="kicker">Cierre</div>
+      <h2 class="title">Preguntas para la discusión</h2>
+    </div>
+    <ol class="a2-question-list grow" style="position:relative; z-index:1; justify-content:center; max-width:1660px;">
+      <li><span>¿Cómo cambiaría el modelo de P1 si una turbina pudiera fallar y repararse <strong>más de una vez</strong>?</span></li>
+      <li><span>En P2, ¿qué tan realista es el supuesto de <strong>“todo o nada”</strong> al atender una zona? ¿Cómo lo relajarían?</span></li>
+      <li><span>¿Qué otros supuestos de ambos modelos discutirían con la empresa antes de implementarlos?</span></li>
+    </ol>
+    <aside class="notes">Abrir la discusión final: pedir a un par de grupos que compartan qué supuesto les generó más dudas.</aside>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Cierre</span><span>25</span></div></div>
+  </section>
+
+</div>
+</div>
+
+<script src="../node_modules/reveal.js/dist/reveal.js"></script>
+<script src="../node_modules/reveal.js/dist/plugin/notes.js"></script>
+<script src="../shared/presentation-init.js"></script>
+</body>
+</html>

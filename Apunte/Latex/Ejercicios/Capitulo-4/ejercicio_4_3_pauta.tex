@@ -1,0 +1,268 @@
+% Fuente: Control 1, Pregunta 2
+\begingroup
+\color{MidnightBlue}
+\paragraph{1.\; Formulación y soluciones básicas}
+
+El modelo LP es:
+\begin{equation}
+  \max_{x_1,x_2,x_3}\quad x_1 + 2x_2 + 2x_3
+  \qquad \text{s.a.}\quad
+  2x_1 + x_2 \le 6,\quad
+  x_3 \le 10,\quad
+  x_1,x_2,x_3 \ge 0.
+  \label{ex:4:3:sol:eq:primal}
+\end{equation}
+
+Agregando variables de holgura $s_1,s_2\ge 0$ se obtiene la forma estándar:
+\begin{equation}
+  \max\quad x_1+2x_2+2x_3
+  \quad\text{s.a.}\quad
+  \underbrace{\begin{bmatrix}2&1&0&1&0\\0&0&1&0&1\end{bmatrix}}_{\displaystyle A}
+  \begin{bmatrix}x_1\\x_2\\x_3\\s_1\\s_2\end{bmatrix}
+  =
+  \underbrace{\begin{bmatrix}6\\10\end{bmatrix}}_{\displaystyle b},\quad
+  x_1,x_2,x_3,s_1,s_2\ge 0.
+  \label{ex:4:3:sol:eq:std}
+\end{equation}
+
+Con $n=5$ variables y $m=2$ restricciones, cada solución básica fija $n-m=3$
+variables no básicas en cero.
+
+Se requiere que cada base $B$ sea no singular, por lo que pares como $\{x_1,x_2\}$, $\{x_2,s_1\}$ o $\{x_3,s_2\}$ son linealmente dependientes y no
+constituyen bases válidas. La tabla de soluciones básicas es:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{cccc}
+  \toprule
+  \textbf{Base} & \textbf{No básicas (=0)} &
+  \textbf{Solución }$(x_1,x_2,x_3,s_1,s_2)$ & \textbf{¿Factible?} \\
+  \midrule
+  $\{x_1,\,x_3\}$ & $x_2=s_1=s_2=0$ & $(3,\;0,\;10,\;0,\;0)$  & Sí \\
+  $\{x_1,\,s_2\}$ & $x_2=x_3=s_1=0$ & $(3,\;0,\;0,\;0,\;10)$  & Sí \\
+  $\{x_2,\,x_3\}$ & $x_1=s_1=s_2=0$ & $(0,\;6,\;10,\;0,\;0)$  & Sí \\
+  $\{x_2,\,s_2\}$ & $x_1=x_3=s_1=0$ & $(0,\;6,\;0,\;0,\;10)$  & Sí \\
+  $\{s_1,\,x_3\}$ & $x_1=x_2=s_2=0$ & $(0,\;0,\;10,\;6,\;0)$  & Sí \\
+  $\{s_1,\,s_2\}$ & $x_1=x_2=x_3=0$ & $(0,\;0,\;0,\;6,\;10)$  & Sí \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+Todas las soluciones básicas son factibles y no degeneradas (todas las variables básicas son estrictamente positivas). No existen soluciones infactibles ni degeneradas.\\
+
+Los 6 vértices del poliedro en las variables originales son:
+\[
+  V_1=(3,0,10),\; V_2=(3,0,0),\; V_3=(0,6,10),\;
+  V_4=(0,6,0),\; V_5=(0,0,10),\; V_6=(0,0,0).
+\]
+
+El poliedro del problema se muestra en la Figura \ref{ex:4:3:sol:fig:poliedro_p2}. Corresponde a un \emph{prisma triangular} en $\mathbb{R}^3$: producto cartesiano de la región triangular $\{2x_1+x_2\le 6,\,x_1,x_2\ge 0\}$ con el
+segmento $[0,10]$ en la dirección $x_3$.\\
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+    x={(1cm,0cm)},
+    y={(0cm,0.65cm)},
+    z={(-0.32cm,-0.26cm)},
+    >=Stealth,
+    line join=round,
+    line cap=round,
+    every node/.style={font=\large},
+    eje/.style={->, thick},
+    arista/.style={thick},
+    oculta/.style={thick, dashed}
+]
+
+\coordinate (O)  at (0,0,0);
+\coordinate (A)  at (3,0,0);
+\coordinate (B)  at (0,6,0);
+
+\coordinate (O3) at (0,0,10);
+\coordinate (A3) at (3,0,10);
+\coordinate (B3) at (0,6,10);
+
+\draw[oculta] (O3) -- (A3);
+\draw[oculta] (O3) -- (B3);
+\draw[oculta] (O3) -- (O);
+
+\draw[arista] (O) -- (A);
+\draw[arista] (A) -- (B);
+\draw[arista] (B) -- (O);
+
+\draw[arista] (A3) -- (B3);
+
+\draw[arista] (A) -- (A3);
+\draw[arista] (B) -- (B3);
+
+\draw[eje] (O) -- (3.8,0,0) node[right] {$x_1$};
+\draw[eje] (O) -- (0,6.7,0) node[above] {$x_2$};
+\draw[eje] (O) -- (0,0,11.2) node[below left] {$x_3$};
+
+\end{tikzpicture}
+\caption{Poliedro definido por $2x_1+x_2\leq 6$, $x_1,x_2\geq 0$ y $0\leq x_3\leq 10$.}
+\label{ex:4:3:sol:fig:poliedro_p2}
+\end{figure}
+
+\paragraph{2.\; Método Simplex Revisado}
+
+Trabajamos con la versión de minimización equivalente
+$\min\;{-x_1-2x_2-2x_3}$, con vector de costos $c=(-1,-2,-2,0,0)'$.
+
+\paragraph{Iteración I — Vértice $V_6=(0,0,0,6,10)$.}
+Base inicial $B=\{s_1,s_2\}$, $B^{-1}=I$.
+\[
+  p' = c_B'B^{-1} = [0,\;0].
+\]
+
+Costos reducidos de las variables no básicas:
+\[
+  \bar c_{x_1}=-1,\quad \bar c_{x_2}=-2,\quad \bar c_{x_3}=-2.
+\]
+
+Todos negativos. Por \textbf{regla de Bland} entra $x_1$ (índice menor).
+\[
+  u = B^{-1}A_{x_1} = \begin{pmatrix}
+      2 \\ 0
+  \end{pmatrix}, \qquad
+  \theta^* = \min\!\left\{\frac{6}{2}\right\} = 3
+  \;\Rightarrow\; s_1 \text{ sale}.
+\]
+
+Actualización de $B^{-1}$ (Gauss--Jordan, pivote en fila~1):
+\[
+  \left[\begin{array}{cc|c}1&0&2\\0&1&0\end{array}\right]
+  \xrightarrow{F_1\leftarrow\frac{1}{2}F_1}
+  \left[\begin{array}{cc|c}\frac{1}{2}&0&1\\0&1&0\end{array}\right]
+  \;\Rightarrow\;
+  \bar{B}^{-1}=\begin{bmatrix}\frac{1}{2}&0\\0&1\end{bmatrix}.
+\]
+
+Nueva base: $\{x_1,s_2\}$, $x_B=(3,10)$ $\to$ \textbf{Vértice $V_2=(3,0,0)$}.
+
+\paragraph{Iteración II — Vértice $V_2=(3,0,0,0,10)$.}
+\[
+  p' = [-1,\;0]\begin{bmatrix}\frac{1}{2}&0\\0&1\end{bmatrix}
+      = \left[-\frac{1}{2},\;0\right].
+\]
+\[
+  \bar c_{x_2} = -2+\frac{1}{2}(1) = -\frac{3}{2}<0,\quad
+  \bar c_{x_3} = -2+\frac{1}{2}(0) = -2<0,\quad
+  \bar c_{s_1} = 0+\frac{1}{2}(1) = \frac{1}{2}>0.
+\]
+
+Por Bland entra $x_2$.
+\[
+  u = \begin{bmatrix}\frac{1}{2}&0\\0&1\end{bmatrix}\begin{bmatrix}
+      1 \\ 0
+  \end{bmatrix}
+    = \begin{bmatrix}
+        \frac{1}{2} \\ 0
+    \end{bmatrix}, \qquad
+  \theta^* = \frac{3}{1/2} = 6
+  \;\Rightarrow\; x_1 \text{ sale}.
+\]
+
+Actualización (pivote en fila~1):
+\[
+  \left[\begin{array}{cc|c}\frac{1}{2}&0&\frac{1}{2}\\0&1&0\end{array}\right]
+  \xrightarrow{F_1\leftarrow 2F_1}
+  \left[\begin{array}{cc|c}1&0&1\\0&1&0\end{array}\right]
+  \;\Rightarrow\;
+  \bar{B}^{-1}=I.
+\]
+
+Nueva base: $\{x_2,s_2\}$, $x_B=(6,10)$ $\to$ \textbf{Vértice $V_4=(0,6,0)$}.
+
+\paragraph{Iteración III — Vértice $V_4=(0,6,0,0,10)$.}
+\[
+  p' = [-2,\;0]\cdot I = [-2,\;0].
+\]
+\[
+  \bar c_{x_1} = -1+2(2) = 3>0,\quad
+  \bar c_{x_3} = -2+2(0) = -2<0,\quad
+  \bar c_{s_1} = 0+2(1) = 2>0.
+\]
+
+Entra $x_3$ (único costo reducido negativo).
+\[
+  u = I\begin{bmatrix}
+      0 \\1
+  \end{bmatrix} = \begin{bmatrix}
+      0 \\1
+  \end{bmatrix}, \qquad
+  \theta^* = \frac{10}{1} = 10
+  \;\Rightarrow\; s_2 \text{ sale}.
+\]
+
+No es necesario pivotear, pues $u=e_2$. Luego, $\bar{B}^{-1}=I$. Nueva base: $\{x_2,x_3\}$, $x_B=(6,10)$ $\to$ \textbf{Vértice $V_3=(0,6,10)$}.
+
+\paragraph{Iteración IV — Vértice $V_3=(0,6,10,0,0)$.}
+\[
+  p' = [-2,\;-2]\cdot I = [-2,\;-2].
+\]
+\[
+  \bar c_{x_1} = -1+2(2) = 3>0,\quad
+  \bar c_{s_1} = 0+2(1) = 2>0,\quad
+  \bar c_{s_2} = 0+2(1) = 2>0.
+\]
+
+Todos los costos reducidos son \textbf{no negativos}: óptimo alcanzado.
+\[
+  \boxed{(x_1^*,\,x_2^*,\,x_3^*) = (0,\;6,\;10)}
+\]
+
+Por lo que nos movilizamos en el siguiente orden: \quad $V_6\;\to\;V_2\;\to\;V_4\;\to\;V_3^*$.\\
+
+\paragraph{3.\; Problema dual, holgura complementaria y precio sombra}
+
+El dual del primal~\eqref{ex:4:3:sol:eq:primal} es:
+\begin{equation}
+  \min_{p_1,p_2}\quad 6p_1+10p_2
+  \qquad\text{s.a.}\quad
+  \begin{array}{ll}
+    2p_1\ge 1 & (x_1)\\
+    p_1 \ge 2 & (x_2)\\
+    p_2 \ge 2 & (x_3)\\
+    p_1,p_2\ge 0.
+  \end{array}
+  \label{ex:4:3:sol:eq:dual}
+\end{equation}
+
+\textbf{Verificación por Holgura Complementaria.}
+Con $(x_1^*,x_2^*,x_3^*)=(0,6,10)$:
+\begin{alignat}{2}
+  p_1\,(2x_1^*+x_2^*-6) &= p_1(6-6) = 0
+    &\quad&\Rightarrow\; p_1 \text{ libre (restricción activa)} \notag\\
+  p_2\,(x_3^*-10)        &= p_2(10-10) = 0
+    &\quad&\Rightarrow\; p_2 \text{ libre (restricción activa)} \notag\\
+  (2-p_1)\,x_2^*         &= 0,\quad x_2^*=6>0
+    &\quad&\Rightarrow\; p_1^*=2 \, [\text{ton}/\text{turno de riego semanal}]\notag\\
+  (2-p_2)\,x_3^*         &= 0,\quad x_3^*=10>0
+    &\quad&\Rightarrow\; p_2^*=2 [\text{ton}/\text{lote invernadero}] \notag
+\end{alignat}
+
+\medskip
+\textbf{Precio a pagar por un turno adicional de riego.}
+El incremento es exactamente $p_1^*\cdot 1=2$ ton.
+Dado un precio de mercado $\pi$~[\$/ton], la cooperativa estaría dispuesta
+a pagar hasta
+\[
+  \boxed{p_1^*\cdot\pi = 2\pi\;\left[\frac{\$}{\text{turno}\cdot\text{semana}}\right]}
+\]
+por el turno adicional. Si el precio pedido supera $2\pi$, no conviene el acuerdo.\\
+
+\paragraph{4.\; Sensibilidad en el coeficiente objetivo}
+
+La solución óptima es $x^*=(0,6,10)$ con base $\{x_2,x_3\}$, $B^{-1}=I$ y multiplicador $p'=[-2,-2]$. Para que esta base siga siendo óptima, el costo reducido de toda variable no
+básica debe permanecer no negativo. El único que depende de $c_1$ es:
+\[
+  \bar c_{x_1} = -c_1 - p' A_{x_1}
+               = -c_1 - [-2,\,-2]\begin{pmatrix}
+                   2 \\ 0
+               \end{pmatrix}
+               = -c_1 - 4 \;\ge\; 0,
+\]
+lo que exige $c_1\le 4$. Reducir $c_1$ solo refuerza esta condición, por lo que no hay cota inferior. El rango de validez de la solución óptima es: $\boxed{c_1\in(-\infty,\;4]\text{ [ton/lote]}}$. Con el valor actual $c_1=1\le 4$ la solución óptima permanece inalterada y $x_1^*=0$: no conviene producir trigo. Recién cuando $c_1>4$ el costo reducido $\bar c_{x_1}$ se vuelve negativo, $x_1$ entraría a la base en la siguiente iteración de Simplex, y la cooperativa reasignaría turnos de riego desde el maíz hacia el trigo. Dicho de otro modo, el fertilizante debe más que cuadruplicar el rendimiento actual del trigo para que sea rentable incorporarlo a la producción.\\
+
+\endgroup

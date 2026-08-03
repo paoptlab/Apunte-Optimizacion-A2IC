@@ -1,0 +1,89 @@
+\section*{Resolución P2}
+\textbf{Conjuntos e índices:}
+\begin{align*}
+J &: \text{Sitios candidatos } (j\in J).\\
+K &: \text{Zonas de demanda } (k\in K).\\
+T &= \{L,H\}: \text{Tipos de antenas.}
+\end{align*}
+
+\textbf{Parámetros:}
+\begin{align*}
+D_k &: \text{Demanda (número de usuarios) en la zona } k.\\
+F_j^t &: \text{Costo fijo de instalación de la antena tipo } t \text{ en } j.\\
+C_j^t &: \text{Capacidad nominal de la antena tipo } t \text{ en el sitio } j.\\
+B &: \text{Presupuesto total.}\\
+u_k &: \text{Utilidad por atender completamente la zona } k.\\
+R &: \text{Mínimo número de zonas bien cubiertas.}\\
+\alpha &: \text{Fracción mínima de la demanda } D_k \text{ requerida por antena para la condición de redundancia.}\\
+a_{kj}^t &\in \{0,1\}: \text{Indicador de cobertura (1 si la antena } t \text{ en } j \text{ cubre la zona } k).\\
+M &: \text{Constante Big-M.}
+\end{align*}
+
+\textbf{Variables de decisión:}
+\begin{align*}
+x_{jt} &\in \{0,1\}: \text{ 1 si se instala antena tipo } t \text{ en } j.\\
+z_k &\in \{0,1\}: \text{ 1 si la zona } k \text{ es atendida completamente.}\\
+w_k &\in \{0,1\}: \text{ 1 si la zona } k \text{ está bien cubierta.}\\
+v_{kj} &\in \{0,1\}: \text{ 1 si } j \text{ cubre más de la fracción } \alpha \text{ de la demanda.}\\
+d_{kj}^t &\geq 0: \text{ Cantidad de usuarios asignados a la antena tipo } t \text{ en el sitio } j.
+\end{align*}
+
+\textbf{Función objetivo:}
+\begin{align}
+\max \sum_{k\in K} u_k z_k
+\end{align}
+
+\textbf{Restricciones:}
+
+\begin{itemize}
+    \item Instalación única por sitio
+    \begin{equation}
+        \sum_{t\in T} x_{jt} \leq 1 \quad  \forall j\in J
+    \end{equation}
+    \item Cobertura
+    \begin{equation}
+        d_{kj}^t \leq M a_{kj}^t \quad \forall k\in K,\ \forall j\in J,\ \forall t\in T
+    \end{equation}
+    \item Capacidad por antena instalada
+    \begin{equation}
+        \sum_{k\in K} d_{kj}^t \leq C_j^t x_{jt} \quad \forall j\in J,\ \forall t\in T
+    \end{equation}
+    \item Restricción presupuestaria
+    \begin{equation}
+        \sum_{j\in J}\sum_{t\in T} F_j^t x_{jt} \leq B
+    \end{equation}
+    \item Satisfacción de demanda
+    \begin{equation}
+        \sum_{j\in J}\sum_{t\in T} d_{kj}^t \leq D_k \quad \forall k\in K
+    \end{equation}
+    \item Atención completa
+    \begin{equation}
+        \sum_{j\in J}\sum_{t\in T} d_{kj}^t \geq D_k z_k \quad \forall k\in K
+    \end{equation}
+    \item Condición de bien cubierta
+    \begin{itemize}
+        \item[a)] Condición de redundancia
+        \begin{equation}
+            \sum_{j\in J} v_{kj} \geq 2w_k \quad \forall k\in K
+        \end{equation}
+        \item[b)] Condición de atención completa
+        \begin{equation}
+            w_k \leq z_k \quad \forall k\in K
+        \end{equation}
+        \item[c)] Condición de fracción mínima
+        \begin{equation}
+            \sum_{t\in T} d_{kj}^t \geq \alpha D_k v_{kj} \quad  \forall k\in K,\ \forall j\in J
+        \end{equation}
+     \end{itemize}
+    \item Requisito R
+    \begin{equation}
+        \sum_{k\in K} w_k \geq R
+    \end{equation}
+    \item Dominio de las variables
+    \begin{equation}
+        x_{jt},\,z_k,\,w_k,\,v_{kj} \in \{0,1\}, \quad d_{kj}^t \geq 0.
+    \end{equation}
+\end{itemize}
+
+
+Por otro lado, al aumentar el valor de $R$ el problema se hace más restringido, con lo que el espacio factible del problema se reduce. Con esto, el óptimo será peor o igual que el problema original. Como es un problema de maximización, el nuevo valor óptimo será menor o igual al del problema original, pudiendo incluso resultar infactible.

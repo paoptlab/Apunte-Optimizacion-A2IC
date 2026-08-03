@@ -1,0 +1,101 @@
+% Fuente: Auxiliar 3, sección «Poliedro».
+{\color{MidnightBlue}
+\begin{enumerate}
+    \item[(a)] \textbf{Verdadera.}
+
+    Si \(n=m+1\), entonces el espacio afín
+    \[
+    \{x\in\mathbb{R}^n\mid Ax=b\}
+    \]
+    tiene dimensión
+    \[
+    n-m=1.
+    \]
+    Esto quiere decir que es una recta, si consideramos la condición \(x\geq 0\), \(P\) puede ser vacía, un punto, un segmento o un rayo.
+
+    Las soluciones básicas factibles corresponden a puntos extremos de \(P\).
+    Como un subconjunto convexo de una recta puede tener a lo más dos puntos extremos, entonces \(P\) tiene a lo más dos soluciones básicas factibles distintas.
+
+    \item[(b)] \textbf{Falsa.}
+
+    El conjunto de soluciones óptimas no necesariamente es acotado.
+
+
+    Contraejemplo: Considere el siguieente LP.
+    \[
+    \min \, x_1 - x_2 \quad \text{sujeto a } x_1 - x_2 = 0,\quad x_1,x_2\ge 0.
+    \]
+    La restricción \(x_1 - x_2 = 0\) fuerza a que la función objetivo valga \(0\) en todo punto factible, por lo que el conjunto de soluciones óptimas coincide con la región factible \(\{(t,t) : t\ge 0\}\), un rayo no acotado.
+    
+    Es posible construir el contrajemplo de forma matricial (otra forma de responder)
+        \[
+    P=\{x\in\mathbb{R}^2\mid x_1-x_2=0,\; x_1,x_2\geq 0\}.
+    \]
+    Por lo tanto,
+    \[
+    P=\{(t,t)\mid t\geq 0\},
+    \]
+    considerando la función objetivo $\min c^Tx$ con $c=(1,-1)$, todos los puntos de P son óptimos, y como P es un rayo no acotado, existen infinitas soluciones.
+
+    \item[(c)] \textbf{Falsa.}
+
+    Es cierto que una solución básica factible tiene a lo más \(m\) variables básicas, y por lo tanto a lo más \(m\) variables positivas. Sin embargo, una solución óptima no necesariamente debe ser básica.
+
+    Considerando el mismo contraejemplo de (b), $m=1$, cualquier punto del conjunto $\{(t,t)\:|\:t>0\}$ pertenece a P, es óptimo y tiene 2 variables positivas.
+
+
+    \item[(d)] \textbf{Verdadera.}
+
+    Suponga que existen dos soluciones óptimas distintas \(x^1\) y \(x^2\), con
+    \[
+    x^1\neq x^2.
+    \]
+    Como \(P\) es convexo, para todo \(\lambda\in[0,1]\),
+    \[
+    x^\lambda=\lambda x^1+(1-\lambda)x^2\in P.
+    \]
+
+    Además, como la función objetivo de un problema lineal es lineal, se tiene
+    \[
+    c^\top x^\lambda
+    =
+    c^\top\left(\lambda x^1+(1-\lambda)x^2\right).
+    \]
+    Luego,
+    \[
+    c^\top x^\lambda
+    =
+    \lambda c^\top x^1+(1-\lambda)c^\top x^2.
+    \]
+    Como \(x^1\) y \(x^2\) son óptimos,
+    \[
+    c^\top x^1=c^\top x^2=z^\star.
+    \]
+    Por lo tanto,
+    \[
+    c^\top x^\lambda
+    =
+    \lambda z^\star+(1-\lambda)z^\star
+    =
+    z^\star.
+    \]
+    Así, todo punto del segmento
+    \[
+    \{\lambda x^1+(1-\lambda)x^2\mid \lambda\in[0,1]\}
+    \]
+    es óptimo.
+
+    Como el intervalo \([0,1]\) contiene incontablemente muchos puntos, existen incontablemente muchas soluciones óptimas.
+
+    \item[(e)] \textbf{Falsa.}
+
+    No necesariamente existen dos soluciones básicas factibles óptimas.
+
+    Considere nuevamente el contraejemplo en (b), el conjunto óptimo es $\{(t,t)\mid t\geq 0\}$, hay infinitas soluciones óptimas. Sin embargo, el conjunto \(P\) es un rayo cuyo único punto extremo es $(0,0)$
+    Por lo tanto, existe una única solución básica factible óptima.
+
+    Así, puede haber múltiples soluciones óptimas sin que existan al menos dos soluciones básicas factibles óptimas.
+    
+\end{enumerate}
+}
+

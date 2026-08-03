@@ -1,0 +1,153 @@
+% Fuente: Auxiliar 5, P1.
+{\color{MidnightBlue}
+\begin{enumerate}
+
+\item[(a)]
+Sea $\mathbf{y} \in C$. Por definición de $C$, existe un vector $\boldsymbol{\lambda} = (\lambda_1,\ldots,\lambda_n) \in \mathbb{R}^n_+$ tal que $\mathbf{y} = \sum_{i=1}^{n} \lambda_i \mathbf{A}_i.$ Consideremos el poliedro del hint:
+\begin{equation}
+\Lambda =
+\left\{
+\boldsymbol{\lambda} \in \mathbb{R}^n
+\ \middle|\
+\sum_{i=1}^{n} \lambda_i \mathbf{A}_i = \mathbf{y},
+\ \lambda_i \geq 0,\ i=1,\ldots,n
+\right\}.
+\end{equation}
+
+Este poliedro es no vacío, pues $\mathbf{y} \in C$. Además, $\Lambda$ puede escribirse en forma estándar como $\Lambda =
+\left\{
+ \boldsymbol{\lambda} \in \mathbb{R}^n
+\ \middle|\
+\mathbf{A}\boldsymbol{\lambda} = \mathbf{y},
+ \ \boldsymbol{\lambda} \geq \mathbf{0}
+\right\},$ donde 
+$\mathbf{A} =
+\begin{bmatrix}
+    \mathbf{A}_1 & \mathbf{A}_2 & \cdots & \mathbf{A}_n
+\end{bmatrix}
+\in \mathbb{R}^{m \times n},$ pues:
+
+\begin{equation}
+\mathbf{A}\boldsymbol{\lambda}
+=
+\begin{bmatrix} \mathbf{A}_1 & \cdots & \mathbf{A}_n \end{bmatrix}
+\begin{pmatrix} \lambda_1 \\ \vdots \\ \lambda_n \end{pmatrix}
+=
+\lambda_1 \mathbf{A}_1 + \lambda_2 \mathbf{A}_2 + \cdots + \lambda_n \mathbf{A}_n
+\end{equation}
+
+Por Teorema 2.6, sabemos que dado un poliedro no vacío
+\begin{equation}
+    P =
+    \left\{
+    \mathbf{x} \in \mathbb{R}^n
+    \ \middle|\
+    \mathbf{a}_i' \mathbf{x} \geq b_i,\ i = 1,\ldots,m
+    \right\},
+\end{equation}
+este tiene al menos un punto extremo ssi no contiene una línea. Un corolario de este resultado es que todo poliedro no vacío escrito en forma estándar tiene al menos una solución básica factible. Para demostrarlo, basta probar que un poliedro en forma estándar no puede contener una línea.
+  
+\begin{proof}
+Sea entonces un poliedro no vacío en forma estándar dado por
+\begin{equation}
+    P =
+    \left\{
+    \mathbf{x} \in \mathbb{R}^n
+    \ \middle|\
+    \mathbf{A}\mathbf{x} = \mathbf{b},\ \mathbf{x} \geq \mathbf{0}
+    \right\}.
+\end{equation}
+
+Supongamos, por contradicción, que $P$ contiene una línea. Entonces existen un punto 
+$\bar{\mathbf{x}} \in P$ y una dirección no nula $\mathbf{d} \in \mathbb{R}^n$, con $\mathbf{d} \neq \mathbf{0}$, tales que $    \bar{\mathbf{x}} + \theta \mathbf{d} \in P, \ \forall \theta \in \mathbb{R}.$ Como $\bar{\mathbf{x}} + \theta \mathbf{d} \in P$ para todo $\theta \in \mathbb{R}$, se debe cumplir en particular la restricción de no negatividad:
+\begin{equation}
+    \bar{\mathbf{x}} + \theta \mathbf{d} \geq \mathbf{0},
+    \qquad \forall \theta \in \mathbb{R}.
+\end{equation}
+
+Analizando componente a componente, para todo $j = 1,\ldots,n$ se tiene
+\begin{equation}
+    \bar{x}_j + \theta d_j \geq 0,
+    \qquad \forall \theta \in \mathbb{R}.
+\end{equation}
+
+Si $d_j > 0$, entonces tomando $\theta \to -\infty$ se obtiene 
+$\bar{x}_j + \theta d_j < 0$, lo cual contradice la factibilidad. Análogamente, si 
+$d_j < 0$, entonces tomando $\theta \to +\infty$ también se obtiene 
+$\bar{x}_j + \theta d_j < 0$. Por lo tanto, necesariamente debe cumplirse que $d_j = 0, \, \forall j = 1,\ldots,n.$ Esto implica que $\mathbf{d} = \mathbf{0}$, lo cual contradice la hipótesis de que la línea tenía una dirección no nula. Luego, $P$ no contiene líneas.
+
+Como $P$ es no vacío y no contiene líneas, por el Teorema 2.6 se concluye que $P$ posee al menos un punto extremo o solución básica factible. 
+\end{proof}
+
+
+Como $\Lambda$ es un poliedro no vacío en forma estándar, por el corolario del Teorema 2.6 recién demostrado, existe una solución básica factible $\bar{\boldsymbol{\lambda}} \in \Lambda$. Por Teorema 2.4, en una solución básica factible existen exactamente $n-m$ variables no básicas iguales a cero. Esto implica que a lo más $m$ variables pueden ser básicas, y por lo tanto a lo más $m$ componentes de $\bar{\boldsymbol{\lambda}}$ pueden ser distintas de cero. Así,
+\begin{equation}
+    \mathbf{y}
+    =
+    \sum_{i=1}^{n} \bar{\lambda}_i \mathbf{A}_i,
+    \qquad
+    \bar{\lambda}_i \geq 0,
+\end{equation}
+con a lo más $m$ coeficientes $\bar{\lambda}_i$ no nulos. Observar que si $\bar{\boldsymbol{\lambda}}$ tuviera menos de $m$ componentes distintos de cero, entonces se trataría de una solución básica degenerada.
+
+Por lo tanto, todo elemento de $C$ puede expresarse como combinación cónica de a lo más $m\leq n$ vectores de la colección $\{\mathbf{A}_i\}_{i=1}^n$.
+
+\item[(b)]
+Sea $\mathbf{y} \in P$. Por definición de envolvente convexa, existen coeficientes $\lambda_1,\ldots,\lambda_n \geq 0$ tales que
+\begin{equation}
+    \mathbf{y}
+    =
+    \sum_{i=1}^{n} \lambda_i \mathbf{A}_i,
+    \qquad
+    \sum_{i=1}^{n} \lambda_i = 1.
+\end{equation}
+
+Para llevar este problema al caso anterior, definimos los vectores aumentados
+\begin{equation}
+    \tilde{\mathbf{A}}_i
+    =
+    \begin{pmatrix}
+        \mathbf{A}_i \\
+        1
+    \end{pmatrix}
+    \in \mathbb{R}^{m+1},
+    \qquad
+    \tilde{\mathbf{y}}
+    =
+    \begin{pmatrix}
+        \mathbf{y} \\
+        1
+    \end{pmatrix}
+    \in \mathbb{R}^{m+1}.
+\end{equation}
+
+Luego, la condición anterior puede escribirse como
+$\tilde{\mathbf{y}} = \sum_{i=1}^{n} \lambda_i \tilde{\mathbf{A}}_i$,
+con $\lambda_i \geq 0$, $i=1,\ldots,n$. Definiendo la matriz aumentada 
+$\tilde{\mathbf{A}} =
+    \begin{bmatrix}
+        \tilde{\mathbf{A}}_1 & \tilde{\mathbf{A}}_2 & \cdots & \tilde{\mathbf{A}}_n
+    \end{bmatrix}
+    \in \mathbb{R}^{(m+1) \times n},$ podemos escribir el poliedro asociado a $P$ como:
+\begin{equation}
+\tilde{\Lambda} =
+\left\{
+ \boldsymbol{\lambda} \in \mathbb{R}^n
+\ \middle|\
+\tilde{\mathbf{A}}\boldsymbol{\lambda} = \tilde{\mathbf{y}},
+ \ \boldsymbol{\lambda} \geq \mathbf{0}
+\right\}.
+\end{equation}
+
+Es decir, $\tilde{\mathbf{y}}$ pertenece a la envolvente convexa de los vectores aumentados, y $\tilde{\Lambda}$ es no vacío. Aplicando el resultado de la parte (a) a los vectores $\tilde{\mathbf{A}}_i \in \mathbb{R}^{m+1}$, todo elemento de dicha envolvente convexa puede representarse usando a lo más $m+1$ coeficientes no nulos. Por lo tanto, existen coeficientes 
+$\bar{\lambda}_1,\ldots,\bar{\lambda}_n \geq 0$, con a lo más $m+1$ de ellos distintos de cero, tales que
+\begin{equation}
+    \tilde{\mathbf{y}}
+    =
+    \sum_{i=1}^{n} \bar{\lambda}_i \tilde{\mathbf{A}}_i.
+\end{equation}
+En particular, la última componente de esta ecuación vectorial entrega $\sum_{i=1}^{n} \bar{\lambda}_i = 1$, y las primeras $m$ componentes entregan $\mathbf{y} = \sum_{i=1}^{n} \bar{\lambda}_i \mathbf{A}_i$. Por lo tanto, cualquier $\mathbf{y} \in P$ puede expresarse como combinación convexa de a lo más $m+1$ vectores de la colección $\{\mathbf{A}_i\}_{i=1}^n$, con $m+1 \leq n$.
+
+\end{enumerate}
+}
+

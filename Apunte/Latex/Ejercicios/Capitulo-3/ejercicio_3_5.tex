@@ -1,0 +1,67 @@
+% Fuente: Auxiliar 4, Pregunta 2.
+Una empresa generadora opera una central de ciclo combinado y debe decidir la
+producción de energía durante un bloque horario mediante dos componentes de la
+planta: la turbina a gas y el bloque de vapor asociado.
+
+En una central de ciclo combinado, la turbina a gas genera electricidad y sus
+gases de escape se aprovechan en un generador de vapor de recuperación para
+producir vapor. Este vapor acciona una turbina de vapor, permitiendo generar
+electricidad adicional. El costo de operación de la turbina a gas es de
+$4\;[\$/\mathrm{MWh}]$, mientras que el costo de operación del bloque de vapor
+es de $2\;[\$/\mathrm{MWh}]$.
+
+La energía producida por ambos componentes se remunera al precio nodal de la
+barra, que durante el bloque horario es igual a $5\;[\$/\mathrm{MWh}]$ para
+ambas tecnologías. La empresa busca maximizar su beneficio operativo durante
+dicho bloque.
+
+Además, el coordinador del sistema exige mantener al menos $4\;[\mathrm{MW}]$
+de generación en la turbina a gas para cumplir un requerimiento de reservas
+operacionales. Por otra parte, debido a limitaciones en el suministro de
+combustible, la turbina a gas no puede producir más de $16\;[\mathrm{MW}]$.
+En total, la central puede producir hasta $20\;[\mathrm{MW}]$ entre ambos
+componentes.
+
+Para representar el acoplamiento físico del ciclo combinado, se considera que
+la producción del bloque de vapor no puede exceder la mitad de la producción de
+la turbina a gas.
+
+\medskip
+\noindent
+\textbf{Nota:} Como se trata de un bloque horario de una hora, puede
+identificarse numéricamente la potencia promedio $[\mathrm{MW}]$ con la energía
+producida durante el bloque $[\mathrm{MWh}]$. En lo que sigue, modele el
+problema usando variables en $[\mathrm{MW}]$.
+
+\begin{enumerate}[label=\alph*)]
+    \item Modele el problema como un problema de optimización lineal. Defina
+    claramente las variables de decisión, la función objetivo y las
+    restricciones. Luego, reformúlelo en forma estándar.
+
+    \item Realice una representación gráfica del problema en el espacio de las
+    variables de decisión originales y encuentre el óptimo gráficamente.
+    Luego, a partir de la forma estándar, obtenga la solución básica factible
+    óptima. Indique claramente cuáles son las variables básicas y no básicas.
+    Finalmente, proponga un algoritmo que permita encontrar la solución óptima
+    en el caso de un poliedro en $\mathbb{R}^n$, con $n>2$.
+
+    \item Debido a una condición operativa adicional, la mitad de la energía
+    producida en el bloque de vapor, más la energía producida por la turbina a
+    gas, debe sumar al menos $17\;[\mathrm{MW}]$. Agregue esta nueva
+    restricción al problema, actualizando la formulación de optimización.
+    Determine la solución básica factible óptima del problema modificado.
+
+    \item Debido a un aumento en el costo del agua desmineralizada y en los
+    insumos de tratamiento térmico, el costo de operación del bloque de vapor
+    sube a $6\;[\$/\mathrm{MWh}]$. Determine el nuevo punto óptimo revisando la
+    base óptima obtenida en la parte c). Indique si la base cambia y, en caso
+    afirmativo, identifique qué variable sale de la base y cuál entra.
+
+    \item Debido a una restricción térmica adicional (límite de temperatura del
+    condensador), el bloque de vapor ahora no puede producir más de
+    $4.5\;[\mathrm{MW}]$. \textbf{Partiendo del problema de la parte c)}
+    (con $c_V = 2\;[\$/\mathrm{MWh}]$), agregue esta nueva restricción y
+    analice qué ocurre con la base previamente obtenida. Luego, encuentre la
+    nueva solución básica factible óptima.
+\end{enumerate}
+

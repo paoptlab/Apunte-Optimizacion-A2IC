@@ -1,0 +1,42 @@
+% Fuente: Pauta del Control 2, Pregunta 3, ítems 3–4.
+{\color{MidnightBlue}
+\begin{enumerate}
+    \item \textbf{Falsa.} En un programa lineal \emph{entero}, el segmento entre dos soluciones enteras factibles no tiene por qué estar compuesto por puntos enteros.
+
+    Por ejemplo, considérese
+    \[
+        \min \; 0
+    \]
+    sujeto a
+    \[
+        0\leq x\leq 1,
+        \qquad x\in\mathbb{Z}.
+    \]
+    Las únicas soluciones factibles son $x=0$ y $x=1$. Ambas son óptimas, pues la función objetivo vale $0$ en ambas, pero no existen infinitas soluciones óptimas enteras. Por tanto, la afirmación es falsa.
+
+    \item \textbf{Verdadera.} Sea $X_I$ la región factible del programa lineal entero. Como $P_1$ y $P_2$ son relajaciones del problema entero, se cumple
+    \[
+        X_I\subseteq P_1,
+        \qquad
+        X_I\subseteq P_2.
+    \]
+    En particular, como $x^*\in X_I$, entonces $x^*\in P_1$. Por consiguiente,
+    \[
+        c^\top x^*\geq \min_{x\in P_1} c^\top x.
+    \]
+    Además, dado que $P_1\subseteq P_2$, al minimizar sobre un conjunto más grande el valor óptimo no puede aumentar; así,
+    \[
+        \min_{x\in P_1}c^\top x
+        \geq
+        \min_{x\in P_2}c^\top x.
+    \]
+    Por tanto,
+    \[
+        c^\top x^*
+        \geq
+        \min_{x\in P_1}c^\top x
+        \geq
+        \min_{x\in P_2}c^\top x.
+    \]
+\end{enumerate}
+}

@@ -1,0 +1,185 @@
+\begin{comment}
+{\color{MidnightBlue}
+\vspace{5mm}
+
+\textbf{Conjuntos e índices:}
+\begin{align*}
+I &: \text{Instrumentos posibles} \,(i \in I).\\
+O &: \text{Observaciones posibles} \, (o \in O).
+\end{align*}
+
+\textbf{Parámetros:}
+\begin{align*}
+M &: \text{Cantidad máxima de instrumentos a instalar.}\\
+\bar{t}_i &: \text{Tiempo máximo de operación del instrumento } i.\\
+f_i &: \text{Costo fijo de utilizar el instrumento } i.\\
+v_i &: \text{Costo variable por cada hora de operación del instrumento.}\\
+B &: \text{Presupuesto de operación.}\\
+a_{o,i} &: \text{Parámetro que indica si la observación } o \text{ necesita efectuarse con el instrumento } i.\\
+t_{o,i} &: \text{Tiempo de exposición del instrumento } i \text{ necesario para realizar observación } o.\\
+u_o &: \text{Utilidad científica de realizar la observación } o.
+\end{align*}
+
+\textbf{Variables:}
+\begin{align*}
+y_{o,i} &\in \{0,1\}: \text{ 1 si el instrumento } i \text{ se utiliza para la observación } o,\text{ 0 en caso contrario.}\\
+x_i &\in \{0,1\}: \text{ 1 si el instrumento } i \text{ se instala antes del inicio de la jornada, 0 en caso contrario.}
+\end{align*}
+
+\textbf{Función objetivo:}
+\begin{equation}
+\max_{x_i, y_{o,i}} \quad \sum_{i\in I}\sum_{o\in O} u_o\,y_{o,i}
+\end{equation}
+
+\textbf{Restricciones:}
+
+\begin{itemize}[label=\textcolor{MidnightBlue}{\textbullet}]
+    \item Máxima cantidad de instrumentos instalados simultáneamente.
+    \begin{equation}
+        \sum_{i\in I} x_i \leq M
+    \end{equation}
+    \item Máximo tiempo de operación por instrumento.
+    \begin{equation}
+        \sum_{o\in O} t_{o,i}\,y_{o,i} \leq \bar{t}_i\,x_i \quad \forall i\in I
+    \end{equation}
+    \item El instrumento debe haberse instalado para poder ser utilizado.
+    \begin{equation}
+        y_{o,i} \leq x_i \quad \forall i\in I,\ \forall o\in O
+    \end{equation}
+    \item Cada observación se puede realizar a lo más una vez.
+    \begin{equation}
+        \sum_{i\in I} y_{o,i} \leq 1 \quad \forall o\in O
+    \end{equation}
+    \item Presupuesto disponible.
+    \begin{equation}
+        \sum_{i\in I}\left(f_i\,x_i+v_i\sum_{o\in O} y_{o,i}\right)\leq B
+    \end{equation}
+    \item Compatibilidad técnica observación-instrumento.
+    \begin{equation}
+        y_{o,i} \leq a_{o,i} \quad \forall i\in I,\ \forall o\in O
+    \end{equation}
+    \item Naturaleza de las variables.
+    \begin{equation}
+        y_{o,i},\,x_i \in \{0,1\} \quad \forall i\in I,\ \forall o\in O.
+    \end{equation}
+\end{itemize}
+}
+\end{comment}
+
+\section*{Resolución P1}
+
+Se nos solicita minimizar los costos netos de operación y mantenimiento del parque eólico,
+que se definen por los (Costos totales de mantenimiento) - (Ingresos obtenidos por generación
+de energía). Para esto, es conveniente definir las siguientes variables de decisión:
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Variables de decisión}
+    \label{tab:variables_decision}
+
+    \begin{tabular}{p{0.15\textwidth} p{0.14\textwidth} p{0.55\textwidth}}
+        \hline
+        \textbf{Variable} & \textbf{Dominio} & \textbf{Descripción} \\
+        \hline
+
+        $x_{g,t}$ & $\{0,1\}$ &
+        Indica si la turbina $g$ se encuentra en mantenimiento en el período $t$. \\
+
+        $y_{g,t}$ & $\{0,1\}$ &
+        Indica si la turbina $g$ se encuentra disponible en el período $t$. \\
+
+        $z_t$ & $\{0,1\}$ &
+        Indica si el equipo de mantenimiento se encuentra desplegado en el período $t$. \\
+
+        $p_{g,t}$ & $\mathbb{R}^{+}$ &
+        Indica la energía producida por la turbina $g$ en el período $t$. \\
+
+        \hline
+    \end{tabular}
+\end{table}
+
+Tras esto, podemos plantear la función objetivo del problema, la cual, tal como se mencionó
+previamente, consiste en minimizar los costos netos, obteniéndose así que:
+
+\begin{equation}
+    FO:
+    \min
+    \sum_{g \in G}
+    \sum_{t \in T}
+    C_{g,t} \cdot x_{g,t}
+    +
+    \sum_{t \in T}
+    A_t \cdot z_t
+    -
+    \sum_{g \in G}
+    \sum_{t \in T}
+    \pi_t \cdot p_{g,t}
+    \tag{1}
+\end{equation}
+
+Donde el primer término representa los costos en los que se incurre por la reparación de cada turbina; el segundo término representa el costo asociado a desplegar el equipo de mantenimiento; mientras que el tercer término hace referencia a los ingresos que posee el parque eólico por la venta de energía. Luego, se definen las restricciones del problema, donde se consideran:
+
+\begin{itemize}
+
+    \item \textbf{Reparación única:} Fuerza a cada turbina a recibir mantenimiento en una
+    única fecha.
+
+    \begin{equation}
+        \sum_{t \in T} x_{g,t} = 1,
+        \quad \forall g \in G
+    \end{equation}
+
+    \item \textbf{Despliegue del equipo:} Fuerza a que en caso de que una turbina se encuentre
+    siendo reparada en el período $t$, se despliegue el equipo de reparación.
+
+    \begin{equation}
+        x_{g,t} \leq z_t,
+        \quad \forall g \in G,\; t \in T
+    \end{equation}
+
+    \item \textbf{Capacidad máxima:} Establece que no se puede calendarizar la reparación de
+    más de $M_t$ turbinas en un tiempo $t$.
+
+    \begin{equation}
+        \sum_{g \in G} x_{g,t} \leq M_t,
+        \quad \forall g \in G,\; t \in T
+    \end{equation}
+
+    \item \textbf{Mal clima:} Establece que el equipo solo se puede desplegar cuando las condiciones
+    climáticas lo permiten, donde los días $K \subset T$ proveen las condiciones seguras.
+
+    \begin{equation}
+        z_t \leq 1 - \mathbf{1}_{\{t \notin \mathcal{K}\}},
+        \quad \forall t \in T
+    \end{equation}
+
+    \item \textbf{Cumplir demanda:} Representa el requerimimiento mínimo de generación que
+    debe tener el parque eólico.
+
+    \begin{equation}
+        \sum_{g \in G} p_{g,t} \geq D_t,
+        \quad \forall t \in T
+    \end{equation}
+
+    \item \textbf{Límites de generación:} Establece que los límites técnicos de las turbinas.
+
+    \begin{equation}
+        0 \leq p_{g,t} \leq P_{g,t} \cdot y_{g,t},
+        \quad \forall g \in G,\; t \in T
+    \end{equation}
+
+    \item \textbf{Disponibilidad:} Representa si las turbinas se encuentran activas o no. Una turbina
+    puede estar no activa en el período $t$ si aún no supera el tiempo de falla $\tau_g$ pero se
+    encuentra en mantención; o si ya ha superado el tiempo de falla, y aún no ha sido
+    reparada.
+
+    \begin{equation}
+        y_{g,t} =
+        \begin{cases}
+            1 - x_{g,t}, & \text{si } t < \tau_g, \\[4pt]
+            \displaystyle \sum_{r=1}^{t-1} x_{g,r}, & t \geq \tau_g.
+        \end{cases}
+    \end{equation}
+
+\end{itemize}

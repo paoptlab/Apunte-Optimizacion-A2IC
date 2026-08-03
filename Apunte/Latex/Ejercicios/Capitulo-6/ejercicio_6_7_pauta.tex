@@ -1,0 +1,50 @@
+% Fuente: Pauta del Control 2, Pregunta 3, ítems 1–2.
+{\color{MidnightBlue}
+\begin{enumerate}
+    \item \textbf{Verdadera.} Sean $f_1,f_2:\mathbb{R}^n\to\mathbb{R}$ funciones convexas y defínase
+    \[
+        g(x)=\max\{f_1(x),f_2(x)\}.
+    \]
+    Para cualesquiera $x,y\in\mathbb{R}^n$ y $\lambda\in[0,1]$, por convexidad de $f_1$ y $f_2$ se tiene
+    \[
+        f_i(\lambda x+(1-\lambda)y)
+        \leq \lambda f_i(x)+(1-\lambda)f_i(y),
+        \qquad i=1,2.
+    \]
+    Por tanto,
+    \begin{align*}
+        g(\lambda x+(1-\lambda)y)
+        &=\max_{i\in\{1,2\}} f_i(\lambda x+(1-\lambda)y)\\
+        &\leq \max_{i\in\{1,2\}}
+        \left\{\lambda f_i(x)+(1-\lambda)f_i(y)\right\}\\
+        &\leq \lambda \max_{i\in\{1,2\}} f_i(x)
+        +(1-\lambda)\max_{i\in\{1,2\}}f_i(y)\\
+        &=\lambda g(x)+(1-\lambda)g(y).
+    \end{align*}
+    Luego, $g$ es convexa.
+
+    \item \textbf{Verdadera.} Considérese
+    \[
+        f(x_1,x_2)=x_1^2+5x_2^2-2x_1x_2-10x_1+10x_2.
+    \]
+    Su matriz Hessiana es
+    \[
+        \nabla^2 f(x_1,x_2)=
+        \begin{pmatrix}
+            2 & -2\\
+            -2 & 10
+        \end{pmatrix}.
+    \]
+    Como esta matriz es simétrica, basta verificar que es definida positiva. Sus menores principales son
+    \[
+        2>0,
+        \qquad
+        \det\begin{pmatrix}
+            2 & -2\\
+            -2 & 10
+        \end{pmatrix}
+        =20-4=16>0.
+    \]
+    Por el criterio de Sylvester, $\nabla^2 f$ es definida positiva. Por tanto, $f$ es estrictamente convexa y, en particular, convexa.
+\end{enumerate}
+}

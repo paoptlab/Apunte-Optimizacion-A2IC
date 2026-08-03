@@ -1,0 +1,162 @@
+% Fuente: Auxiliar 2, P2 (pauta).
+{\color{MidnightBlue}
+\begin{itemize}
+\item[(a)]
+\textbf{Variables de decisión}
+
+\begin{equation}
+x_e =
+\begin{cases}
+1, & \text{si la arista } e \text{ se incluye en la ruta} \\
+0, & \text{en otro caso}
+\end{cases}
+\end{equation}
+
+\textbf{Restricciones}
+
+Observe que la función $\delta(S)$ entrega todas las aristas que conectan a un subconjunto
+de $S$ de $\mathcal{N}$ con el resto del conjunto $N$. Así:
+
+\begin{itemize}
+    \item Para tener una ruta cerrada, es necesario que cada nodo del grafo se conecte con
+    exactamente dos aristas. Para esto, se deberá cumplir
+    \begin{equation}
+    \sum_{e \in \delta(i)} x_e = 2, \quad \forall i \in \mathcal{N}
+    \label{ex:2:6:eq:aristas2}
+    \end{equation}
+
+    \item Respecto de todos los posibles subconjuntos $S$ de $N$, tal que su cardinalidad cumple $1 < |S| \leq \mathcal{N}-1$, estos deben conectar con el resto del conjunto con al menos dos aristas. Entonces,
+    \begin{equation}
+    \sum_{e \in \delta(S)} x_e \geq 2, \quad \forall S \subset \mathcal{N},\; S \neq \phi,\; S \neq \mathcal{N}
+    \label{ex:2:6:eq:subtour}
+    \end{equation}
+\end{itemize}
+
+Observar que las ecuaciones \eqref{ex:2:6:eq:aristas2} y \eqref{ex:2:6:eq:subtour} modelan la eliminación de subtours, es decir, eliminamos la posibilidad de suconjuntos $S \subset \mathcal{N},\; S \neq \phi,\; S \neq \mathcal{N}$ con aristas que forman ciclos. Esto modela la restricción de pasar por cada ciudad una sola vez y finalizar regresando al nodo de origen.
+
+\textbf{Función objetivo}
+
+La ruta seleccionada debe contener las aristas de menor costo, así que la función objetivo es:
+
+\begin{equation}
+\min \sum_{e \in \mathcal{E}} c_e x_e
+\end{equation}
+
+\textbf{Modelo completo}
+
+\begin{equation}
+\min \sum_{e \in \mathcal{E}} c_e x_e
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \delta(i)} x_e = 2, \quad \forall i \in S \neq \mathcal{N}
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \delta(S)} x_e \geq 2, \quad \forall  S \subset \mathcal{N},\; S \neq \phi,\; S \neq \mathcal{N}
+\end{equation}
+
+\begin{equation}
+x_e \in \{0,1\}, \quad \forall e \in \mathcal{E}
+\end{equation}
+
+\item[(b)]
+La variable de decisión y la primera restricción son iguales al inciso anterior. La segunda
+restricción se puede modificar usando la función $E(S)$, que entrega las aristas cuyos nodos pertenecen a $S$. De esta manera, para que la ruta sea cerrada (eliminación de subtours), la cantidad de aristas
+debe ser menor o igual a la cardinalidad del conjunto menos uno:
+
+\begin{equation}
+\sum_{e \in E(S)} x_e \leq |S| - 1, \quad \forall S \subset \mathcal{N},\; S \neq \phi,\; S \neq \mathcal{N}
+\label{ex:2:6:eq:subtourtryhard}
+\end{equation}
+
+Por lo que el modelo completo se expresa como:
+
+\begin{equation}
+\min \sum_{e \in \mathcal{E}} c_e x_e
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \delta(i)} x_e = 2, \quad \forall i \in \mathcal{N}
+\end{equation}
+
+\begin{equation}
+\sum_{e \in E(S)} x_e \leq |S| - 1, \quad \forall S \subset \mathcal{N},\; S \neq \phi,\; S \neq \mathcal{N}
+\end{equation}
+
+\begin{equation}
+x_e \in \{0,1\}, \quad \forall e \in \mathcal{E}
+\end{equation}
+
+\item[(c)]
+Iniciamos observando que este nuevo problema puede interpretarse como una relajación del problema del vendedor viajero. En el problema original se busca una ruta cerrada que visite cada ciudad exactamente una vez y regrese al origen, lo cual equivale a encontrar un ciclo Hamiltoniano de costo mínimo. En cambio, en este inciso se relajan dichas condiciones y solo se exige obtener una estructura conexa y sin ciclos que cubra todos los nodos del grafo, es decir, un árbol de expansión. En particular, nos interesa un arbol de expansión de mínimo costo, como el de la Figura \ref{ex:2:6:fig:arbolito}.
+
+Por lo tanto, ya no es necesario imponer que cada nodo tenga exactamente dos conexiones, ni tampoco que la solución contenga un ciclo. En su lugar, basta exigir que el subconjunto de aristas seleccionado conecte todos los nodos y no forme ningún tipo de ciclo.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\linewidth]{ejercicios/Capitulo-2/ejercicio_2_6_arbol.png}
+    \caption{Ejemplo de árbol de expansión de mínimo costo, conformado por las aristas remarcadas en negro.}
+    \label{ex:2:6:fig:arbolito}
+\end{figure}
+
+
+\textbf{Restricciones}
+
+Un árbol de expansión sobre \(n = |\mathcal{N}|\) nodos debe contener exactamente \(n-1\) aristas. Así,
+
+\begin{equation}
+\sum_{e \in \mathcal{E}} x_e = |\mathcal{N}| - 1
+\end{equation}
+
+La condición de no contener ciclos puede modelarse usando \eqref{ex:2:6:eq:subtourtryhard}. Equivalentemente, la conectividad puede expresarse mediante la función \(\delta(S)\). Para que el árbol sea conexo, todo subconjunto propio no vacío debe estar conectado con el resto del grafo por al menos una arista. Así,
+
+\begin{equation}
+\sum_{e \in \delta(S)} x_e \geq 1,
+\quad \forall S \subset \mathcal{N},\; S \neq \emptyset,\; S \neq \mathcal{N}
+\end{equation}
+
+Finalmente, se incorporan estas dos últimas restricciones:
+
+\textbf{Modelo completo}
+
+Una formulación del árbol de expansión mínima usando \(E(S)\) es:
+
+\begin{equation}
+\min \sum_{e \in \mathcal{E}} c_e x_e
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \mathcal{E}} x_e = |\mathcal{N}| - 1
+\end{equation}
+
+\begin{equation}
+\sum_{e \in E(S)} x_e \leq |S| - 1,
+\quad \forall S \subset \mathcal{N},\; S \neq \emptyset,\; S \neq \mathcal{N}
+\end{equation}
+
+\begin{equation}
+x_e \in \{0,1\}, \quad \forall e \in \mathcal{E}
+\end{equation}
+
+De manera equivalente, una formulación usando \(\delta(S)\) es:
+
+\begin{equation}
+\min \sum_{e \in \mathcal{E}} c_e x_e
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \mathcal{E}} x_e = |\mathcal{N}| - 1
+\end{equation}
+
+\begin{equation}
+\sum_{e \in \delta(S)} x_e \geq 1,
+\quad \forall S \subset \mathcal{N},\; S \neq \emptyset,\; S \neq \mathcal{N}
+\end{equation}
+
+\begin{equation}
+x_e \in \{0,1\}, \quad \forall e \in \mathcal{E}
+\end{equation}
+
+\end{itemize}
+}

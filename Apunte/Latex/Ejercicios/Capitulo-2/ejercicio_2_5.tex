@@ -1,0 +1,16 @@
+% Fuente: Auxiliar 2, P1.
+Considere un grafo dirigido $G = (N, A)$ y una demanda o suministro $b_i$ para cada nodo $i \in N$, tal que: 
+
+
+\begin{equation}
+    \sum_{i \in N} b_i = 0. 
+\end{equation}
+
+
+Existen dos tipos de costos:
+\begin{itemize}
+    \item Costos de transporte $c_{ij}$, por enviar una unidad desde el nodo $i$ al nodo $j$.
+    \item Costos de construcción $d_{ij}$, por establecer un enlace $(i,j)$ entre los nodos $i$ y $j$, con una capacidad $U_{ij}$.
+\end{itemize}
+
+Se desea construir una red que minimice el costo total de construcción y transporte, de manera que se satisfaga toda la demanda. Formule el problema como un problema de programación entera (MILP).\\

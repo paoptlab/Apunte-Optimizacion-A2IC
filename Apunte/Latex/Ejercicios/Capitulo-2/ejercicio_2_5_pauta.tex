@@ -1,0 +1,68 @@
+% Fuente: Auxiliar 2, P1 (pauta).
+{\color{MidnightBlue}
+\textbf{Variables de decisión}
+
+Se busca minimizar los costos de habilitar enlaces y costos de transporte para abastecer la demanda. Por lo tanto, las variables de decisiones serán:
+
+\begin{equation}
+y_{i,j} =
+\begin{cases}
+1 & \text{si se habilita el enlace de } i \text{ a } j, \\
+0 & \text{caso contrario}
+\end{cases}
+\end{equation}
+
+\begin{equation}
+x_{i,j} \;:\; \text{Flujo de } i \text{ a } j
+\end{equation}
+
+El dominio de la variable $x_{i,j}$ serán los reales positivos debido a que es un grafo dirigido
+(el flujo puede tomar una sola dirección). Notar que en el caso de que se requiera un flujo
+bidireccional de $i$ a $j$ se requiere habilitar los enlaces $x_{i,j}$ y $x_{j,i}$.\\
+
+\textbf{Parámetros}
+
+\begin{itemize}
+    \item $N$: Nodos.
+    \item $c_{i,j}$: Costos por unidad de flujo.
+    \item $d_{i,j}$: Costos por construcción.
+    \item $U_{i,j}$: Capacidad máxima del enlace.
+    \item $b_n$: Demanda/Suministro del nodo $n$, asumiremos que es positiva si corresponde a demanda y negativa en el caso de ser suministro.
+\end{itemize}
+
+\textbf{Función objetivo}
+
+\begin{equation}
+\min_{x_{i,j},\,y_{i,j}} \sum_{(i,j)\in A} c_{i,j}\,x_{i,j} \;+\; \sum_{(i,j)\in A} d_{i,j}\,y_{i,j}
+\end{equation}
+
+donde el primer término corresponde a los costos por transporte de flujo, mientras que el segundo corresponde a los costos por construcción de enlace.\\
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item[a)] Balance: Los flujos entrantes a cualquier nodo $n \in N$ deben ser iguales a los flujos salientes más la cantidad demandada o suministrada.
+
+    \begin{equation}
+    \sum_{j\,|\,(n,j)\in A} x_{n,j} + b_n = \sum_{i\,|\,(i,n)\in A} x_{i,n}
+    \qquad \forall n \in N
+    \end{equation}
+
+    \item[b)] Límites de flujo: Se deberá respetar la capacidad máxima de flujo por el enlace. Adicionalmente, flujos por enlaces podrán ser distintos de cero solo en caso de decidir ser habilitados ($y_{i,j}=1$).
+    
+    \begin{equation}
+    x_{i,j} \leq U_{i,j}\,y_{i,j} \qquad \forall (i,j) \in A
+    \end{equation}
+
+    \item[c)] Dominio de las variables:
+
+    \begin{equation}
+        x_{i,j} \geq 0 \qquad \forall (i,j) \in A
+    \end{equation}
+
+    \begin{equation}
+        y_{i,j} \in \{0,1\} \qquad \forall (i,j) \in A
+    \end{equation}
+    
+\end{itemize}
+}

@@ -1,0 +1,27 @@
+% Fuente: Pauta del Auxiliar 3, «Convexidad — Función convexa».
+{\color{MidnightBlue}
+\begin{enumerate}
+  \item
+\begin{align*}
+    f(\lambda x + (1-\lambda) y)&=e^{g(\lambda x + (1-\lambda) y)}\\
+    & \leq e^{\lambda g(x) + (1-\lambda) g(y)} \quad & \text{por convexidad de g(.)}\\
+    & \leq \lambda e^{g(x)}+(1-\lambda)e^{g(y)} & \text{por convexidad de exp(.)}\\
+    &= \lambda f(x) + (1-\lambda)f(y)
+\end{align*}
+  \item
+Definiendo $g(x) =A x+Db$. Se puede ver que g(.) corresponde a una transformación lineal:
+\begin{align*}
+g(\lambda x + (1-\lambda)y)&=\lambda A x + (1-\lambda)A y + Db\\
+&=\lambda(Ax+Db)+(1-\lambda)(Ay+Db)\\
+&=\lambda g(x)+(1-\lambda)g(y)
+\end{align*}
+
+Luego
+\begin{align*}
+    f_r(\lambda x + (1-\lambda) y)&=f(g(\lambda x + (1-\lambda) y))\\
+    & = f(\lambda g(x) + (1-\lambda) g(y)) \quad & \text{por linealidad de g(.)}\\
+    & \leq \lambda f(g(x)) +(1-\lambda)f(g(y)) & \text{por convexidad de f(.)}\\
+    &= \ \lambda f_r(x) +(1-\lambda)f_r(y)
+\end{align*}
+\end{enumerate}
+}

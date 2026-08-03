@@ -1,0 +1,29 @@
+% Fuente: Auxiliar 1, P3.
+Considere dos centros de consumo de energía eléctrica interconectados por una línea de transmisión $L1$, como se ilustra en la Figura \ref{ex:2:3:fig:sistema-de-potencia}. Cada centro de consumo tiene su propia instalación de producción y demanda. Los costos variables de los generadores ($C_i$), límites técnicos ($P_{max}^{G_i}$ y $P_{min}^{G_i}$) y la demanda de cada zona ($P_{Di}$) están dados por:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+        \hline
+        \textbf{Centro (i)} & \textbf{$P_{max}^{G_i}$ (MW)} & \textbf{$P_{min}^{G_i}$ (MW)} & \textbf{$C_{i}$ (\$/MWh)} & $P_{Di}$ (MWh) \\
+        \hline
+        1 & 6  & 1.0 & 25  & 7  \\
+        2 & 9  & 1.5 & 15  & 5  \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de generación y demanda por centro}
+    \label{ex:2:3:tab:generacion-demanda}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.65\linewidth]{ejercicios/Capitulo-2/ejercicio_2_3_sistema.png}
+    \caption{Sistema de potencia}
+    \label{ex:2:3:fig:sistema-de-potencia}
+\end{figure}
+
+\begin{enumerate}
+    \item Formule el problema de Programación Lineal Entera Mixta (MILP) con el objetivo de minimizar los costos operativos durante una hora de operación. Considere que la capacidad de la línea de transmisión es infinita.
+    \item Considere ahora que la línea de transmisión que une ambos nodos tiene una capacidad física limitada de $F_\text{max}^{L1} = 4$ $MW$. Debido a que ambos centros contienen cargas críticas, penalice la posibilidad de desabastecimiento mediante un costo de energía no suministrada de $C^\text{ENS} = 100$ $\$/MWh$. Formule el nuevo problema MILP, considerando el acople angular entre nodos.
+    \item Formule el problema de MILP de manera general para un sistema de N nodos con G generadores, donde cada generador tiene límites técnicos y puede estar encendido o apagado. El sistema cuenta con L líneas de transmisión, cada una con límites de flujo, y se asume que todas las líneas están en operación. Incorpore en su formulación la posibilidad de déficit de suministro mediante una penalización $C^\text{ENS}$, y plantee el problema de operación para H periodos (horas).
+\end{enumerate}

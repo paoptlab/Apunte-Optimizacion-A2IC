@@ -1,0 +1,13 @@
+% Fuente: Auxiliar 2, P2.
+Considere el siguiente problema de optimización: \\
+
+Un vendedor viajero necesita visitar $n$ ciudades. ¿Cuál es la ruta menos costosa posible que visita cada ciudad exactamente una vez y al finalizar regresa a su ciudad de origen? \\
+
+Para esto, se define el grafo no dirigido $G = (\mathcal{N}, \mathcal{E})$, los costos $c_e$ para cada arista $e \in \mathcal{E}$ y una variable $x_e$ igual a uno si la arista $e$ se incluye en la ruta, e igual cero si no. Considere además que $S \subset \mathcal{N}$.\\
+
+\begin{itemize}
+    \item[(a)] Sea $\delta(S) = \{ e \mid e = \{i,j\},\ i \in S,\ j \notin S \}$. Formule el problema utilizando la función $\delta(S)$.
+
+    \item[(b)] Sea $E(S) = \{ \{i,j\} \in \mathcal{E} \mid i,j \in S \}$. Formule nuevamente el problema utilizando las funciones $E(S)$ y $\delta(S)$.
+    \item[(c)] Un árbol es un grafo no dirigido sin ciclos y completamente conectado. Considere que su nuevo objetivo es encontrar el árbol de expansión de mínimo costo para la ruta del vendedor viajero. Formule el problema utilizando las funciones $E(S)$ y $\delta(S)$.
+\end{itemize}

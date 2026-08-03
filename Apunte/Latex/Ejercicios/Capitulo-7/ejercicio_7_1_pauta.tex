@@ -1,0 +1,33 @@
+% Fuente: Pauta del Control 2, Pregunta 3, ítem 5.
+{\color{MidnightBlue}
+\begin{enumerate}
+    \item \textbf{Falsa.} La convexidad, diferenciabilidad y unicidad del mínimo no garantizan la convergencia del descenso de gradiente para cualquier tamaño de paso fijo $\alpha>0$.
+
+    Considérese la función convexa y diferenciable
+    \[
+        f(x)=x^2,
+        \qquad x\in\mathbb{R}.
+    \]
+    Esta función tiene un único mínimo global en
+    \[
+        x^*=0.
+    \]
+    El método de descenso de gradiente con tamaño de paso fijo $\alpha>0$ genera la sucesión
+    \[
+        x_{k+1}=x_k-\alpha \nabla f(x_k).
+    \]
+    Como $\nabla f(x)=2x$, se obtiene
+    \[
+        x_{k+1}=(1-2\alpha)x_k.
+    \]
+    Si se toma, por ejemplo, $\alpha=2$ y $x_0\neq 0$, entonces
+    \[
+        x_{k+1}=-3x_k,
+    \]
+    de donde
+    \[
+        x_k=(-3)^k x_0.
+    \]
+    Esta sucesión no converge a $0$; de hecho, su valor absoluto crece sin límite. Por tanto, no es cierto que el algoritmo converja siempre a la solución óptima para todo $\alpha>0$.
+\end{enumerate}
+}
