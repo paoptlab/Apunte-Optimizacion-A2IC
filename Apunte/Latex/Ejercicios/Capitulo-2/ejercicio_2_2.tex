@@ -1,0 +1,20 @@
+% Fuente: Auxiliar 1, P2.
+Un grupo de investigación se encuentra trabajando en el desarrollo de un cubeSat. Los cubeSat son una clase de naves espaciales de investigación llamadas nanosatélites. Se desea determinar la potencia máxima del panel fotovoltaico y la masa de las baterías de modo de minimizar el costo del satélite.
+
+El modelo de panel utilizado tiene una masa por unidad de potencia de $\beta^{PV}$ [kg/W]. Para las baterías, el parámetro $\rho$ [Wh/kg] indica la densidad de energía máxima y $\mu$ [W/kg] la potencia máxima de carga o descarga por unidad de masa. Considere una eficiencia de carga/descarga $\eta \in (0, 1)$ para el sistema de baterías. Adicionalmente, considere que las baterías tienen un costo por unidad de masa $c^{bat}$ [\$/kg] y los paneles fotovoltaicos tienen un costo por unidad de potencia de $c^{PV}$ [\$/W].
+
+Para la formulación del problema, debe considerar la modelación de las siguientes restricciones técnicas y operativas del satélite:
+
+\begin{itemize}
+    \item Para dimensionar el tamaño de los componentes se considera que la suma de la masa de los paneles fotovoltaicos y baterías debe ser menor o igual a $\bar{w}$ [kg].
+
+    \item Se considera que el satélite operará durante $t = 1, \dots, T$ instantes de tiempo. En cada instante de tiempo debe suplir la demanda $P_t^L$ [W] del satélite. Dicha demanda puede ser cubierta mediante la potencia generada por los paneles fotovoltaicos y la descarga de las baterías.
+
+    \item Debido a la trayectoria que sigue el cubeSat, la potencia que puede ser generada por el panel fotovoltaico varía en cada instante de tiempo. El parámetro $\alpha_t$ [\%] indica el porcentaje de la potencia máxima del panel fotovoltaico que puede ser efectivamente generada en el instante de tiempo $t$.
+
+    \item Se debe considerar que la energía almacenada en la batería en cada instante de tiempo $t$ debe encontrarse dentro de los límites permitidos por el fabricante. No puede ser menor que un porcentaje $\gamma$ [\%] de su capacidad de almacenamiento máxima establecido por el fabricante.
+
+    \item Se debe considerar el balance de energía en la batería para cada instante $t$. Como condición de borde suponga que en el instante $t = 0$ la energía almacenada es igual a la capacidad de almacenamiento máxima. La capacidad de almacenamiento máxima y la potencia máxima de carga y descarga de la batería dependen de la masa de las baterías cubeSat.
+\end{itemize}
+
+Plantee un modelo de programación lineal que permita al grupo de investigación minimizar el costo del satélite.

@@ -1,0 +1,188 @@
+% Fuente: Auxiliar 3, sección «Forma general y estándar».
+{\color{MidnightBlue}
+\textbf{Pasar a forma estándar:}\\
+
+Definimos los siguientes cambios de variables:
+\[
+x_3 = x_3' + 5,\quad x_3'\ge0;
+\qquad
+x_4 = -x_4',\quad x_4'\ge0;
+\qquad
+x_5 = x_5^+ - x_5^-,\quad x_5^+, x_5^-\ge0.
+\]
+
+Definimos la variable de holgura $s_1$ y se añade a la primera restricción:
+\[
+x_1 + x_2 +4x_4' + s_1 =10,\quad s_1\ge0;
+\]
+donde, además, se añade el cambio de variable de $x_4'$.\\
+
+Se realizan los cambios de variables en la segunda restricción:
+\[
+x_2 -0.5x_3' + x_5^+ - x_5^- =1.5
+\]
+
+La función objetivo se pasa a minimización y se realizan los cambios de variables en la función objetivo; además, se omiten las constantes:
+
+\[
+\min\;-3x_1 -5x_2 +3x_3' +1.3x_4' +x_5^+ - x_5^-.
+\]
+
+El problema queda:
+\[
+\begin{aligned}
+\min\quad & -3x_1 -5x_2 +3x_3' +1.3x_4' +x_5^+ - x_5^- \\
+\text{s.a.}\quad
+& x_1 + x_2 +4x_4' + s_1 =10,\\
+& x_2 -0.5x_3' + x_5^+ - x_5^- =1.5,\\
+& x_1, x_2, x_3', x_4', x_5^+, x_5^-, s_1 \ge0.
+\end{aligned}
+\]
+
+Las matrices están dadas por:
+\[
+x = \begin{pmatrix}
+x_1\\ x_2\\ x_3'\\ x_4'\\ x_5^+\\ x_5^-\\ s_1
+\end{pmatrix},
+\quad
+c^T = \bigl(-3,\,-5,\,3,\,1.3,\,1,\,-1,\,0\bigr),
+\]
+\[
+A =
+\begin{pmatrix}
+1 & 1   & 0    & 4 & 0 & 0 & 1\\
+0 & 1   & -0.5 & 0 & 1 & -1 & 0
+\end{pmatrix},
+\quad
+b = \begin{pmatrix}10\\1.5\end{pmatrix}.
+\]\\
+
+\textbf{Pasar a forma general:}\\
+
+La segunda restricción se puede escribir como dos restricciones de desigualdad:
+\[
+x_2 - 0.5x_3 + x_5 = -1
+\;\Longrightarrow\;
+\begin{cases}
+x_2 - 0.5x_3 + x_5 \le -1,\\
+-(x_2 - 0.5x_3 + x_5)\le 1.
+\end{cases}
+\]\\
+
+La tercera restricción se puede cambiar la dirección de la desigualdad:
+\[
+x_3 \ge 5
+\;\Longrightarrow\;
+-\,x_3 \le -5.
+\]
+
+El problema queda:
+\[
+\begin{aligned}
+\min\quad & -3x_1 -5x_2 +3x_3 -1.3x_4 +x_5 \\
+\text{s.a.}\quad
+& x_1 + x_2 -4x_4 \le 10,\\
+&x_2 - 0.5x_3 + x_5 \le -1,\\
+&-x_2 + 0.5x_3 - x_5\le 1. \\
+& -x_3 \le -5
+\end{aligned}
+\]
+\[
+x_1\ge0,\quad x_2\ge0,\quad x_4\le0,\quad x_5\ \text{libre}.
+\]
+
+Las matrices están dadas:
+\[
+x = \begin{pmatrix}
+x_1\\ x_2\\ x_3\\ x_4\\ x_5\\ 
+\end{pmatrix},
+\quad
+c^T = \bigl(-3,\,-5,\,3,\,-1.3,\,1),
+\]
+\[
+A = 
+\begin{pmatrix}
+1 & 1   & 0    & -4 & 0\\
+0 & 1   & -0.5 & 0  & 1\\
+0 & -1  & 0.5  & 0  & -1\\
+0 & 0   & -1   & 0  & 0
+\end{pmatrix},\quad
+b = \begin{pmatrix}10\\-1\\1\\-5\end{pmatrix}.
+\]
+
+\textbf{Forma estándar:}\\
+
+El problema se encuentra en forma estándar, de modo que sólo queda representar de forma matricial:
+
+\[
+x = \begin{pmatrix}
+x_1\\
+x_2\\
+r_1\\
+s_1
+\end{pmatrix},
+\quad
+c^T = \bigl(200,\;220,\;0,\;0\bigr),
+\]
+\[
+A = 
+\begin{pmatrix}
+0.7 & 0.6 & -1 & 0\\
+0.9 & 0.8 &  0 & 1\\
+1   & 1   &  0 & 0
+\end{pmatrix},
+\quad
+b = \begin{pmatrix}
+0.65\\
+0.85\\
+1
+\end{pmatrix}.
+\]
+
+\textbf{Forma general:}\\
+
+Cada restricción se convierte en dos desigualdades “\(\le\)”:
+\[
+\begin{aligned}
+&0.7x_1 + 0.6x_2 - r_1 \le 0.65,\\
+&-(0.7x_1 + 0.6x_2 - r_1)\le -0.65,\\[6pt]
+&0.9x_1 + 0.8x_2 + s_1 \le 0.85,\\
+&-(0.9x_1 + 0.8x_2 + s_1)\le -0.85,\\[6pt]
+&x_1 + x_2 \le 1,\\
+&-(x_1 + x_2)\le -1.
+\end{aligned}
+\]\\
+
+Las matrices están dadas por:
+\[
+x = \begin{pmatrix}
+x_1\\
+x_2\\
+r_1\\
+s_1
+\end{pmatrix},\quad
+c^T = \bigl(200,\;220,\;0,\;0\bigr).
+\]
+\[
+A = 
+\begin{pmatrix}
+ 0.7 &  0.6 & -1 &  0\\
+-0.7 & -0.6 &  1 &  0\\
+ 0.9 &  0.8 &  0 &  1\\
+-0.9 & -0.8 &  0 & -1\\
+ 1   &  1   &  0 &  0\\
+-1   & -1   &  0 &  0
+\end{pmatrix},
+\quad
+b = 
+\begin{pmatrix}
+ 0.65\\
+-0.65\\
+ 0.85\\
+-0.85\\
+ 1\\
+-1
+\end{pmatrix}.
+\]
+}
+

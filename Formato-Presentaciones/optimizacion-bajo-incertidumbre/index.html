@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimización bajo incertidumbre</title>
+<link rel="icon" href="../shared/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../node_modules/reveal.js/dist/reset.css">
+<link rel="stylesheet" href="../node_modules/reveal.js/dist/reveal.css">
+<link rel="stylesheet" href="../shared/vendor/ibm-plex/fonts.css">
+<link rel="stylesheet" href="../shared/deck.css">
+<link rel="stylesheet" href="../shared/vendor/katex/katex.min.css">
+<script defer src="../shared/vendor/katex/katex.min.js"></script>
+<script defer src="../shared/vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- 01 · PORTADA -->
+  <section class="dark" data-screen-label="01 Portada">
+    <div class="cover-grid"></div>
+    <div class="col grow" style="justify-content:space-between; position:relative; z-index:1;">
+      <div class="row" style="justify-content:flex-end;">
+        <div class="row" style="gap:18px; align-items:stretch;">
+          <div class="logo-solo" style="width:380px;"><img src="../shared/assets/logo-a2ic.jpg" alt="A2IC — Área para el Aprendizaje de Ingeniería y Ciencias" style="height:60px;"></div>
+          <div class="logo-solo" style="width:380px;"><img src="../shared/assets/logo-fcfm-die.png" alt="FCFM · Departamento de Ingeniería Eléctrica · Universidad de Chile" style="height:60px;"></div>
+        </div>
+      </div>
+      <div class="col" style="gap:28px;">
+        <div class="kicker">EL4114 · Optimización · A2IC</div>
+        <h1 class="title" style="font-size:104px; line-height:1;">Optimización<br>bajo incertidumbre</h1>
+        <div class="subtitle" style="max-width:1220px;">Unit Commitment estocástico de dos etapas</div>
+      </div>
+      <div class="row between" style="align-items:flex-end;">
+        <div class="col" style="gap:6px;">
+          <div class="small mono muted">Profesor: Heraldo Rozas</div>
+          <div class="small mono muted">Auxiliares: Diego Carez · Joaquín Ormazábal</div>
+        </div>
+        <div class="timer" style="position:static;">Sesión · 1:30 h</div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Universidad de Chile — FCFM — DIE</span><span>01</span></div></div>
+  </section>
+
+  <!-- 02 · AGENDA / MAPA DE TIEMPOS -->
+  <section data-screen-label="02 Agenda">
+    <div class="head">
+      <div class="kicker">Índice</div>
+      <h2 class="title">Cómo está organizada la sesión</h2>
+    </div>
+    <div class="timer">Total · 80 min</div>
+    <div class="agenda grow" style="align-content:center;">
+      <div class="ai"><span class="n">01</span><span class="t">Contexto<span class="s">Sistemas eléctricos bajo incertidumbre</span></span><span class="m">5 min</span></div>
+      <div class="ai act"><span class="n">06</span><span class="t">Construcción de escenarios (SAA)<span class="s">Muestreo desde distribuciones</span></span><span class="m">5 min</span></div>
+      <div class="ai act"><span class="n">02</span><span class="t">Unit Commitment determinista<span class="s">Formulación · planteen la reserva ✍</span></span><span class="m">8 min</span></div>
+      <div class="ai act"><span class="n">07</span><span class="t">Implementación en el notebook<span class="s">Dos funciones · uso crítico de IA ✍</span></span><span class="m">15 min</span></div>
+      <div class="ai"><span class="n">03</span><span class="t">Determinista con reservas<span class="s">El margen R — solución</span></span><span class="m">3 min</span></div>
+      <div class="ai"><span class="n">08</span><span class="t">Resultados<span class="s">Compromiso · despacho · in-sample (SAA)</span></span><span class="m">9 min</span></div>
+      <div class="ai act"><span class="n">04</span><span class="t">Programación estocástica<span class="s">Dos etapas · planteen la formulación ✍</span></span><span class="m">20 min</span></div>
+      <div class="ai"><span class="n">09</span><span class="t">Oráculo y comparación<span class="s">Wait-and-See · out-of-sample</span></span><span class="m">5 min</span></div>
+      <div class="ai"><span class="n">05</span><span class="t">Modelamiento estocástico<span class="s">Solución y explicación</span></span><span class="m">5 min</span></div>
+      <div class="ai act"><span class="n">10</span><span class="t">Discusión final y RET<span class="s">Retroalimentación grupal ✍</span></span><span class="m">15 min</span></div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Índice</span><span>02</span></div></div>
+  </section>
+
+  <!-- 03 · CONTEXTO -->
+  <section class="dark" data-screen-label="03 Contexto">
+    <div class="head">
+      <div class="kicker">Contexto</div>
+      <h2 class="title">Sistemas eléctricos bajo incertidumbre</h2>
+    </div>
+    <div class="timer">5 min</div>
+    <div class="row grow" style="gap:56px; align-items:stretch;">
+      <div class="col" style="flex:none; width:920px; gap:var(--gap-item); justify-content:center;">
+        <p class="lead">La alta penetración de generación no despachable —solar y eólica— pone la incertidumbre en el centro de la operación. Las decisiones de compromiso deben tomarse <em class="it">antes</em> de conocer la realización de demanda y recurso renovable.</p>
+        <ul class="clean small">
+          <li><span class="dot"></span><span>Reemplazar variables aleatorias por su <strong>valor esperado</strong> produce modelos frágiles y peligrosamente optimistas.</span></li>
+          <li><span class="dot"></span><span>Prepararse sólo para la <strong>peor falla</strong> ignora las probabilidades reales y sobre-invierte.</span></li>
+          <li><span class="dot"></span><span>Fuentes de incertidumbre: demanda volátil, disponibilidad solar/eólica, fallas de unidades y contingencias en líneas.</span></li>
+        </ul>
+      </div>
+      <div class="col grow" style="gap:16px; justify-content:center;">
+        <span class="kicker" style="font-size:18px;">Cuando la planificación falla</span>
+        <div class="card"><div class="row between" style="align-items:baseline;"><h3 style="font-size:28px;">California</h3><span class="mono small muted">ago. 2020</span></div><p class="small muted">Ola de calor + baja renovable en horas críticas → cortes rotativos.</p></div>
+        <div class="card"><div class="row between" style="align-items:baseline;"><h3 style="font-size:28px;">Texas</h3><span class="mono small muted">feb. 2021</span></div><p class="small muted">Tormenta Uri: fallas simultáneas de generación y de gas natural.</p></div>
+        <div class="card"><div class="row between" style="align-items:baseline;"><h3 style="font-size:28px;">Chile</h3><span class="mono small muted">1998–1999</span></div><p class="small muted">Sequía severa redujo la hidroelectricidad → racionamiento.</p></div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Contexto</span><span>03</span></div></div>
+  </section>
+
+  <!-- 04 · UC DETERMINISTA + ACTIVIDAD RESERVA -->
+  <section data-screen-label="04 UC determinista">
+    <div class="head">
+      <div class="kicker">Unit Commitment</div>
+      <h2 class="title">Formulación determinista</h2>
+    </div>
+    <div class="timer">8 min</div>
+    <div class="row" style="gap:48px; align-items:stretch; margin-bottom:18px;">
+      <div class="col" style="flex:none; width:900px; gap:13px;">
+        <div class="math" style="font-size:22px; padding:16px 24px;">
+          \[ \min\ \underbrace{\sum_{g,t}\!\bigl(c^{nl}_g u_{g,t} + c^{su}_g v_{g,t}\bigr)}_{\text{compromiso}} + \underbrace{\sum_{t}\!\Bigl(\sum_{g} c_g\,p_{g,t} + \mathrm{VOLL}\,\ell_{t}\Bigr)}_{\text{operación}} \]
+        </div>
+        <div class="cons">
+          <div class="ci"><div class="cn"><b>Balance de potencia</b></div><div class="ce">\(\sum_{g} p_{g,t} + p^{\mathrm{sol}}_{t} + \ell_{t} = D_{t}\)</div><div class="cd">\(\forall\, t\)</div></div>
+          <div class="ci"><div class="cn"><b>Límites técnicos</b></div><div class="ce">\(P^{\min}_g\,u_{g,t} \le p_{g,t} \le P^{\max}_g\,u_{g,t}\)</div><div class="cd">\(\forall\, g, t\)</div></div>
+          <div class="ci"><div class="cn"><b>Disponibilidad solar</b></div><div class="ce">\(0 \le p^{\mathrm{sol}}_{t} \le P^{\mathrm{sol}}_{t}\)</div><div class="cd">\(\forall\, t\)</div></div>
+          <div class="ci"><div class="cn"><b>Lógica de transición</b></div><div class="ce">\(u_{g,t}-u_{g,t-1}=v_{g,t}-w_{g,t}\)</div><div class="cd">\(\forall\, g, t\)</div></div>
+          <div class="ci"><div class="cn"><b>Exclusividad arranque/parada</b></div><div class="ce">\(v_{g,t}+w_{g,t}\le 1\)</div><div class="cd">\(\forall\, g, t\)</div></div>
+          <div class="ci dom-row"><div class="cn"><b>Dominio</b></div><div class="ce"><span>\(u_{g,t},v_{g,t},w_{g,t}\in\{0,1\}\)</span><span>\(p_{g,t},\,p^{\mathrm{sol}}_{t},\,\ell_{t}\ge 0\)</span></div></div>
+        </div>
+      </div>
+      <div class="col grow">
+        <table class="t">
+          <thead><tr><th>Unidad</th><th class="n">c</th><th class="n">Pmin</th><th class="n">Pmax</th><th class="n">no-load</th><th class="n">partida</th></tr></thead>
+          <tbody id="system-table-body">
+            <tr><td class="gtag" style="color:var(--g1)">G1 · Carbón base</td><td class="n">20</td><td class="n">40</td><td class="n">150</td><td class="n">100</td><td class="n">500</td></tr>
+            <tr><td class="gtag" style="color:var(--g2)">G2 · Intermedia</td><td class="n">40</td><td class="n">20</td><td class="n">100</td><td class="n">80</td><td class="n">300</td></tr>
+            <tr><td class="gtag" style="color:var(--g3)">G3 · Peaker</td><td class="n">70</td><td class="n">10</td><td class="n">80</td><td class="n">50</td><td class="n">100</td></tr>
+            <tr><td class="gtag" style="color:var(--solar)">☀ Solar</td><td class="n">0</td><td class="n">—</td><td class="n">150</td><td class="n">—</td><td class="n">—</td></tr>
+          </tbody>
+        </table>
+        <div class="row" style="gap:14px; margin-top:18px;">
+          <div class="card grow" style="padding:16px 20px;"><span class="stat"><span class="k">Capacidad</span><span class="v" id="system-cap" style="font-size:34px;">330<span class="small muted" style="font-size:18px;"> MW</span></span></span></div>
+          <div class="card grow" style="padding:16px 20px;"><span class="stat"><span class="k">Demanda pico</span><span class="v" id="system-dmax" style="font-size:34px;">248<span class="small muted" style="font-size:18px;"> MW</span></span></span></div>
+          <div class="card grow" style="padding:16px 20px;"><span class="stat"><span class="k">VOLL</span><span class="v" id="system-voll" style="font-size:34px;">10k<span class="small muted" style="font-size:18px;"> $/MWh</span></span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="activity">
+      <span class="atag">✍ Actividad · 5 min</span>
+      <p class="q">Antes de modelar la incertidumbre: planteen una <strong>restricción de reserva</strong> que obligue a la capacidad comprometida a superar la demanda por un margen \(\alpha\). ¿Qué términos entran y para qué períodos se impone?</p>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Unit Commitment</span><span>04</span></div></div>
+  </section>
+
+  <!-- 05 · DETERMINISTA CON RESERVA (solución) -->
+  <section data-screen-label="05 Determinista con reserva">
+    <div class="head">
+      <div class="kicker">Enfoque de seguridad · solución</div>
+      <h2 class="title">UC determinista con reservas</h2>
+    </div>
+    <div class="timer">3 min</div>
+    <div class="row grow" style="gap:52px; align-items:center;">
+      <div class="col" style="flex:none; width:840px; gap:22px;">
+        <div class="math" style="font-size:28px;">
+          \[ \sum_{g} p_{g,t} \;+\; p^{\mathrm{sol}}_{t} \;+\; \ell_{t} \;=\; (1+\alpha)\,D_t \qquad \forall\, t \in \mathcal{T} \]
+          <div class="small mono muted" style="font-size:17px; font-style:normal; margin-top:8px;">se sobredimensiona el balance: el sistema despacha capacidad para \((1+\alpha)\) veces la demanda nominal</div>
+        </div>
+        <ul class="clean small">
+          <li><span class="dot"></span><span id="reserve-set">Se evalúa \(R \in \{0\%, 10\%, 15\%, 20\%\}\); con \(R=0\) se recupera la base determinista pura.</span></li>
+          <li><span class="dot"></span><span>✅ Sencillo (un solo escenario). &nbsp; ❌ Sobrecompromete unidades caras «por si acaso» y no distingue escenarios probables de improbables.</span></li>
+        </ul>
+      </div>
+      <div class="col grow" style="gap:12px;">
+        <span class="card lab" style="border:0; padding:0;">Trade-off · costo total vs margen de reserva α</span>
+        <div id="reserves-chart" class="chart"></div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Reservas</span><span>05</span></div></div>
+  </section>
+
+  <!-- 06 · PROGRAMACIÓN ESTOCÁSTICA + ACTIVIDAD FORMULAR -->
+  <section class="dark" data-screen-label="06 Programación estocástica">
+    <div class="head">
+      <div class="kicker">Concepto central</div>
+      <h2 class="title">Programación estocástica de dos etapas</h2>
+    </div>
+    <div class="timer">20 min</div>
+    <div class="row grow" style="align-items:center; gap:56px;">
+      <div class="col" style="flex:none; width:780px; gap:24px;">
+        <div class="math" style="font-size:32px;">
+          \[ \min_{x\in X}\; c^{\top}x \;+\; \mathbb{E}_{\xi}\!\left[\,Q(x,\xi)\,\right] \]
+        </div>
+        <div class="math small" style="font-size:27px;">
+          \[ \approx\; \min_{x\in X}\; c^{\top}x + \sum_{s\in\mathcal{S}}\pi_s\,Q(x,\xi_s) \]
+          <div class="small muted mono" style="font-size:17px; margin-top:8px; font-style:normal;">equivalente determinista · \(\mathcal{S}\) es un conjunto finito de <strong>N</strong> escenarios con probabilidad \(\pi_s\)</div>
+        </div>
+        <div class="card" style="border-color:var(--accent-soft); background:rgba(42,157,143,.12); padding:18px 24px;">
+          <span class="lab" style="color:var(--accent-soft)">La función de recurso</span>
+          <p class="small" style="margin:0;">\(Q(x,\xi_s)\) es el <strong>costo óptimo de la 2ª etapa</strong>: dado el compromiso \(x\) ya fijado y revelado el escenario \(\xi_s\), se resuelve el despacho de mínimo costo (generación + ENS). El objetivo minimiza el costo de 1ª etapa \(c^{\top}x\) más el <strong>valor esperado</strong> \(\sum_s\pi_s\,Q(x,\xi_s)\) de ese recurso.</p>
+        </div>
+      </div>
+      <div class="grow col" style="gap:12px;">
+        <div id="tree" class="chart"></div>
+      </div>
+    </div>
+    <div class="activity" style="margin-top:18px;">
+      <span class="atag">✍ ACTIVIDAD · 10 MIN</span>
+      <p class="q">Planteen la <strong>formulación estocástica</strong> del UC: ¿qué variables llevan índice \(s\) y cuáles no? ¿Cómo cambian la función objetivo y el balance de potencia respecto al caso determinista?</p>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Concepto central</span><span>06</span></div></div>
+  </section>
+
+  <!-- 07 · MODELAMIENTO ESTOCÁSTICO (solución) -->
+  <section data-screen-label="07 Modelamiento estocástico">
+    <div class="head">
+      <div class="kicker">Solución y explicación</div>
+      <h2 class="title">Modelo estocástico completo del UC</h2>
+    </div>
+    <div class="timer">5 min</div>
+    <div class="row grow" style="gap:44px; align-items:stretch;">
+      <div class="col" style="flex:none; width:1060px; gap:14px;">
+        <div class="math" style="font-size:22px; padding:16px 24px;">
+          \[ \min\ \underbrace{\sum_{g,t}\!\bigl(c^{nl}_g u_{g,t}+c^{su}_g v_{g,t}\bigr)}_{\text{compromiso (etapa 1)}} + \underbrace{\sum_{s}\pi_s\!\sum_{t}\!\Bigl(\sum_{g}c_g\, p_{g,t,s} + \mathrm{VOLL}\,\ell_{t,s}\Bigr)}_{\text{operación esperada (etapa 2)}} \]
+        </div>
+        <div class="cons">
+          <div class="ci"><div class="cn"><b>Balance de potencia</b></div><div class="ce">\(\sum_{g} p_{g,t,s} + p^{\mathrm{sol}}_{t,s} + \ell_{t,s} = D_{t,s}\)</div><div class="cd">\(\forall\, t, s\)</div></div>
+          <div class="ci"><div class="cn"><b>Límites técnicos</b></div><div class="ce">\(P^{\min}_g\,u_{g,t} \le p_{g,t,s} \le P^{\max}_g\,u_{g,t}\)</div><div class="cd">\(\forall\, g, t, s\)</div></div>
+          <div class="ci"><div class="cn"><b>Disponibilidad solar</b></div><div class="ce">\(0 \le p^{\mathrm{sol}}_{t,s} \le P^{\mathrm{sol}}_{t,s}\)</div><div class="cd">\(\forall\, t, s\)</div></div>
+          <div class="ci"><div class="cn"><b>Lógica de transición</b></div><div class="ce">\(u_{g,t}-u_{g,t-1}=v_{g,t}-w_{g,t}\)</div><div class="cd">\(\forall\, g, t\)</div></div>
+          <div class="ci"><div class="cn"><b>Exclusividad arranque/parada</b></div><div class="ce">\(v_{g,t}+w_{g,t}\le 1\)</div><div class="cd">\(\forall\, g, t\)</div></div>
+          <div class="ci dom-row"><div class="cn"><b>Dominio</b></div><div class="ce"><span>\(u_{g,t},v_{g,t},w_{g,t}\in\{0,1\}\)</span><span>\(p_{g,t,s},\,p^{\mathrm{sol}}_{t,s},\,\ell_{t,s}\ge 0\)</span></div></div>
+        </div>
+      </div>
+      <div class="col grow" style="gap:14px;">
+        <div class="card" style="border-color:var(--g2); background:rgba(217,169,63,.12); padding:18px 22px;">
+          <span class="lab" style="color:var(--g2)">1ª etapa · here-and-now · sin índice s</span>
+          <div class="legend" style="gap:10px; margin:6px 0;"><span class="chip">\(u_{g,t}\)</span><span class="chip">\(v_{g,t}\)</span><span class="chip">\(w_{g,t}\)</span></div>
+          <p class="small muted" style="margin:0;">Compromiso: se decide <em class="it">antes</em> de observar \(\xi\). Único para todos los escenarios.</p>
+        </div>
+        <div class="card" style="border-color:var(--good); background:rgba(42,157,143,.12); padding:18px 22px;">
+          <span class="lab" style="color:var(--good)">2ª etapa · wait-and-see · con índice s</span>
+          <div class="legend" style="gap:10px; margin:6px 0;"><span class="chip">\(p_{g,t,s}\)</span><span class="chip">\(p^{\mathrm{sol}}_{t,s}\)</span><span class="chip">\(\ell_{t,s}\)</span></div>
+          <p class="small muted" style="margin:0;">Despacho (recurso): se adapta a la demanda y el sol observados en cada \(s\).</p>
+        </div>
+        <div class="card" style="border-color:var(--accent-soft); padding:16px 22px;">
+          <span class="lab" style="color:var(--accent-soft)">No-anticipatividad</span>
+          <p class="small muted" style="margin:0;">\(u,v,w\) aparecen en las restricciones de <em class="it">todos</em> los escenarios pero <strong>no llevan índice \(s\)</strong>: ése es el acoplamiento que une las dos etapas.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Modelamiento estocástico</span><span>07</span></div></div>
+  </section>
+
+  <!-- 08 · CONSTRUCCIÓN DE ESCENARIOS (SAA) -->
+  <section class="dark" data-screen-label="08 Construcción de escenarios">
+    <div class="head">
+      <div class="kicker">Parte 2 · sólo explicación</div>
+      <h2 class="title">Construcción de escenarios (SAA)</h2>
+    </div>
+    <div class="timer">5 min</div>
+    <div class="row grow" style="gap:52px; align-items:center;">
+      <div class="col" style="flex:none; width:880px; gap:20px;">
+        <p class="lead" style="font-size:28px;">En vez de inventar escenarios a mano, se muestrean \(N\) realizaciones de los factores de demanda y solar desde una distribución conjunta y se resuelve el UC con \(N\) escenarios equiprobables (\(\pi_s = 1/N\)).</p>
+        <div class="row" style="gap:16px;">
+          <div class="card grow" style="padding:18px 22px;"><span class="lab">Factor demanda</span><div class="mono" id="saa-dist-d" style="font-size:24px;">\(k_D \sim \mathcal{N}(1,\,0.10^2)\)</div></div>
+          <div class="card grow" style="padding:18px 22px;"><span class="lab">Factor solar</span><div class="mono" id="saa-dist-s" style="font-size:24px;">\(k_S \sim \mathcal{N}(1,\,0.30^2)\)</div></div>
+        </div>
+        <div class="card" style="padding:18px 22px;"><span class="lab">Correlación</span><p class="small" id="saa-rho" style="margin:0;">\(\rho=-0.5\) — un día nublado tiende a juntar <strong>menos sol</strong> con <strong>más demanda</strong> (el caso de estrés).</p></div>
+        <p class="small muted">Estos escenarios <strong>no los plantean ustedes</strong>: ya vienen construidos en el notebook. Su tarea es entender cómo se generan y su efecto sobre las decisiones.</p>
+      </div>
+      <div class="col grow" style="gap:12px;">
+        <span class="hint" id="saa-sample-hint">Muestras \((k_D, k_S)\) · distribución bivariada · N=100</span>
+        <div id="saa-scatter" class="chart"></div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Construcción de escenarios</span><span>08</span></div></div>
+  </section>
+
+  <!-- 09 · IMPLEMENTACIÓN — DOS FUNCIONES + IA -->
+  <section data-screen-label="09 Implementación">
+    <div class="head">
+      <div class="kicker">Partes 3·4 · Implementación</div>
+      <h2 class="title">Qué construir en el notebook: dos funciones</h2>
+    </div>
+    <div class="timer">15 min</div>
+    <div class="row" style="gap:36px; align-items:stretch; margin-bottom:10px;">
+      <div class="col grow">
+        <div class="code-title"><span class="tag">función 1</span> resolver_uc_reserva()</div>
+        <pre class="code grow" data-lang="py" style="font-size:21px;"># UC determinista con reserva R (Gurobi)
+def resolver_uc_reserva(D_nom, Sol_nom, reserva):
+    # variables u,v,w (binarias) y p,ps,ell (>=0)
+    # objetivo: compromiso + operacion determinista
+    for t in T:
+        # >>> BALANCE SOBREDIMENSIONADO POR LA RESERVA <<<
+        m.addConstr(quicksum(p[g,t] for g in G)
+                    + ps[t] + ell[t] == (1+reserva)*D_nom[t])
+    m.optimize()</pre>
+      </div>
+      <div class="col grow">
+        <div class="code-title"><span class="tag">función 2</span> resolver_uc()  ·  estocástica</div>
+        <pre class="code grow" data-lang="py" style="font-size:21px;"># UC de dos etapas — N escenarios (Gurobi)
+def resolver_uc(D_in, Sol_in, pi_in, fijar_uc=None):
+    u = m.addVars(G, T, vtype=GRB.BINARY)       # SIN s
+    p = m.addVars(G, T, Sset, lb=0)             # CON s
+    m.setObjective(compromiso + quicksum(
+        pi_in[s]*operacion[s] for s in Sset))   # costo esperado
+    for t in T:
+        for s in Sset:                          # balance por t,s
+            m.addConstr(quicksum(p[g,t,s] for g in G)
+                        + ps[t,s] + ell[t,s] == D_in[s][t])</pre>
+      </div>
+    </div>
+    <div class="row grow" style="gap:32px; align-items:stretch;">
+      <div class="activity grow" style="margin:0;">
+        <span class="atag">✍ Desarrollo · 12 min</span>
+        <p class="small" style="margin:0;">Implementen ambas funciones. Verifiquen el checklist: binarias <strong>sin</strong> \(s\), despacho <strong>con</strong> \(s\), objetivo con costo esperado \(\sum_s\pi_s(\cdot)\), balance \(\forall\,t,s\), demanda y solar indexadas por escenario.</p>
+      </div>
+      <div class="card" style="flex:none; width:620px; border-color:var(--accent); background:rgba(42,157,143,.10);">
+        <span class="lab">🤖 Uso crítico de IA — 3 min de muestra</span>
+        <p class="small muted" style="margin:0;">La IA acelera el andamiaje, pero <strong>verifiquen</strong>: índices de escenario correctos, signo de las desigualdades y que la no-anticipatividad se respete. No deleguen la lógica del modelo. Compartiremos avances al cierre del bloque.</p>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Implementación</span><span>09</span></div></div>
+  </section>
+
+  <!-- 10 · SOLUCIÓN — RESOLVER_UC_RESERVA -->
+  <section data-screen-label="10 Solución reservas">
+    <div class="head">
+      <div class="kicker">Solución · código de referencia (notebook)</div>
+      <h2 class="title">resolver_uc_reserva() — determinista con reserva</h2>
+    </div>
+    <div class="timer">Sección 1</div>
+    <div class="row grow" style="gap:28px; align-items:stretch; margin-bottom:14px;">
+      <div class="col grow">
+        <div class="code-title"><span class="tag">parte 1</span> modelo · variables · objetivo</div>
+        <pre class="code grow" data-lang="py" style="font-size:17px;">def resolver_uc_reserva(D_nom, Sol_nom, reserva):
+    m = grb.Model("UC_Reserva")
+    m.Params.OutputFlag = 0
+
+    # variables de compromiso (binarias)
+    u = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    v = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    w = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    # despacho determinista (>= 0)
+    p   = m.addVars(G, T, lb=0)
+    ps  = m.addVars(T, lb=0)
+    ell = m.addVars(T, lb=0)
+
+    # objetivo: compromiso + operacion
+    m.setObjective(
+      grb.quicksum(cnl[g]*u[g,t] + cstart[g]*v[g,t]
+                   for g in G for t in T)
+      + grb.quicksum(cvar[g]*p[g,t] for g in G for t in T)
+      + grb.quicksum(VOLL*ell[t] for t in T),
+      grb.GRB.MINIMIZE)</pre>
+      </div>
+      <div class="col grow">
+        <div class="code-title"><span class="tag">parte 2</span> restricciones · reserva · resolver</div>
+        <pre class="code grow" data-lang="py" style="font-size:17px;">    for g in G:
+      for t in T:
+        ut_1 = 0 if t == 0 else u[g, t-1]
+        m.addConstr(u[g,t]-ut_1 == v[g,t]-w[g,t])
+        m.addConstr(v[g,t] + w[g,t] <= 1)
+        m.addConstr(p[g,t] >= Pmin[g]*u[g,t])
+        m.addConstr(p[g,t] <= Pmax[g]*u[g,t])
+
+    for t in T:
+      m.addConstr(ps[t] <= Sol_nom[t])
+      # >>> RESERVA: balance x (1 + reserva) <<<
+      if reserva > 0:
+        m.addConstr(grb.quicksum(p[g,t] for g in G)
+          + ps[t] + ell[t] == (1+reserva)*D_nom[t])
+      else:
+        m.addConstr(grb.quicksum(p[g,t] for g in G)
+          + ps[t] + ell[t] == D_nom[t])
+
+    m.optimize()
+    return u, v, w, p, ps, ell   # + obj, status</pre>
+      </div>
+    </div>
+    <div class="row" id="reserve-cards" style="gap:14px;">
+      <div class="card grow" style="padding:13px 20px;"><span class="stat" style="flex-direction:row; align-items:baseline; gap:12px;"><span class="k">R=0%</span><span class="v" style="font-size:26px; color:var(--g1);">$90.464</span></span></div>
+      <div class="card grow" style="padding:13px 20px;"><span class="stat" style="flex-direction:row; align-items:baseline; gap:12px;"><span class="k">R=10%</span><span class="v" style="font-size:26px; color:var(--g2);">$107.391</span></span></div>
+      <div class="card grow" style="padding:13px 20px;"><span class="stat" style="flex-direction:row; align-items:baseline; gap:12px;"><span class="k">R=15%</span><span class="v" style="font-size:26px; color:var(--g3);">$116.852</span></span></div>
+      <div class="card grow" style="padding:13px 20px;"><span class="stat" style="flex-direction:row; align-items:baseline; gap:12px;"><span class="k">R=20%</span><span class="v" style="font-size:26px; color:var(--ens);">$126.790</span></span></div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Solución reservas</span><span>10</span></div></div>
+  </section>
+
+  <!-- 11 · SOLUCIÓN — RESOLVER_UC (ESTOCÁSTICO) -->
+  <section data-screen-label="11 Solución estocástica">
+    <div class="head">
+      <div class="kicker">Solución · código de referencia (notebook)</div>
+      <h2 class="title">resolver_uc() — estocástico de dos etapas</h2>
+    </div>
+    <div class="timer">Sección 2</div>
+    <div class="row grow" style="gap:28px; align-items:stretch; margin-bottom:14px;">
+      <div class="col grow">
+        <div class="code-title"><span class="tag">parte 1</span> variables 1ª/2ª etapa · costo esperado</div>
+        <pre class="code grow" data-lang="py" style="font-size:16px;">def resolver_uc(D_in, Sol_in, pi_in, fijar_uc=None):
+    Sset = list(D_in.keys())          # escenarios
+    m = grb.Model("UC_estocastico")
+    m.Params.OutputFlag = 0
+
+    # 1a etapa — SIN indice de escenario s
+    u = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    v = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    w = m.addVars(G, T, vtype=grb.GRB.BINARY)
+    # 2a etapa — CON indice de escenario s
+    p   = m.addVars(G, T, Sset, lb=0)
+    ps  = m.addVars(T, Sset, lb=0)
+    ell = m.addVars(T, Sset, lb=0)
+
+    # objetivo: compromiso + costo ESPERADO
+    compromiso = grb.quicksum(cnl[g]*u[g,t]
+      + cstart[g]*v[g,t] for g in G for t in T)
+    operacion = grb.quicksum(pi_in[s]*(
+      grb.quicksum(cvar[g]*p[g,t,s] for g in G for t in T)
+      + grb.quicksum(VOLL*ell[t,s] for t in T))
+      for s in Sset)
+    m.setObjective(compromiso + operacion, grb.GRB.MINIMIZE)</pre>
+      </div>
+      <div class="col grow">
+        <div class="code-title"><span class="tag">parte 2</span> balance ∀ t,s · no-anticipatividad</div>
+        <pre class="code grow" data-lang="py" style="font-size:16px;">    for g in G:
+      for t in T:
+        ut_1 = 0 if t == 0 else u[g, t-1]
+        m.addConstr(u[g,t]-ut_1 == v[g,t]-w[g,t])
+        m.addConstr(v[g,t] + w[g,t] <= 1)
+        for s in Sset:                # limites por s
+          m.addConstr(p[g,t,s] >= Pmin[g]*u[g,t])
+          m.addConstr(p[g,t,s] <= Pmax[g]*u[g,t])
+
+    for t in T:
+      for s in Sset:                  # balance por t y s
+        m.addConstr(ps[t,s] <= Sol_in[s][t])
+        m.addConstr(grb.quicksum(p[g,t,s] for g in G)
+          + ps[t,s] + ell[t,s] == D_in[s][t])
+
+    # fijar compromiso comun (evaluacion OOS)
+    if fijar_uc is not None:
+      for g in G:
+        for t in T:
+          m.addConstr(u[g,t] == fijar_uc[(g,t)])
+
+    m.optimize()
+    return u, v, w, p, ps, ell        # + obj, status</pre>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Solución estocástica</span><span>11</span></div></div>
+  </section>
+
+  <!-- 12 · RESULTADOS I — COMPROMISO (comparación) -->
+  <section data-screen-label="12 Resultados compromiso">
+    <div class="head">
+      <div class="kicker">Resultados · del notebook</div>
+      <h2 class="title">Compromiso de unidades · 1ª etapa</h2>
+    </div>
+    <div class="timer">3 min</div>
+    <div class="row" style="margin-bottom:18px; align-items:center; gap:26px;">
+      <div class="seg" id="commit-mode-toggle" role="group" aria-label="Comparación de compromiso">
+        <button data-mode="saa" aria-pressed="true">SAA · N=2 vs N=100</button>
+        <button data-mode="reservas" aria-pressed="false">Reservas · 0% vs 20%</button>
+      </div>
+      <span class="hint">El compromiso es la decisión de 1ª etapa: no depende del escenario realizado</span>
+    </div>
+    <div class="row grow" style="gap:44px; align-items:center;">
+      <div class="col grow" style="gap:26px;">
+        <div class="col" style="gap:10px;">
+          <span class="lab" id="commit-a-lab">SAA N=2 · pocos muestreos</span>
+          <div id="commit-a" class="chart"></div>
+        </div>
+        <div class="col" style="gap:10px;">
+          <span class="lab" id="commit-b-lab">SAA N=100 · muchos muestreos</span>
+          <div id="commit-b" class="chart"></div>
+        </div>
+      </div>
+      <div class="col" style="flex:none; width:460px; gap:16px;">
+        <div class="card">
+          <span class="lab">Lectura</span>
+          <p class="small muted" id="commit-read">Con N=2 la 1ª etapa apenas cubre dos realizaciones (G2 con huecos, G3 casi apagada). Con N=100 el compromiso se robustece: G2 encendida las 24 h y G3 sostiene el pico (h17–21).</p>
+        </div>
+        <p class="small muted">Más muestras (o más reserva) → más unidades-hora comprometidas. La capacidad <em class="it">extra</em> es el precio de cubrirse frente a la incertidumbre.</p>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Resultados</span><span>12</span></div></div>
+  </section>
+
+  <!-- 13 · RESULTADOS II — DESPACHO DETERMINISTA -->
+  <section class="dark" data-screen-label="13 Resultados despacho">
+    <div class="head">
+      <div class="kicker">Resultados · del notebook</div>
+      <h2 class="title">Despacho determinista: sin reserva vs conservador</h2>
+    </div>
+    <div class="timer">3 min</div>
+    <div class="row" style="margin-bottom:18px; align-items:center; gap:26px;">
+      <div class="seg" id="det-disp-toggle" role="group" aria-label="Margen de reserva">
+        <button data-det="r0" aria-pressed="true">R = 0% · sin margen</button>
+        <button data-det="r20" aria-pressed="false">R = 20% · conservador</button>
+      </div>
+      <div class="legend small" style="gap:16px;">
+        <span class="it"><span class="sw" style="background:var(--g1)"></span>G1</span>
+        <span class="it"><span class="sw" style="background:var(--g2)"></span>G2</span>
+        <span class="it"><span class="sw" style="background:var(--g3)"></span>G3</span>
+        <span class="it"><span class="sw" style="background:var(--solar)"></span>Solar</span>
+        <span class="it"><span class="sw" style="background:#fff;border:1px dashed #fff"></span>Demanda nominal</span>
+      </div>
+    </div>
+    <div class="row grow" style="gap:40px; align-items:center;">
+      <div class="grow"><div id="det-disp-chart" class="chart"></div></div>
+      <div class="col" style="flex:none; width:460px; gap:16px;">
+        <div class="card" style="padding:22px 26px;"><span class="stat"><span class="k">Energía no suministrada</span><span class="v" id="det-ens-value" style="color:var(--accent-soft);">0,0 <span class="small muted" style="font-size:22px;">MWh</span></span></span></div>
+        <p class="small muted" id="det-note">R=0% · base determinista pura: la solar desplaza generación al mediodía y el balance se satisface exacto, sin margen.</p>
+        <p class="small muted" id="det-high-explain">Con \(R=20\%\) el despacho se sobredimensiona a \(1{,}2\cdot D\): el área apilada supera la <em class="it">demanda nominal</em> (línea punteada). Esa holgura tiene costo, pero no garantiza cubrir escenarios peores que el margen.</p>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Resultados</span><span>13</span></div></div>
+  </section>
+
+  <!-- 14 · RESULTADOS III — SAA IN-SAMPLE -->
+  <section data-screen-label="14 SAA in-sample">
+    <div class="head">
+      <div class="kicker">Resultados · estocástico SAA</div>
+      <h2 class="title">¿Cuántas muestras bastan? Costo in-sample</h2>
+    </div>
+    <div class="timer">3 min</div>
+    <div class="row grow" style="gap:56px; align-items:center;">
+      <div class="grow"><div id="insample-chart" class="chart"></div></div>
+      <div class="col" style="flex:none; width:600px; gap:14px;">
+        <p class="lead" id="insample-summary" style="font-size:27px;">El costo <em class="it">dentro de la muestra</em> con N=2 es engañosamente bajo (<strong>$83k</strong>): la 1ª etapa se ajusta a sólo dos realizaciones. Al aumentar N, el costo no es necesariamente monótono y con más muestras se acerca a <strong>~$99k</strong>.</p>
+        <div class="row" style="gap:16px;">
+          <div class="card grow" id="insample-low-card" style="padding:18px 24px;"><span class="stat"><span class="k">N=2 · 37 u·h ON</span><span class="v" style="color:var(--g3);">$83k</span></span></div>
+          <div class="card grow" id="insample-high-card" style="padding:18px 24px;"><span class="stat"><span class="k">N=100 · 53 u·h ON</span><span class="v" style="color:var(--g1);">$99k</span></span></div>
+        </div>
+        <div class="card" style="border-color:var(--accent-soft); background:rgba(42,157,143,.12); padding:20px 26px; gap:6px;">
+          <span class="lab">Cuidado con el optimismo</span>
+          <p class="small muted" id="insample-warning">Un costo in-sample bajo <strong>no</strong> significa una buena decisión: hay que evaluarla <em class="it">fuera de la muestra</em> (oráculo).</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Resultados</span><span>14</span></div></div>
+  </section>
+
+  <!-- 15 · ORÁCULO — QUÉ ES -->
+  <section class="dark" data-screen-label="15 Oráculo concepto">
+    <div class="head">
+      <div class="kicker">Evaluación · Perfect Information</div>
+      <h2 class="title">El oráculo (Wait-and-See)</h2>
+    </div>
+    <div class="timer">2 min</div>
+    <div class="row grow" style="gap:56px; align-items:center;">
+      <div class="col" style="flex:none; width:900px; gap:22px;">
+        <p class="lead">El <strong>oráculo</strong> conoce el futuro con certeza: para cada escenario resuelve un UC sabiendo exactamente la demanda y el sol → el costo mínimo posible. Es una <em class="it">cota inferior inalcanzable</em>.</p>
+        <p class="small muted">Ningún modelo realista puede ser mejor que el oráculo. El mejor compromiso es el que logra el menor <span class="mono">gap</span> y poca energía no suministrada esperada.</p>
+        <div class="math" style="font-size:24px;">
+          \[ \mathrm{gap}\,(\%) = \frac{\text{costo}_{\text{modelo}} - \mathrm{WS}}{\mathrm{WS}} \times 100 \]
+        </div>
+      </div>
+      <div class="col grow" style="gap:16px;">
+        <div class="rail">
+          <div class="step"><span class="num">1</span><div class="col" style="gap:2px;"><b>Generar OOS</b><span class="d"><span data-n-eval>200</span> escenarios «verdaderos» desde la distribución.</span></div></div>
+          <div class="step"><span class="num">2</span><div class="col" style="gap:2px;"><b>Oráculo (WS)</b><span class="d">Un UC por escenario sabiéndolo todo → cota inferior.</span></div></div>
+          <div class="step"><span class="num">3</span><div class="col" style="gap:2px;"><b>Fijar y re-despachar</b><span class="d">Cada modelo fija su \(u\) y re-optimiza sobre los <span data-n-eval>200</span>.</span></div></div>
+          <div class="step"><span class="num">4</span><div class="col" style="gap:2px;"><b>Medir gap</b><span class="d">Distancia porcentual al óptimo del oráculo.</span></div></div>
+        </div>
+        <div class="card center" style="text-align:center; padding:20px;"><span class="lab">Costo oráculo · WS</span><div id="oracle-ws" style="font-size:46px; font-family:'IBM Plex Serif',serif; color:var(--accent-soft);">$94.402</div></div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Oráculo</span><span>15</span></div></div>
+  </section>
+
+  <!-- 16 · ORÁCULO — RESULTADOS -->
+  <section data-screen-label="16 Oráculo resultados">
+    <div class="head">
+      <div class="kicker">Evaluación out-of-sample</div>
+      <h2 class="title">Comparación de todos los modelos</h2>
+    </div>
+    <div class="timer">3 min</div>
+    <div class="row grow" style="gap:44px; align-items:center;">
+      <div class="grow"><div id="oracle-chart" class="chart"></div></div>
+      <div class="col" style="flex:none; width:430px; gap:16px;">
+        <div class="legend" style="flex-direction:column; align-items:flex-start; gap:11px;">
+          <span class="it"><span class="sw" style="background:#2ecc71"></span>Oráculo (WS) — óptimo</span>
+          <span class="it"><span class="sw" style="background:#264653"></span>SAA (N muestras)</span>
+          <span class="it"><span class="sw" style="background:var(--g3)"></span>Reservas (R)</span>
+        </div>
+        <div class="card"><span class="lab">El mensaje</span><p class="small muted" id="oracle-message"><strong>SAA N=100</strong> queda más cerca del oráculo (gap 9%). El desempeño real se decide fuera de la muestra: aumentar N mejora mucho esta solución, mientras las reservas siguen siendo una regla aproximada.</p></div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Oráculo</span><span>16</span></div></div>
+  </section>
+
+  <!-- 17 · DISCUSIÓN FINAL + RET -->
+  <section class="dark" data-screen-label="17 Discusión y RET">
+    <div class="head">
+      <div class="kicker">Discusión final · Retroalimentación (RET)</div>
+      <h2 class="title">Cierre y retroalimentación grupal</h2>
+    </div>
+    <div class="timer">15 min</div>
+    <div class="row grow" style="gap:48px; align-items:stretch;">
+      <div class="col" style="flex:none; width:760px; gap:18px;">
+        <div class="card" style="border-color:var(--accent-soft); background:rgba(42,157,143,.12);">
+          <span class="lab">Idea de fondo</span>
+          <p class="lead" style="font-size:27px;">Distinguir decisiones <strong>anticipativas</strong> (compromiso) de <strong>adaptativas</strong> (despacho) permite planificar operaciones robustas, en lugar de optimizar para un único pronóstico que casi nunca se cumple.</p>
+        </div>
+        <div class="math small" style="font-size:22px;">
+          \[ \mathrm{WS}_{\text{oráculo}} \;\le\; \min_{m\,\in\,\text{modelos evaluados}} \mathrm{costo}^{\mathrm{OOS}}_m \]
+        </div>
+        <ul class="clean small" style="gap:10px;">
+          <li><span class="dot"></span><span>Conformen grupos de <strong>4–5</strong>; un/a secretario/a sistematiza la pauta.</span></li>
+          <li><span class="dot"></span><span>Entreguen la guía al asesor/a. Consultas: <span class="mono">a2ic@ing.uchile.cl</span></span></li>
+        </ul>
+      </div>
+      <div class="col grow" style="gap:14px;">
+        <span class="card lab" style="border:0; padding:0; color:var(--accent-soft);">Pauta de retroalimentación temprana (RET)</span>
+        <div class="pauta">
+          <div class="pr"><div class="pc ph">Dimensión</div><div class="pc ph">A discutir en grupo</div></div>
+          <div class="pr"><div class="pc">Apunte interactivo: contenido y problemas de modelamiento.</div><div class="pc">¿Cómo aportó al aprendizaje? Recomendaciones.</div></div>
+          <div class="pr"><div class="pc">Sesión de resolución de problemas (RP): formulación y análisis crítico.</div><div class="pc">¿Cómo aportó? Recomendaciones.</div></div>
+          <div class="pr"><div class="pc">Uso crítico de IA en optimización.</div><div class="pc">Riesgos/errores observados y cómo los mitigaron.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>EL4114 · A2IC</span><div class="fr"><span>Discusión y RET</span><span>17</span></div></div>
+  </section>
+
+</div>
+</div>
+
+<script src="../node_modules/reveal.js/dist/reveal.js"></script>
+<script src="../node_modules/reveal.js/dist/plugin/notes.js"></script>
+<script src="nb-data.js"></script>
+<script src="charts.js"></script>
+<script src="../shared/presentation-init.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+name: actividad1-a2ic
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - nodejs>=22
+  - numpy
+  - pip
+  - pip:
+      - gurobipy==13.0.2

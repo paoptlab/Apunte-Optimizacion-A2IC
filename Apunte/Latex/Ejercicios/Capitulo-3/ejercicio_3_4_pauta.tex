@@ -1,0 +1,149 @@
+% Fuente: Auxiliar 4, Problema 1.
+{\color{MidnightBlue}
+\begin{enumerate}
+
+\item
+Por definición, $x \in P$ es un vértice de $P$ si existe un vector $c \in \mathbb{R}^n$ tal que
+    \[
+        c^\top x < c^\top u, \qquad \forall u \in P, \; u \neq x.
+    \]
+
+    Supongamos, por contradicción, que $x$ no es un punto extremo de $P$. Entonces existen
+    $y,z \in P$, con $y \neq z$, y un escalar $\lambda \in (0,1)$ tales que
+    \[
+        x = \lambda y + (1-\lambda)z.
+    \]
+    Además, como $x$ no es extremo, podemos tomar $y \neq x$ y $z \neq x$. Luego, por la
+    definición de vértice,
+    \[
+        c^\top x < c^\top y,
+        \qquad
+        c^\top x < c^\top z.
+    \]
+    Multiplicando por $\lambda$ y $(1-\lambda)$, respectivamente, se obtiene
+    \[
+        \lambda c^\top x < \lambda c^\top y,
+        \qquad
+        (1-\lambda)c^\top x < (1-\lambda)c^\top z.
+    \]
+    Sumando ambas desigualdades,
+    \[
+        c^\top x
+        <
+        \lambda c^\top y + (1-\lambda)c^\top z.
+    \]
+    Sin embargo, usando que $x = \lambda y + (1-\lambda)z$,
+    \[
+        \lambda c^\top y + (1-\lambda)c^\top z
+        =
+        c^\top\left(\lambda y + (1-\lambda)z\right)
+        =
+        c^\top x.
+    \]
+    Por lo tanto,
+    \[
+        c^\top x < c^\top x,
+    \]
+    lo cual es una contradicción. Luego, $x$ debe ser un punto extremo de $P$.
+
+\item
+Como $A \in \mathbb{R}^{n \times n}$ tiene filas linealmente independientes, entonces $A$ es no singular.
+    Por lo tanto, el sistema
+    \[
+        Ax=b
+    \]
+    tiene una única solución, dada por
+    \[
+        x^\star = A^{-1}b.
+    \]
+
+    La factibilidad del problema depende de si esta solución satisface la restricción de no negatividad.
+    Por lo tanto:
+
+    \begin{itemize}
+        \item Si
+        \[
+            A^{-1}b \geq 0,
+        \]
+        entonces el problema es factible. Además, como existe un único punto factible,
+        \[
+            x^\star = A^{-1}b,
+        \]
+        este punto es necesariamente la única solución óptima del problema, para cualquier vector de costos $c$.
+        El valor óptimo es
+        \[
+            z^\star = c^\top A^{-1}b.
+        \]
+
+        \item Si existe alguna componente negativa en $A^{-1}b$, es decir,
+        \[
+            (A^{-1}b)_i < 0
+        \]
+        para algún $i$, entonces el problema es infactible, porque la única solución de $Ax=b$
+        no satisface $x \geq 0$. En este caso, el problema no tiene solución óptima.
+    \end{itemize}
+
+    En conclusión, el problema tiene solución óptima si y solo si
+    \[
+        A^{-1}b \geq 0.
+    \]
+    En tal caso, existe una única solución óptima:
+    \[
+        x^\star = A^{-1}b.
+    \]
+
+\item
+Un ejemplo es el siguiente problema:
+    \[
+        \begin{aligned}
+            \min_{x_1,x_2} \quad & x_1+x_2 \\
+            \text{s.a.} \quad & x_1 + x_2 \geq 1, \\
+            & x_1,x_2 \in \mathbb{R}.
+        \end{aligned}
+    \]
+    Su región factible es
+    \[
+        P = \{(x_1,x_2) \in \mathbb{R}^2 \mid x_1+x_2 \geq 1\}.
+    \]
+    Este conjunto es no vacío, ya que, por ejemplo,
+    \[
+        (0,1) \in P.
+    \]
+
+    Ahora probemos que $P$ no contiene puntos extremos. Basta con demostrar que contiene una linea. Sea $x=(x_1,x_2) \in P$ y considere
+    la dirección
+    \[
+        d = (1,-1).
+    \]
+    Para cualquier $\varepsilon > 0$, se tiene
+    \[
+        x+\varepsilon d = (x_1+\varepsilon, x_2-\varepsilon),
+    \]
+    y
+    \[
+        x-\varepsilon d = (x_1-\varepsilon, x_2+\varepsilon).
+    \]
+    En ambos casos, la suma de las componentes se mantiene igual:
+    \[
+        (x_1+\varepsilon)+(x_2-\varepsilon) = x_1+x_2,
+    \]
+    y
+    \[
+        (x_1-\varepsilon)+(x_2+\varepsilon) = x_1+x_2.
+    \]
+    Como $x \in P$, se cumple que $x_1+x_2 \geq 1$. Por lo tanto,
+    \[
+        x+\varepsilon d \in P,
+        \qquad
+        x-\varepsilon d \in P.
+    \]
+
+    En consecuencia, la linea
+    \[
+    \{x+td\:|\:d=(1,-1) \: | \:y \in \mathbb{R}\}\:\in \:P
+    \]
+    esta contenida en $P$. Por lo tanto $P$ es un conjunto no vacío que no contiene puntos extremos.
+
+\end{enumerate}
+}
+

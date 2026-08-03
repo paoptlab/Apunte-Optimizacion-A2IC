@@ -1,0 +1,283 @@
+% Fuente: Control 1, P1 (pauta).
+{\color{MidnightBlue}
+\medskip
+\noindent\textbf{1.\; Modelamiento de planificación de mantenimiento y ruteo de vehículos}\par
+
+Se propone un modelo MILP para coordinar la planificación de mantenimiento,
+la asignación de equipos técnicos y el ruteo de vehículos eléctricos en un
+parque eólico.
+
+\medskip
+\noindent\textbf{Conjuntos}\par
+
+\begin{itemize}
+    \item $\mathcal{T}=\{1,\dots,T\}$: conjunto de períodos de planificación.
+    \item $\mathcal{I}=\{1,\dots,I\}$: conjunto de turbinas eólicas.
+    \item $\mathcal{J}=\{1,\dots,J\}$: conjunto de equipos técnicos.
+    \item $\delta$: depósito central.
+    \item $\mathcal{V}=\mathcal{I}\cup\{\delta\}$: conjunto de nodos del problema.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Parámetros}\par
+
+\begin{itemize}
+    \item $\bar{C}_{it}$: costo de realizar mantenimiento a la turbina $i$ en el período $t$.
+    \item $C^{tl}_{i_1 i_2}$: costo de traslado entre los nodos $i_1,i_2\in\mathcal{V}$.
+    \item $\bar{o}_{ijt}$: tiempo requerido por el equipo $j$ para realizar mantenimiento a la turbina $i$ en el período $t$.
+    \item $a_{ijt}\in\{0,1\}$: vale $1$ si el equipo $j$ está capacitado para mantener la turbina $i$ en el período $t$, y $0$ en caso contrario.
+    \item $\tau_{i_1 i_2}$: tiempo de traslado entre los nodos $i_1,i_2\in\mathcal{V}$.
+    \item $d_{i_1 i_2}$: distancia entre los nodos $i_1,i_2\in\mathcal{V}$.
+    \item $\Delta_T$: duración máxima de la jornada laboral.
+    \item $E$: autonomía máxima del vehículo eléctrico.
+    \item $M$: número máximo de turbinas que puede atender un vehículo en un período.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Variables de decisión}\par
+
+\begin{itemize}
+    \item $x_{ijt}\in\{0,1\}$: vale $1$ si la turbina $i$ recibe mantenimiento por parte del equipo $j$ en el período $t$, y $0$ en caso contrario.
+    \item $y_{i_1 i_2 jt}\in\{0,1\}$: vale $1$ si el equipo $j$ viaja directamente desde el nodo $i_1$ al nodo $i_2$ en el período $t$, y $0$ en caso contrario.
+    \item $f_{i_1 i_2 jt}\geq 0$: variable continua de flujo usada para eliminar subtours.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Modelo MILP}\par
+
+\begin{equation}
+\begin{aligned}
+\min \quad 
+& \sum_{t\in\mathcal{T}}
+  \sum_{i\in\mathcal{I}}
+  \sum_{j\in\mathcal{J}}
+  \bar{C}_{it}x_{ijt}
+  +
+  \sum_{t\in\mathcal{T}}
+  \sum_{j\in\mathcal{J}}
+  \sum_{i_1\in\mathcal{V}}
+  \sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i_1}}
+  C^{tl}_{i_1 i_2}y_{i_1 i_2 jt}.
+\end{aligned}
+\end{equation}
+
+Sujeto a:
+
+\paragraph{Asignación de mantenimiento.}
+
+Cada turbina debe recibir mantenimiento exactamente una vez durante el horizonte:
+
+\begin{equation}
+\sum_{t\in\mathcal{T}}
+\sum_{j\in\mathcal{J}}
+x_{ijt}
+=1,
+\qquad \forall i\in\mathcal{I}.
+\end{equation}
+
+Un equipo solo puede realizar mantenimiento si está capacitado para ello:
+
+\begin{equation}
+x_{ijt}\leq a_{ijt},
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\paragraph{Consistencia entre mantenimiento y ruteo.}
+
+Si una turbina recibe mantenimiento por parte de un equipo en un período, entonces dicho equipo debe llegar a la turbina:
+
+\begin{equation}
+\sum_{\substack{i_1\in\mathcal{V}\\ i_1\neq i}}
+y_{i_1 ijt}
+=
+x_{ijt},
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+Análogamente, si una turbina recibe mantenimiento, el equipo debe salir de ella:
+
+\begin{equation}
+\sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i}}
+y_{i i_2 jt}
+=
+x_{ijt},
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+Cada equipo puede iniciar a lo más una ruta desde el depósito en cada período:
+
+\begin{equation}
+\sum_{i\in\mathcal{I}}
+y_{\delta ijt}
+\leq 1,
+\qquad \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+Si un equipo sale del depósito, debe retornar al depósito en el mismo período:
+
+\begin{equation}
+\sum_{i\in\mathcal{I}}
+y_{\delta ijt}
+=
+\sum_{i\in\mathcal{I}}
+y_{i\delta jt},
+\qquad \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\paragraph{Restricción de jornada laboral.}
+
+La suma de los tiempos de mantenimiento y traslado no puede exceder la jornada disponible:
+
+\begin{equation}
+\sum_{i\in\mathcal{I}}
+\bar{o}_{ijt}x_{ijt}
++
+\sum_{i_1\in\mathcal{V}}
+\sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i_1}}
+\tau_{i_1 i_2}y_{i_1 i_2 jt}
+\leq
+\Delta_T,
+\qquad \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\paragraph{Restricción de autonomía del vehículo eléctrico.}
+
+La distancia total recorrida por un equipo en un período no puede superar la autonomía disponible:
+
+\begin{equation}
+\sum_{i_1\in\mathcal{V}}
+\sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i_1}}
+d_{i_1 i_2}y_{i_1 i_2 jt}
+\leq
+E,
+\qquad \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\paragraph{Capacidad máxima de atención por vehículo.}
+
+Cada vehículo puede atender a lo más $M$ turbinas en un mismo período:
+
+\begin{equation}
+\sum_{i\in\mathcal{I}}
+x_{ijt}
+\leq
+M,
+\qquad \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\label{ex:2:8:eq:capacidad}
+\end{equation}
+
+\paragraph{Eliminación de subtours mediante flujo.}
+
+El flujo se interpreta como una cantidad enviada desde el depósito hacia las turbinas atendidas.
+Cada turbina mantenida consume una unidad de flujo:
+
+\begin{equation}
+\sum_{\substack{i_1\in\mathcal{V}\\ i_1\neq i}}
+f_{i_1 ijt}
+-
+\sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i}}
+f_{i i_2 jt}
+=
+x_{ijt},
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+El flujo solo puede circular por arcos efectivamente utilizados:
+
+\begin{equation}
+f_{i_1 i_2 jt}
+\leq
+M y_{i_1 i_2 jt},
+\qquad 
+\forall i_1,i_2\in\mathcal{V}: i_1\neq i_2,\ 
+\forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\label{ex:2:8:eq:cap-tour}
+\end{equation}
+
+Al modelar la ecuación \eqref{ex:2:8:eq:cap-tour}, la ecuación \eqref{ex:2:8:eq:capacidad} es redundante. Por lo tanto, si se modela correctamente \eqref{ex:2:8:eq:cap-tour}, no es necesario modelar \eqref{ex:2:8:eq:capacidad} (no al revés).
+
+\paragraph{Naturaleza de las variables.}
+
+\begin{equation}
+x_{ijt}\in\{0,1\},
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\begin{equation}
+y_{i_1 i_2 jt}\in\{0,1\},
+\qquad 
+\forall i_1,i_2\in\mathcal{V}: i_1\neq i_2,\ 
+\forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\begin{equation}
+f_{i_1 i_2 jt}\geq 0,
+\qquad 
+\forall i_1,i_2\in\mathcal{V}: i_1\neq i_2,\ 
+\forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+\medskip
+\noindent\textbf{2.\; Restricción metereológica}\par
+
+Sea $W_t\in\{0,1\}$ un parámetro que vale $1$ si las condiciones climáticas permiten
+realizar mantenimiento en el período $t$, y $0$ en caso contrario.
+
+Para incorporar esta información, basta agregar la siguiente restricción:
+
+\begin{equation}
+x_{ijt}
+\leq
+W_t,
+\qquad \forall i\in\mathcal{I},\ \forall j\in\mathcal{J},\ \forall t\in\mathcal{T}.
+\end{equation}
+
+De esta forma, si $W_t=0$, no se puede programar mantenimiento en el período $t$.
+Además, por las restricciones de consistencia entre mantenimiento y ruteo, tampoco se
+activan rutas hacia turbinas en dicho período.
+
+\medskip
+\noindent\textbf{3.\; Restricción de balance de trabajo}\par
+
+Se define la carga total de trabajo del equipo $j$ durante todo el horizonte como:
+
+\begin{equation}
+H_j
+=
+\sum_{t\in\mathcal{T}}
+\sum_{i\in\mathcal{I}}
+\bar{o}_{ijt}x_{ijt}
++
+\sum_{t\in\mathcal{T}}
+\sum_{i_1\in\mathcal{V}}
+\sum_{\substack{i_2\in\mathcal{V}\\ i_2\neq i_1}}
+\tau_{i_1 i_2}y_{i_1 i_2 jt},
+\qquad \forall j\in\mathcal{J}.
+\end{equation}
+
+El requerimiento sindical exige que la diferencia entre las cargas laborales de cualquier
+par de equipos no supere $\gamma$:
+
+\begin{equation}
+|H_j-H_{j'}|
+\leq
+\gamma,
+\qquad \forall j,j'\in\mathcal{J}: j<j'.
+\end{equation}
+
+Para mantener una formulación MILP, se reemplaza el valor absoluto por dos restricciones lineales:
+
+\begin{equation}
+H_j-H_{j'}
+\leq
+\gamma,
+\qquad \forall j,j'\in\mathcal{J}: j<j',
+\end{equation}
+
+\begin{equation}
+H_{j'}-H_j
+\leq
+\gamma,
+\qquad \forall j,j'\in\mathcal{J}: j<j'.
+\end{equation}
+}

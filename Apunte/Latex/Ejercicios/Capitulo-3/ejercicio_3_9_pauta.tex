@@ -1,0 +1,660 @@
+% Fuente: Auxiliar 5, P3.
+{\color{MidnightBlue}
+\begin{enumerate}
+
+\item[(a)]
+\noindent\textbf{Problema 1}\par
+En la Figura \ref{ex:3:9:p1} se muestra la región factible del problema 1. Se define la función objetivo $f_o(x_1,x_2) = -2x_1 - x_2,$
+cuyo gradiente es $\mathbf{c} = (-2,-1)$. Como el problema es de minimización, el óptimo se encontrará en el último punto en el cual la función objetivo intersecta la región factible al desplazarse en dirección contraria al gradiente ($-\mathbf{c}$). Del gráfico se extrae que la solución óptima es $\mathbf{x}^* = (4,2)$ con valor objetivo $f_o(\mathbf{x}^*) = -10$.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{ejercicios/Capitulo-3/ejercicio_3_9_p1.png}
+    \caption{Región factible y solución óptima de problema 1}
+    \label{ex:3:9:p1}
+\end{figure}
+
+\noindent\textbf{Problema 2}\par
+
+En la Figura \ref{ex:3:9:p2} se muestra la región factible del problema 2. Se define la función objetivo $f_o(x_1,x_2) = -5x_1 - 4x_2,$ cuyo gradiente es $\mathbf{c} = (-5,-4)$. Análogamente al problema 1, movemos la función objetivo en dirección del vector $-\mathbf{c}$. Así, el óptimo se alcanza en $ \mathbf{x}^* = \left( \frac{12}{7}, \frac{15}{7}\right)$ cuando $f_o(\mathbf{x}^*) = -17,143$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{ejercicios/Capitulo-3/ejercicio_3_9_p2.png}
+    \caption{Región factible y solución óptima de problema 2}
+    \label{ex:3:9:p2}
+\end{figure}
+
+\item[(b)]
+\noindent\textbf{Problema 1}\par
+
+ En general, un problema lineal de minimización en forma estándar se puede escribir como
+    \begin{equation}
+        \begin{aligned}
+            \min \quad & \mathbf{c}'\mathbf{x} \\
+            \text{s.a.} \quad & \mathbf{A}\mathbf{x} = \mathbf{b}, \\
+            & \mathbf{x} \geq \mathbf{0}.
+        \end{aligned}
+    \end{equation}
+
+    Para usar simplex, el poliedro debe estar en forma estándar. Por lo tanto, se agregan las variables de holgura necesarias:
+    \begin{equation}
+        \begin{aligned}
+            \min \quad & -2x_1 - x_2 \\
+            \text{s.a.} \quad 
+            & x_1 - x_2 + x_3 = 2, \\
+            & x_1 + x_2 + x_4 = 6, \\
+            & x_1,x_2,x_3,x_4 \geq 0.
+        \end{aligned}
+    \end{equation}
+
+    De esta forma, se identifican la matriz $\mathbf{A}$ y los vectores $\mathbf{b}$ y $\mathbf{c}'$:
+    \begin{equation}
+        \mathbf{A}
+        =
+        \begin{bmatrix}
+            1 & -1 & 1 & 0 \\
+            1 & 1 & 0 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{b}
+        =
+        \begin{bmatrix}
+            2 \\
+            6
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'
+        =
+        (-2,-1,0,0).
+    \end{equation}
+
+    El problema posee $n=4$ variables y $m=2$ restricciones, sin considerar las restricciones de no negatividad.
+
+
+    \noindent\textbf{Paso 1: Búsqueda de una solución básica factible.}
+
+    Se escogen $m$ variables básicas y se encuentra una solución factible. Se escogen arbitrariamente las variables $x_1$ y $x_3$ (puede ser cualquier otra combinación). Se define entonces la matriz básica $\mathbf{B}=[\mathbf{A_1} \, \, \mathbf{A_3}]$ (las columnas $\mathbf{A}_j$ deben ser l.i), y la matriz no básica $\mathbf{N}=[\mathbf{A_2} \, \, \mathbf{A_4}]$, además del vector de costos de las variables básicas $\mathbf{c'_B}=(c'_1, c'_3)$ y el vector de costos de variables no básicas $\mathbf{c'_N}=(c'_2, c'_4)$, obteniendo:
+
+    
+    \begin{equation}
+        \mathbf{B}
+        =
+        \begin{bmatrix}
+            1 & 1 \\
+            1 & 0
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}
+        =
+        \begin{bmatrix}
+            -1 & 0 \\
+            1 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}} = (-2,0),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}} = (-1,0).
+    \end{equation}
+
+    Las soluciones básicas se obtienen resolviendo el sistema $ \mathbf{x}_{\mathbf{B}} = \mathbf{B}^{-1}\mathbf{b}.$ En este caso:
+
+    \begin{equation}
+        \begin{bmatrix}
+            x_1 \\
+            x_3
+        \end{bmatrix}
+        = -
+        \begin{bmatrix}
+            0 & -1 \\
+            -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            2 \\
+            6
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            6 \\
+            -4
+        \end{bmatrix}.
+    \end{equation}
+
+    Observar que la solución básica encontrada no es factible, ya que posee una variable negativa y viola las restricciones de no negatividad. Por lo tanto, se escoge otra base. Arbitrariamente, se escogen $x_1$ y $x_4$ como variables básicas. Luego,
+    
+    \begin{equation}
+        \mathbf{B}
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            1 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}
+        =
+        \begin{bmatrix}
+            -1 & 1 \\
+            1 & 0
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}} = (-2,0),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}} = (-1,0).
+    \end{equation}
+
+    Calculamos nuevamente los valores de las variables básicas, resolviendo el sistema $ \mathbf{x}_{\mathbf{B}} = \mathbf{B}^{-1}\mathbf{b}.$
+    
+    \begin{equation}
+        \begin{bmatrix}
+            x_1 \\
+            x_4
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            2 \\
+            6
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            2 \\
+            4
+        \end{bmatrix}.
+    \end{equation}
+
+    Por lo tanto, la solución básica  es factible y corresponde al vector $\mathbf{x}_{\mathbf{B}}' = (2,0,0,4).$ Observar que esta solución es no degenerada, ya que posee exactamente $n-m=2$ componentes iguales a cero.
+
+    
+
+    \noindent\textbf{Paso 2: Cálculo de costos reducidos.}
+
+
+    Los costos reducidos se calculan como $\bar{\mathbf{c}}'_{\mathbf{N}}
+        =
+        \mathbf{c}'_{\mathbf{N}}
+        -
+        \mathbf{c}'_{\mathbf{B}}\mathbf{B}^{-1}\mathbf{N}$. Estos se calculan para las variables no básicas con el objetivo
+de saber si es conveniente moverse en alguna de esas direcciones (recordar que los variables básicas tienen costos reducidos iguales a cero). Entonces,
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}}
+        =
+        (-1,0)
+        -
+        (-2,0)
+        \begin{bmatrix}
+            1 & 0 \\
+            -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            -1 & 1 \\
+            1 & 0
+        \end{bmatrix}
+        =
+        (-3,2).
+    \end{equation}
+
+    Observar que la primera coordenada de los costos reducidos es negativa, es decir, para mejorar la solución básica factible obtenida, es necesario moverse en la dirección de $x_2$. Recuerde que si todos los costos reducidos fueran no negativos, la solución básica factible obtenida sería óptima.
+
+    La idea entonces, es moverse hacia otra solución básica factible que mejore los costos, $\mathbf{x_{B1}}$. Esta nueva solución debe cumplir que $\mathbf{x_{B1}} = \mathbf{x_B} + \theta\mathbf{d}$, donde $\theta$ es un escalar conocido como \textit{paso} y $\mathbf{d}$ es una dirección básica factible.
+
+    
+
+    \noindent\textbf{Paso 3: Cálculo de la dirección básica.}
+    Una dirección básica corresponde a la dirección de cambio de las variables básicas cuando se incrementa la variable no básica escogida en el paso anterior ($x_2$). La dirección básica se calcula como $\mathbf{d_B} = \mathbf{-B^{-1}A}_j$. En este caso $j=2$. Entonces:
+    
+    \begin{equation}
+        \mathbf{d}_{\mathbf{B}}
+        =
+        -
+        \begin{bmatrix}
+            1 & 0 \\
+            -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            -1 \\
+            1
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            1 \\
+            -2
+        \end{bmatrix}.
+    \end{equation}
+
+    Por lo tanto, el vector de dirección con todas sus componentes es $\mathbf{d}' = (1,1,0,-2)$. Aquí la componente asociada a $x_2$ es igual a $1$, pues esta es la variable que entra a la base, mientras que la componente asociada a $x_3$ es $0$. Además, la componente asociada a $x_4$ es negativa, por lo que al aumentar $x_2$, la variable $x_4$ disminuye.
+
+    Esto último es un problema, ya que, la solución no puede ser negativa debido a las restricciones de no negatividad. Por lo tanto, hay que determinar cuánto se puede mover $x_4$ sin perder la factibilidad (el \textit{paso}), lo cual se determinará a continuación. 
+    
+    Notar que si el vector $\mathbf{d}$ tuviese todas sus componentes positivas, esto indicaría que la solución se puede mover indefinidamente en todas las direcciones, por lo que el paso sería infinito y el costo óptimo sería $-\infty$. Obviamente, en este caso el algoritmo concluiría.
+
+
+    \noindent\textbf{Paso 4: Determinación del paso.}
+
+    Para las componentes negativas de $\mathbf{d}$ se calcula cuánto es lo máximo que se puede mover la solución básica factible en esas direcciones. El paso se calcula como:
+    \begin{equation}
+        \theta^*
+        =
+        \min_{\{i \mid d_i < 0\}}
+        \left\{
+        -\frac{x_i}{d_i}
+        \right\}.
+    \end{equation}
+
+    Perfectamente puede existir más de una componente negativa, por lo que calculamos el paso para la componente más restringida, usando el mínimo. En este caso, la única componente negativa corresponde a $d_4=-2$, por lo que
+    
+    \begin{equation}
+        \theta^*
+        =
+        \min_{\{4\}}
+        \left\{
+        -\frac{x_4}{d_4}
+        \right\}
+        =
+        -\frac{4}{-2}
+        =
+        2.
+    \end{equation}
+
+    Con este resultado, ya se puede iniciar una nueva iteración.
+
+    \noindent\textbf{Nueva iteración: Paso 1}
+
+    De acuerdo a los pasos anteriores, se obtiene una nueva solución básica factible:
+    
+    \begin{equation}
+        \mathbf{x}_{\mathbf{B1}}'
+        =
+        (2,0,0,4)
+        +
+        2(1,1,0,-2)
+        =
+        (4,2,0,0).
+    \end{equation}
+
+    La nueva solución tiene componentes no nulas en $x_1$ y $x_2$, por lo que estas serán las nuevas variables básicas. Es decir, $x_2$ entra a la base y $x_4$ sale de la base. Se define entonces:
+    \begin{equation}
+        \mathbf{B}_1
+        =
+        \begin{bmatrix}
+            1 & -1 \\
+            1 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}_1
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}_1} = (-2,-1),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}_1} = (0,0).
+    \end{equation}
+
+    No hay necesidad de resolver el sistema $ \mathbf{x}_{\mathbf{B}} = \mathbf{B}^{-1}\mathbf{b}$, ya que la solución sería el mismo vector $\mathbf{x}_{\mathbf{B1}}'$.
+
+    \noindent\textbf{Nueva iteración: Paso 2}
+
+    Se calculan los nuevos costos reducidos:
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}_1}
+        =
+        \mathbf{c}'_{\mathbf{N}_1}
+        -
+        \mathbf{c}'_{\mathbf{B}_1}\mathbf{B}_1^{-1}\mathbf{N}_1.
+    \end{equation}
+
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}_1}
+        =
+        (0,0)
+        -
+        (-2,-1)
+        \frac{1}{2}
+        \begin{bmatrix}
+            1 & 1 \\
+            -1 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        =
+        \left(
+        \frac{1}{2},
+        \frac{3}{2}
+        \right).
+    \end{equation}
+
+    Como ambos costos reducidos son no negativos, no conviene moverse en ninguna dirección no básica. Por lo tanto, la solución actual es óptima y finaliza el algoritmo. Así, la solución óptima del problema es $ (4,2,0,0)$,
+    lo que en las variables originales corresponde a $ (x_1^*,x_2^*) = (4,2)$, por lo que se encontró la misma solución obtenida con método gráfico.
+    
+\noindent\textbf{Problema 2}\par
+
+Se transforma el problema a forma estándar, se identifica la matriz $\mathbf{A}$ y los vectores $\mathbf{b}$ y $\mathbf{c}$:
+
+\begin{equation}
+\begin{aligned}
+    \min \quad & -5x_1 - 4x_2 \\
+    \text{s.a.} \quad & x_1 + 2x_2 + x_3 = 6 \\
+    & 5x_1 + 3x_2 + x_4 = 15 \\
+    & x_1,x_2,x_3,x_4 \geq 0
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+    \mathbf{A}
+    =
+    \begin{bmatrix}
+        1 & 2 & 1 & 0 \\
+        5 & 3 & 0 & 1
+    \end{bmatrix},
+    \qquad
+    \mathbf{b}
+    =
+    \begin{bmatrix}
+        6 \\
+        15
+    \end{bmatrix},
+    \qquad
+    \mathbf{c}' = (-5,-4,0,0)
+\end{equation}
+
+El problema posee $n=4$ variables y $m=2$ restricciones (distintas de las de no negatividad).
+
+
+\textbf{Paso 1:} Búsqueda de la solución básica factible
+
+    Se escogen las variables $x_3$ y $x_4$ como variables básicas. Por lo tanto:
+
+    \begin{equation}
+        \mathbf{B}
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}
+        =
+        \begin{bmatrix}
+            1 & 2 \\
+            5 & 3
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}} = (0,0),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}} = (-5,-4)
+    \end{equation}
+
+    Se resuelve el sistema $\mathbf{x}_{\mathbf{B}} = \mathbf{B}^{-1}\mathbf{b}$:
+
+    \begin{equation}
+        \begin{bmatrix}
+            x_3 \\
+            x_4
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            6 \\
+            15
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            6 \\
+            15
+        \end{bmatrix}
+    \end{equation}
+
+    Por lo tanto, la solución básica factible es el vector $\mathbf{x}_{\mathbf{B}}' = (0,0,6,15)$.
+
+\textbf{Paso 2:} Cálculo de costos reducidos.
+
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}}
+        =
+        (-5,-4)
+        -
+        (0,0)
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 2 \\
+            5 & 3
+        \end{bmatrix}
+        =
+        (-5,-4)
+    \end{equation}
+
+    Como ambas componentes son negativas, hay que moverse hacia la dirección más negativa, es decir, hacia $x_1$.
+
+\textbf{Paso 3:} Cálculo de la dirección básica factible.
+
+    \begin{equation}
+        \mathbf{d_B}
+        =
+        -
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 \\
+            5
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            -1 \\
+            -5
+        \end{bmatrix}
+    \end{equation}
+
+    Por lo tanto, el vector de dirección es $\mathbf{d}' = (1,0,-1,-5)$.
+
+\textbf{Paso 4:} Cálculo del paso.
+
+    Note que hay dos componentes negativas. Entonces:
+
+    \begin{equation}
+        \theta^*
+        =
+        \min_{\{i \mid d_i < 0\}}
+        \left(
+        -\frac{6}{-1},
+        -\frac{15}{-5}
+        \right)
+        =
+        3
+    \end{equation}
+
+    Ahora, se inicia una nueva iteración.
+
+\textbf{Paso 1:} Búsqueda de la solución básica factible:
+
+    De acuerdo a los pasos anteriores, la nueva solución básica factible es:
+
+    \begin{equation}
+        \mathbf{x}'_{\mathbf{B}_1}
+        =
+        (0,0,6,15)
+        +
+        3(1,0,-1,-5)
+        =
+        (3,0,3,0)
+    \end{equation}
+
+    Se tiene $x_1$ y $x_3$ como variables básicas, dado que $x_1$ entró a la base y $x_4$ sale. Por lo tanto:
+
+    \begin{equation}
+        \mathbf{B}_1
+        =
+        \begin{bmatrix}
+            1 & 1 \\
+            5 & 0
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}_1
+        =
+        \begin{bmatrix}
+            2 & 0 \\
+            3 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}_1} = (-5,0),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}_1} = (-4,0)
+    \end{equation}
+
+ \textbf{Paso 2:} Cálculo de costos reducidos:
+
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}_1}
+        =
+        (-4,0)
+        -
+        (-5,0)
+        \left(
+        \frac{1}{-5}
+        \right)
+        \begin{bmatrix}
+            0 & -1 \\
+            -5 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            2 & 0 \\
+            3 & 1
+        \end{bmatrix}
+        =
+        (-1,1)
+    \end{equation}
+
+    Por lo tanto, hay que moverse en la dirección de $x_2$.
+
+\textbf{Paso 3:} Cálculo de la dirección básica factible:
+
+    \begin{equation}
+        \mathbf{d}_\mathbf{B_1}
+        =
+        -
+        \frac{1}{5}
+        \begin{bmatrix}
+            0 & -1 \\
+            -5 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            2 \\
+            3
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            -\frac{3}{5} \\
+            -\frac{7}{5}
+        \end{bmatrix}
+    \end{equation}
+
+    Por lo tanto, el vector de dirección es
+    $\mathbf{d}_1'= \left(-\frac{3}{5},1,-\frac{7}{5},0\right)$.
+
+\textbf{Paso 4:} Cálculo del paso:
+
+    \begin{equation}
+        \theta^*_1
+        =
+        \min_{\{i \mid u_i < 0\}}
+        \left( -\frac{3}{-3/5},
+        -\frac{3}{-7/5}
+        \right)
+        =
+        \frac{15}{7}
+    \end{equation}
+
+    Ahora, se inicia una nueva iteración.
+
+\textbf{Paso 1:} Búsqueda de la solución básica factible:
+
+    De acuerdo a los pasos anteriores, la nueva solución básica factible es:
+
+    \begin{equation}
+        \mathbf{x}'_{\mathbf{B2}}
+        =
+        (3,0,3,0)
+        +
+        \frac{15}{7}
+        \left(
+        -\frac{3}{5},
+        1,
+        -\frac{7}{5},
+        0
+        \right)
+        =
+        \left(
+        \frac{12}{7},
+        \frac{15}{7},
+        0,
+        0
+        \right)
+    \end{equation}
+
+    Se tiene $x_1$ y $x_2$ como variables básicas. Por lo tanto:
+
+    \begin{equation}
+        \mathbf{B}_2
+        =
+        \begin{bmatrix}
+            1 & 2 \\
+            5 & 3
+        \end{bmatrix},
+        \qquad
+        \mathbf{N}_2
+        =
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix},
+        \qquad
+        \mathbf{c}'_{\mathbf{B}_2} = (-5,-4),
+        \qquad
+        \mathbf{c}'_{\mathbf{N}_2} = (0,0)
+    \end{equation}
+
+\textbf{Paso 2:} Cálculo de costos reducidos:
+
+    \begin{equation}
+        \bar{\mathbf{c}}'_{\mathbf{N}_2}
+        =
+        (0,0)
+        -
+        (-5,-4)
+        \left(
+        \frac{1}{-7}
+        \right)
+        \begin{bmatrix}
+            3 & -2 \\
+            -5 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}
+        =
+        \left(
+        \frac{5}{7},
+        \frac{6}{7}
+        \right)
+    \end{equation}
+
+    Como los costos reducidos son no negativos, la solución $\mathbf{x}_{\mathbf{B2}}$ es óptima y finaliza el algoritmo.
+
+\end{enumerate}
+}

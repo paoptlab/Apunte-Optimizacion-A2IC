@@ -1,0 +1,16 @@
+% Fuente: Pauta del Auxiliar 8, «Árbol de Branch and Bound».
+{\color{MidnightBlue}
+Denotemos $z^*$ el incumbente y se entenderá un nodo hoja como uno que no será ramificado (terminal).
+
+\begin{enumerate}
+    \item El gap relativo se define como \(\%\text{gap} = \frac{UB - LB}{LB}\), en este caso \(\%\text{gap} = \frac{z^* - LB}{LB}\). De esta forma sí es posible terminar después de explorar 4 nodos, para esto se exploran los nodos \textbf{1, 2, 3} y \textbf{4} y se llega a un \(\%\text{gap} = \frac{930 - 850}{850} = 9.41\% < 10\%\). De esta forma se dejan sin explorar las hojas \textbf{5, 6} y \textbf{7}.
+    
+    \item No, ya que el incumbente sería al menos 850 (\(z_4 = 850\) y es entero), de esta forma el nodo \textbf{7} no se seguirá ramificando (\(840 = z_7 < z^*\)).
+    
+    \item Sí, el valor óptimo es \(z = 860\) y se encuentra en el nodo \textbf{9}. Notar que en las demás hojas la función objetivo es menor a este valor.
+    
+    \item No, de haberse explorado antes el nodo \textbf{4} se tendría \(z^* = 850\), y los nodos \textbf{10, 11, 7} al tener funciones objetivo menores o iguales, efectivamente podrían ser hojas. Sin embargo, no hay manera de que el nodo \textbf{5} sea hoja, ya que no hay solución entera que supere su valor.
+    
+    \item No, de manera análoga al caso anterior, no hay posibilidad de que los nodos \textbf{2} y \textbf{6} sean hojas.
+\end{enumerate}
+}

@@ -1,0 +1,387 @@
+% Fuente: Pauta del Control 2, Pregunta 2.
+{\color{MidnightBlue}
+\begin{enumerate}
+  \item[(a)]
+
+Consideramos el problema
+
+\begin{align}
+(\bar P)\qquad
+\min_{x_1,x_2}\quad
+& f_0(x_1,x_2)
+=
+\frac{1}{2}k_1x_1^2
++
+\frac{1}{2}k_2(x_2-x_1)^2
++
+\frac{1}{2}k_3(l-x_2)^2
+\label{ex:6:6:eq:primal_obj}\\
+\text{s.a.}\quad
+& \frac{w}{2}-x_1\leq 0,
+\label{ex:6:6:eq:R1}\\
+& w+x_1-x_2\leq 0,
+\label{ex:6:6:eq:R2}\\
+& \frac{w}{2}-l+x_2\leq 0,
+\label{ex:6:6:eq:R3}
+\end{align}
+
+Expandiendo la función objetivo, se obtiene
+
+\begin{align}
+f_0(x_1,x_2)
+&=
+\frac{1}{2}k_1x_1^2
++
+\frac{1}{2}k_2\left(x_2^2-2x_1x_2+x_1^2\right)
++
+\frac{1}{2}k_3\left(l^2-2lx_2+x_2^2\right)\\
+&=
+\frac{1}{2}(k_1+k_2)x_1^2
+-k_2x_1x_2
++\frac{1}{2}(k_2+k_3)x_2^2
+-k_3lx_2
++\frac{1}{2}k_3l^2.
+\end{align}
+
+La matriz Hessiana de la función objetivo es
+
+\begin{equation}
+\nabla^2 f_0(x_1,x_2)
+=
+\begin{pmatrix}
+k_1+k_2 & -k_2\\
+-k_2 & k_2+k_3
+\end{pmatrix}.
+\end{equation}
+
+Para verificar que esta matriz es definida positiva, se utiliza el criterio de Sylvester. El primer menor principal satisface $k_1+k_2>0,$ mientras que el determinante es
+
+\begin{align}
+\det\left(\nabla^2 f_0\right)
+&=
+(k_1+k_2)(k_2+k_3)-k_2^2=
+k_1k_2+k_1k_3+k_2k_3>0.
+\end{align}
+
+Por lo tanto, $\nabla^2 f_0(x_1,x_2)\succ 0,$ y, en consecuencia, $f_0(x_1,x_2)$ es estrictamente convexa. Por otra parte, las restricciones pueden escribirse mediante las funciones
+
+\begin{align}
+g_1(x_1,x_2)
+&=
+\frac{w}{2}-x_1,\\
+g_2(x_1,x_2)
+&=
+w+x_1-x_2,\\
+g_3(x_1,x_2)
+&=
+\frac{w}{2}-l+x_2.
+\end{align}
+
+Todas estas funciones son afines. Luego, son convexas. Por consiguiente, $(\bar P)$ es un problema de optimización convexo.
+
+Para verificar la condición de Slater, encontremos cotas para $x_1$ y $x_2$. 
+Las restricciones estrictas son
+
+\begin{align}
+\frac{w}{2}-x_1 &< 0, \label{ex:6:6:eq:slater_r1}\\
+w+x_1-x_2 &< 0, \label{ex:6:6:eq:slater_r2}\\
+\frac{w}{2}-l+x_2 &< 0. \label{ex:6:6:eq:slater_r3}
+\end{align}
+
+De \eqref{ex:6:6:eq:slater_r1} y \eqref{ex:6:6:eq:slater_r3}, se obtiene
+
+\begin{align}
+x_1 &> \frac{w}{2}, \label{ex:6:6:eq:x1_lower}\\
+x_2 &< l-\frac{w}{2}. \label{ex:6:6:eq:x2_upper}
+\end{align}
+
+Además, de \eqref{ex:6:6:eq:slater_r2}, se tiene
+
+\begin{equation}
+x_2>x_1+w \Leftrightarrow
+x_2-w>x_1.
+\end{equation}
+
+Combinando esta última desigualdad con \eqref{ex:6:6:eq:x2_upper}, resulta
+
+\begin{equation}
+x_1<x_2-w<l-\frac{3w}{2}.
+\end{equation}
+
+Por lo tanto, las cotas para $x_1$ pueden escribirse como
+
+\begin{equation}
+\frac{w}{2}<x_1<l-\frac{3w}{2}.
+\end{equation}
+
+Tomando el punto medio entre ambas cotas, definimos
+
+\begin{align}
+\bar{x}_1
+&=
+\frac{1}{2}
+\left(
+\frac{w}{2}
++
+l-\frac{3w}{2}
+\right)=
+\frac{l-w}{2}.
+\end{align}
+
+Por otro lado, las cotas para $x_2$ son
+
+\begin{equation}
+\bar{x}_1+w<x_2<l-\frac{w}{2}.
+\end{equation}
+
+Tomando el punto medio entre estas cotas, se obtiene
+
+\begin{align}
+\bar{x}_2
+&=
+\frac{1}{2}
+\left[
+\left(
+\frac{l-w}{2}+w
+\right)
++
+\left(
+l-\frac{w}{2}
+\right)
+\right]=
+\frac{3l}{4}.
+\end{align}
+
+Por tanto, el punto $(\bar{x}_1,\bar{x}_2)
+=\left(\frac{l-w}{2},\frac{3l}{4}\right)$ es estrictamente factible. Luego, se cumple la condición de Slater.
+
+  \item[(b)]
+
+Sean $\lambda_1\geq 0$, $\lambda_2\geq 0,$ $\lambda_3\geq 0$ los multiplicadores asociados a las restricciones \eqref{ex:6:6:eq:R1}, \eqref{ex:6:6:eq:R2} y \eqref{ex:6:6:eq:R3}, respectivamente. El Lagrangiano está dado por
+
+\begin{align}
+L(x_1,x_2,\lambda_1,\lambda_2,\lambda_3)
+&=
+\frac{1}{2}k_1x_1^2
++
+\frac{1}{2}k_2(x_2-x_1)^2
++
+\frac{1}{2}k_3(l-x_2)^2\\
+&\quad+
+\lambda_1
+\left(
+\frac{w}{2}-x_1
+\right)
++
+\lambda_2
+\left(
+w+x_1-x_2
+\right)\\
+&\quad+
+\lambda_3
+\left(
+\frac{w}{2}-l+x_2
+\right).
+\end{align}
+
+La función dual se define como
+
+\begin{equation}
+d(\lambda_1,\lambda_2,\lambda_3)
+=
+\min_{x_1,x_2\in\mathbb{R}}
+L(x_1,x_2,\lambda_1,\lambda_2,\lambda_3).
+\end{equation}
+
+Por tanto, el problema dual lagrangiano es
+
+\begin{equation}
+\max_{\lambda_1,\lambda_2,\lambda_3\geq0}
+q(\lambda_1,\lambda_2,\lambda_3) \Leftrightarrow
+\max_{\lambda_1,\lambda_2,\lambda_3\geq0}\min_{x_1,x_2\in\mathbb{R}}
+L(x_1,x_2,\lambda_1,\lambda_2,\lambda_3)
+\end{equation}
+
+Por dualidad débil, se tiene que $d^\star\leq p^\star.$ Sin embargo, dado que el problema primal es convexo y satisface la condición de Slater, se cumple dualidad fuerte: $d^\star=p^\star.$
+
+  \item[(c)]
+
+Las condiciones KKT para este problema son las siguientes.\\
+
+La factibilidad primal exige
+
+\begin{align}
+\frac{w}{2}-x_1
+&\leq 0,\\
+w+x_1-x_2
+&\leq 0,\\
+\frac{w}{2}-l+x_2
+&\leq 0.
+\end{align}
+
+
+La factibilidad dual requiere
+
+\begin{equation}
+\lambda_1\geq 0,\qquad
+\lambda_2\geq 0,\qquad
+\lambda_3\geq 0.
+\end{equation}
+
+Las condiciones de holgura complementaria son
+
+\begin{align}
+\lambda_1
+\left(
+\frac{w}{2}-x_1
+\right)
+&=0,\\
+\lambda_2
+\left(
+w+x_1-x_2
+\right)
+&=0,\\
+\lambda_3
+\left(
+\frac{w}{2}-l+x_2
+\right)
+&=0.
+\end{align}
+
+La condición de estacionariedad respecto de \(x_1\) y $x_2$ es
+
+\begin{equation}
+\frac{\partial L}{\partial x_1}=
+k_1x_1+k_2(x_1-x_2)-\lambda_1+\lambda_2=
+(k_1+k_2)x_1-k_2x_2-\lambda_1+\lambda_2=0.
+\end{equation}
+
+\begin{equation}
+\frac{\partial L}{\partial x_2}=
+k_2(x_2-x_1)+k_3(x_2-l)-\lambda_2+\lambda_3=
+-k_2x_1+(k_2+k_3)x_2-k_3l-\lambda_2+\lambda_3=0.
+\end{equation}
+
+Sabemos que un punto \((x_1^\star,x_2^\star)\) es óptimo si existen multiplicadores \((\lambda_1^\star,\lambda_2^\star,\lambda_3^\star)\) que satisfacen la factibilidad primal, factibilidad dual, holgura complementaria y estacionariedad. Puesto que el problema es convexo y satisface Slater, las condiciones KKT son necesarias y suficientes para optimalidad global. Por tanto, es posible encontrar la solución óptima global resolviendo las condiciones KKT. Además, como la función objetivo es estrictamente convexa, la solución óptima primal es única.
+
+
+  \item[(d)]
+
+Se considera ahora el problema
+
+\begin{align}
+\min_{x_1,x_2}\quad
+&
+\frac{1}{2}x_1^2
++
+\frac{1}{2}(x_2-x_1)^2
++
+\frac{1}{2}(10-x_2)^2\\
+\text{s.a.}\quad
+&
+1-x_1\leq 0,\\
+&
+2+x_1-x_2\leq 0,\\
+&
+x_2-9\leq 0.
+\label{ex:6:6:eq:tercera_d}
+\end{align}
+
+Se supone que las variables duales asociadas a \((R1)\) y \((R2)\) son nulas: $\lambda_1^\star=\lambda_2^\star=0$. Las ecuaciones de estacionariedad se reducen a
+
+\begin{align}
+2x_1-x_2
+&=0,\\
+-x_1+2x_2-10+\lambda_3
+&=0.
+\end{align}
+
+De la primera ecuación se obtiene $x_2=2x_1.$ Sustituyendo en la segunda ecuación,
+
+\begin{align}
+-x_1+2(2x_1)-10+\lambda_3
+&=0,\\
+3x_1-10+\lambda_3
+&=0,
+\end{align}
+
+por lo que $\lambda_3=10-3x_1.$ La condición de holgura complementaria \eqref{ex:6:6:eq:tercera_d} es
+
+\begin{equation}
+\lambda_3(x_2-9)=0
+\Rightarrow (10-3x_1)(2x_1-9)=0.
+\end{equation}
+
+Se analizan los dos casos posibles.
+
+\medskip\noindent\textbf{Caso 1: \(\lambda_3=0\).}
+
+En este caso,
+
+\begin{equation}
+10-3x_1=0 \Rightarrow x_1^\star=\frac{10}{3}.
+\end{equation}
+
+Por tanto,
+
+\begin{equation}
+x_2^\star
+=
+2x_1^\star
+=
+\frac{20}{3}.
+\end{equation}
+
+Se verifica que este punto es primalmente factible:
+
+\begin{align}
+1-x_1^\star
+&=
+1-\frac{10}{3}
+=
+-\frac{7}{3}<0,\\
+2+x_1^\star-x_2^\star
+&=
+2+\frac{10}{3}-\frac{20}{3}
+=
+-\frac{4}{3}<0,\\
+x_2^\star-9
+&=
+\frac{20}{3}-9
+=
+-\frac{7}{3}<0.
+\end{align}
+
+Luego, las tres restricciones tienen holgura estricta y es coherente que $\lambda_1^\star=\lambda_2^\star=\lambda_3^\star
+=0.$
+
+\medskip\noindent\textbf{Caso 2: \(x_2=9\).}
+
+Como \(x_2=2x_1\), se tendría $x_1=\frac{9}{2}.$ Sin embargo, verificando factibilidad dual
+
+\begin{equation}
+\lambda_3=
+10-3\left(\frac{9}{2}\right)=
+10-\frac{27}{2}=-\frac{7}{2}<0,
+\end{equation}
+
+por lo que $\lambda_3$ no es factible. Por tanto, esta solución debe descartarse.\\
+
+En consecuencia, la solución primal-dual óptima es:
+
+\begin{equation}
+\boxed{
+x_1^\star=\frac{10}{3},
+\quad
+x_2^\star=\frac{20}{3}, \quad
+\lambda_1^\star
+=
+\lambda_2^\star
+=
+\lambda_3^\star
+=
+0.
+}
+\end{equation}
+\end{enumerate}
+}

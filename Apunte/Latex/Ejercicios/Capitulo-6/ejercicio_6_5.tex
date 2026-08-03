@@ -1,0 +1,30 @@
+% Fuente: Auxiliar 10, «KKT — Pregunta 2».
+Un lago recibe descargas industriales contaminantes $u_i$ en $n$ puntos $i = 1, \dots, N$ ($u_i$ es la demanda biológica por oxígeno y se mide en [mg $O_2$/litro]).
+
+Una reducción de $x_i$ unidades en las emisiones de la planta $i$ conlleva un costo $c_i(x_i) = \beta_i [\exp(\alpha_i x_i) - 1]$ con $\alpha_i, \beta_i$ constantes conocidas y estrictamente positivas. Para alcanzar un nivel aceptable de calidad del agua se debe satisfacer la restricción $\sum_{i=1}^{n} a_i x_i \geq b$, donde $a_i$ representa el impacto que tiene la fuente $i$ sobre el lago y $b \leq \sum_{i=1}^{n} a_i u_i$, lo que nos lleva a considerar el problema:
+
+\[
+\text{(P)} \quad \min \sum_{i=1}^{n} \beta_i (e^{\alpha_i x_i} - 1)
+\quad \text{s.a.} \quad
+\sum_{i=1}^{n} a_i x_i \geq b, \quad
+0 \leq x_i \leq u_i \quad \forall i = 1, \dots, n
+\]
+\begin{enumerate}
+  \item[(a)] Discuta la unicidad de las soluciones óptimas.
+  \item[(b)] Explicite las condiciones KKT y pruebe que el multiplicador $\mu$ asociado a $\sum_{i=1}^{n} a_i x_i \geq b$ es estrictamente positivo.
+  \item[(c)] Muestre que la solución óptima se puede expresar como 
+  \[
+  x_i = \frac{1}{\alpha_i} \left[ \ln\left( \frac{\mu a_i}{\beta_i \alpha_i} \right) \right]_{0}^{u_i}
+  \]
+  donde $[z]_0^u$ es la truncación del número $z$ al intervalo $[0, u]$, es decir
+  \[
+  [z]_0^u =
+  \begin{cases}
+  0 & \text{si } z < 0 \\
+  z & \text{si } 0 \leq z \leq u \\
+  u & \text{si } z > u
+  \end{cases}
+  \]
+  \item[(d)] Encuentre una ecuación para $\mu$ y muestre que tiene solución única.
+  \item[(e)] Resuelva para el caso en que $u_i = u$ y $\frac{a_i}{\beta_i \alpha_i} = \gamma$ son constantes y calcule los $x_i$ óptimos.
+\end{enumerate}

@@ -1,0 +1,45 @@
+% Fuente: Auxiliar 5, P2.
+{\color{MidnightBlue}
+\begin{enumerate}
+
+\item[(a)]
+Sea $\mathbf{x}$ un elemento de un poliedro $P$. Recordar que un vector $\mathbf{d} \in \mathbb{R}^n$ se dice una \textbf{dirección factible} en $\mathbf{x}$, si existe un escalar positivo $\theta$ tal que $\mathbf{x} + \theta \mathbf{d} \in P$.\\
+
+
+Para demostrar la equivalencia, estudiamos las implicancias hacia ambos lados:
+
+$\left[\Rightarrow\right]$: Si $\mathbf{x}$ es óptimo $\Rightarrow \mathbf{c}'\mathbf{d} \geq 0$ para cualquier dirección factible.
+
+Como $\mathbf{x}$ es óptimo, necesariamente se cumple que $\mathbf{c}'\mathbf{x} \leq \mathbf{c}'\mathbf{y}$ $\forall \mathbf{y} \in P$. Por otro lado, como $\mathbf{y} \in P$, debe existir una dirección factible $\mathbf{d}$ y un escalar $\theta \geq 0$ tales que $\mathbf{y} = \mathbf{x} + \theta \mathbf{d}$. Por lo tanto:
+\begin{align*}
+        \mathbf{c}'\mathbf{y} &\geq \mathbf{c}'\mathbf{x} \\
+        \mathbf{c}'\mathbf{y} - \mathbf{c}'\mathbf{x} &\geq 0 \\
+        \mathbf{c}'(\mathbf{x} + \theta \mathbf{d}) - \mathbf{c}'\mathbf{x} &\geq 0 \\
+        \mathbf{c}'\mathbf{x} + \theta \mathbf{c}'\mathbf{d} - \mathbf{c}'\mathbf{x} &\geq 0 \\
+        \theta \mathbf{c}'\mathbf{d} &\geq 0 \\
+        \mathbf{c}'\mathbf{d} &\geq 0
+\end{align*}
+
+$\left[\Leftarrow\right]$: Si $\mathbf{c}'\mathbf{d} \geq 0$ para cualquier dirección factible $\Rightarrow \mathbf{x}$ es óptimo.
+
+Sea $\mathbf{y} \in P$ y $\mathbf{x}$ una solución factible, entonces existe una dirección factible $\mathbf{d}$ y un escalar $\theta \geq 0$ tales que $\mathbf{y} = \mathbf{x} + \theta \mathbf{d}$. Entonces:
+\begin{align*}
+\frac{\mathbf{y} - \mathbf{x}}{\theta} &= \mathbf{d} \\
+\frac{\mathbf{c}'\mathbf{y} - \mathbf{c}'\mathbf{x}}{\theta} &= \mathbf{c}'\mathbf{d}
+\end{align*}
+
+Por hipótesis:
+\begin{align*}
+\frac{\mathbf{c}'\mathbf{y} - \mathbf{c}'\mathbf{x}}{\theta} &\geq 0 \\
+\mathbf{c}'\mathbf{y} - \mathbf{c}'\mathbf{x} &\geq 0 \\
+\mathbf{c}'\mathbf{y} &\geq \mathbf{c}'\mathbf{x}
+\end{align*}
+
+Por lo tanto, $\mathbf{x}$ es óptimo.
+
+\item[(b)]
+La demostración es totalmente análoga, salvo que para ser la única solución factible óptima se debe cumplir que $\mathbf{c}'\mathbf{x} < \mathbf{c}'\mathbf{y}$ $\forall \mathbf{y} \in P$ y se toma el resguardo de que $\mathbf{d} \neq 0$ para no encontrar más de un óptimo.
+
+\end{enumerate}
+}
+

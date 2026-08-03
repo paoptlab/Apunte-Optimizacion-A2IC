@@ -1,0 +1,67 @@
+% Plantilla general de pauta para auxiliares.
+% Para crear otro auxiliar, cambie la configuración y la lista de preguntas.
+
+\documentclass[
+	spanish,
+	letterpaper, oneside
+]{article}
+
+% -----------------------------------------------------------------------------
+% CONFIGURACIÓN EDITABLE DEL AUXILIAR
+% -----------------------------------------------------------------------------
+\def\auxiliarnumero {1}
+\def\auxiliartema {Modelamiento LP--MILP}
+\def\rutaejercicios {../../Apunte/Latex/Ejercicios}
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\documenttitle {Pauta Auxiliar \auxiliarnumero}
+\def\documentsubject {\auxiliartema}
+\def\documentauthor {}
+\def\coursename {Optimización}
+\def\coursecode {EL4114}
+
+\def\universityname {Universidad de Chile}
+\def\universityfaculty {Facultad de Ciencias Físicas y Matemáticas}
+\def\universitydepartment {Departamento de Ingeniería Eléctrica}
+\def\universitydepartmentimage {departamentos/fcfm}
+\def\universitydepartmentimagecfg {height=1.75cm}
+\def\universitylocation {Santiago de Chile}
+
+% Se deja vacío para que la plantilla no muestre nombres de integrantes del curso.
+\def\teachingstaff {}
+
+% FORMATO BASE DEL AUXILIAR
+\input{template}
+
+% Reutiliza logos e imágenes desde el apunte, sin duplicar recursos.
+\graphicspath{{../../Apunte/Latex/img/}}
+
+% #1: etiqueta visible (P1, P2, ...)
+% #2: ruta del fragmento relativa a Apunte/Latex/Ejercicios, sin extensión.
+% El sufijo _pauta se resuelve automáticamente.
+\newcommand{\incluirpreguntaresuelta}[2]{%
+	\newboxquestion{#1}
+	\input{\rutaejercicios/#2}%
+	\par\medskip
+	\input{\rutaejercicios/#2_pauta}%
+}
+
+\begin{document}
+
+\templatePagecfg
+
+% -----------------------------------------------------------------------------
+% PREGUNTAS Y RESOLUCIONES DEL AUXILIAR 1
+% -----------------------------------------------------------------------------
+\incluirpreguntaresuelta{P1}{Capitulo-2/ejercicio_2_1}
+
+\newpage
+\incluirpreguntaresuelta{P2}{Capitulo-2/ejercicio_2_2}
+
+\newpage
+\incluirpreguntaresuelta{P3}{Capitulo-2/ejercicio_2_3}
+
+\newpage
+\incluirpreguntaresuelta{P4}{Capitulo-2/ejercicio_2_4}
+
+\end{document}

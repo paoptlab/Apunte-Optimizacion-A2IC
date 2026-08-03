@@ -1,0 +1,44 @@
+% Fuente: Control 1, Pregunta 3, ítems 1, 2, 3 y 5.
+{\color{MidnightBlue}
+\begin{enumerate}
+
+\item
+\textbf{Verdadero.} Sea $x^*_2 = \arg\min_{x \in P_2} c'x$ (el cual siempre existe pues $P_2$ es no vacío y acotado). Para todo $x \in P_1$, como $P_1 \subseteq P_2$, se tiene $x \in P_2$, y por lo tanto
+\[
+  c'x \;\geq c'x^*_2 = \min_{x \in P_2} c'x.
+\]
+Como esta desigualdad vale para todo $x \in P_1$, en particular vale para el óptimo sobre $P_1$:
+\[
+  \min_{x \in P_1} c'x \;\geq\; \min_{x \in P_2} c'x.
+\]
+
+\item
+\textbf{Falso.} Sea $P = \{(x_1,x_2) \in \R^2 : x_1 + x_2 = 1,\; x_1,x_2 \geq 0\}$ y $c = (-1,\,-1)'$.
+ 
+Los vértices $(1,0)$ y $(0,1)$ son óptimos, ambos con valor $c'x = -1$. El punto $\bar{x} = (0.5,\, 0.5)$ satisface $c'\bar{x} = 1$, por lo que también es óptimo. Sin embargo, $\bar{x} = \frac{1}{2}(1,0) + \frac{1}{2}(0,1)$ es combinación convexa estricta de dos puntos de~$P$, luego no es punto extremo.
+
+\item
+\textbf{Verdadero.} Un poliedro se define como $P = \{x \in \R^n : Ax \leq b\}$. Sean $x, y \in P$ y $\lambda \in [0,1]$. Entonces
+\[
+  A\bigl(\lambda x + (1-\lambda)y\bigr)
+  = \lambda\, Ax + (1-\lambda)\, Ay
+  \leq \lambda\, b + (1-\lambda)\, b
+  = b,
+\]
+donde la desigualdad se debe a que $Ax \leq b$, $Ay \leq b$ y $\lambda,\, 1-\lambda \geq 0$. Luego $\lambda x + (1-\lambda)y \in P$, y $P$ es convexo.
+
+\item
+\textbf{Verdadero.} Sean $x^*$ e $y^*$ dos soluciones óptimas distintas con valor óptimo $z^* = c'x^* = c'y^*$. Para cualquier $\lambda \in (0,1)$, definamos
+$z_\lambda = \lambda\, x^* + (1-\lambda)\, y^*$. Por el inciso~3, el poliedro (conjunto factible) es convexo, luego $z_\lambda$ es factible. Respecto a la optimalidad de $z_\lambda$:
+ 
+\[
+  c' z_\lambda
+  = \lambda\, c' x^* + (1-\lambda)\, c' y^*
+  = \lambda\, z^* + (1-\lambda)\, z^*
+  = z^*.
+\]
+ 
+Como $x^* \neq y^*$, para cada $\lambda \in (0,1)$ se obtiene un punto distinto, y hay infinitos valores de $\lambda$ en dicho intervalo. Por lo tanto, existen infinitas soluciones óptimas.\\
+
+\end{enumerate}
+}

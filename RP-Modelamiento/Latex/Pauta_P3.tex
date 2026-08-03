@@ -1,0 +1,90 @@
+{\color{MidnightBlue}
+\textbf{Variables de decisión:}
+
+\[
+x_{ir} =
+\begin{cases}
+1, & \text{si el trabajo } i \text{ es el } r\text{-ésimo trabajo procesado},\\
+0, & \text{en otro caso}.
+\end{cases}
+\]
+
+\[
+y_{ir} =
+\begin{cases}
+1, & \text{si la herramienta } j \text{ está en el almacén mientras el } r\text{-ésimo trabajo es procesado},\\
+0, & \text{en otro caso}.
+\end{cases}
+\]
+
+\textbf{Restricciones:}
+
+\begin{itemize}
+    \item Que el almacén esté vacío al inicio, se modela como
+    \[
+    y_{j0} = 0, \quad \forall j.
+    \]
+
+    \item Como todos los trabajos deben ser procesados, se requiere que
+    \[
+    \sum_{r=1}^{n} x_{ir} = 1, \quad \forall i.
+    \]
+
+    \item Como se debe procesar un trabajo a la vez, se debe cumplir que
+    \[
+    \sum_{i=1}^{n} x_{ir} = 1, \quad \forall r.
+    \]
+
+    \item Un trabajos $i$ se puede procesar sólo si las herramientas en $J_i$ están en el almacén, por lo tanto se debe incluir una restricción de forzamiento:
+    \[
+    x_{ir} \leq y_{ir}, \quad \forall j \in J_i, \ \forall r, i.
+    \]
+
+    \item El almacén tiene una capacidad máxima, así que
+    \[
+    \sum_{j=1}^{m} y_{ir} \leq B, \quad \forall r.
+    \]
+\end{itemize}
+
+\textbf{Función objetivo:}
+
+Los tiempos que se pueden gestionar son aquellos producidos por la carga y descarga de herramientas en el almacén, $s_j$, los cuales son utilizados cuando la herramienta requerida en la secuencia actual no estaba cargada en la secuencia anterior. Por lo tanto, la función objetivo es:
+
+\[
+\min \sum_{j=1}^{m} \sum_{r=1}^{n} s_j \left|y_{jr} - y_{j,r-1}\right|
+\]
+
+Esta función objetivo se puede reformular definiendo una nueva variable de decisión $z_{jr}$, quedando la función objetivo como:
+
+\[
+\min \sum_{j=1}^{m} \sum_{r=1}^{n} s_j z_{jr}
+\]
+
+Y agregando las restricciones
+
+\[
+z_{jr} \geq y_{jr} - y_{j,r-1}
+\]
+
+y
+
+\[
+z_{jr} \geq y_{j,r-1} - y_{jr}, \quad \forall j, r.
+\]
+
+\textbf{Modelo completo:}
+
+\begin{align*}
+\min \quad & \sum_{j=1}^{m} \sum_{r=1}^{n} s_j z_{jr} \\
+\text{s.a.} \quad
+& z_{jr} \geq y_{jr} - y_{j,r-1}, && \forall j, r \\
+& z_{jr} \geq y_{j,r-1} - y_{jr}, && \forall j, r \\
+& y_{j0} = 0, && \forall j \\
+& \sum_{r=1}^{n} x_{ir} = 1, && \forall i \\
+& \sum_{i=1}^{n} x_{ir} = 1, && \forall r \\
+& x_{ir} \leq y_{ir}, && \forall j \in J_i, \ \forall r, i \\
+& \sum_{j=1}^{m} y_{ir} \leq B, && \forall r \\
+& x_{ir}, y_{jr}, z_{jr} \in \{0,1\}.
+\end{align*}
+
+}

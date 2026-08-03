@@ -1,0 +1,7 @@
+% Fuente: Pauta del Auxiliar 10, «Repaso de programación entera — Branch and Bound».
+{\color{MidnightBlue}
+\begin{enumerate}
+  \item Recordar que al agregar restricciones la solución va empeorando al reducir su región factible. Como en este caso la solución aumenta (es menos negativa), se concluye que se está minimizando. El algoritmo ramificaría los nodos \(P_3\) y \(P_5\) ya que son los únicos que pueden seguir dando una mejor solución. En este caso la cota superior (UB) es el \emph{incumbente} \(=-52\) y la cota inferior viene dada por el nodo \(P_5\) (en el mejor de los casos el óptimo podría ser \(-54\)).
+  \item Si la solución de \(P_5\) fuese entera, el algoritmo no sigue ramificando ya que el óptimo se encuentra en ese nodo y ambas cotas coinciden (\(\mathrm{UP} = \mathrm{LB} = -54\)).
+\end{enumerate}
+}

@@ -1,0 +1,119 @@
+% Fuente: Auxiliar 2, P3 (pauta).
+{\color{MidnightBlue}
+\textbf{Parámetros y conjuntos}
+
+\begin{itemize}
+    \item $r_i$: ranking del postulante $i$.
+    \item $N$: número total de becas.
+    \item $n_s$: número de postulantes por estado $s \in \{1,\ldots,50\}$.
+    \item $T(s)$: objetivo por estado $s \in \{1,\ldots,50\}$.
+    \item $F_s$: conjunto de postulantes del estado $s$.
+    \item $T_g$: objetivo de género $g \in \{M,F\}$.
+    \item $F_g$: conjunto de postulantes de género $g$.
+    \item $T(d)$: objetivo por disciplina $d \in \{1,\ldots,19\}$.
+    \item $F_d$: conjunto de postulantes a la disciplina $d$.
+    \item $T(l)$: objetivo por nivel de grado $l \in \{u,g1,g2\}$.
+    \item $F_l$: conjunto de postulantes de nivel de grado $l$.
+\end{itemize}
+
+\textbf{Variables de decisión}
+
+\begin{equation}
+x_i =
+\begin{cases}
+1, & \text{si el postulante } i \text{ recibe la beca} \\
+0, & \text{en otro caso}
+\end{cases}
+\end{equation}
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item Como todos los postulantes del grupo 1 ganaron la beca,
+    \begin{equation}
+    x_i = 1, \quad \forall i \in G1
+    \end{equation}
+
+    \item La suma de las variables de decisión debe ser igual al total de becas:
+    \begin{equation}
+    \sum_{i=1}^{|G1| + K} x_i = N
+    \end{equation}
+
+    \item Se debe cumplir el objetivo de género:
+    \begin{equation}
+    \sum_{i \in F_g} x_i \geq T(g), \quad \forall g \in \{M,F\}
+    \end{equation}
+
+    \item Se debe cumplir el objetivo de disciplina:
+    \begin{equation}
+    \sum_{i \in F_d} x_i \geq T(d), \quad \forall d \in \{1,\ldots,19\}
+    \end{equation}
+
+    \item Se debe cumplir el objetivo de nivel de grado:
+    \begin{equation}
+    \sum_{i \in F_l} x_i \geq T(l), \quad \forall l \in \{u,g1,g2\}
+    \end{equation}
+
+    \item Se debe cumplir el objetivo de estado, cuidando que no se supere el número de postulantes por estado:
+    \begin{equation}
+    \sum_{i \in F_s} x_i \geq \min(T(s),n_s), \quad \forall s \in \{1,\ldots,50\}
+    \end{equation}
+\end{itemize}
+
+\textbf{Función objetivo}
+
+Se requiere minimizar el mayor (peor) ranking entre los postulantes de las becas, entonces
+la función objetivo es:
+
+\begin{equation}
+\min \max_{i \in G2} r_i x_i
+\end{equation}
+
+Esta última expresión se puede reformular como:
+
+\begin{equation}
+\min z
+\end{equation}
+
+\begin{equation}
+z \geq r_i x_i, \quad \forall i \in G2
+\end{equation}
+
+\textbf{Modelo completo}
+
+\begin{equation}
+\min z
+\end{equation}
+
+\begin{equation}
+z \geq r_i x_i, \quad \forall i \in G2
+\end{equation}
+
+\begin{equation}
+x_i = 1, \quad \forall i \in G1
+\end{equation}
+
+\begin{equation}
+\sum_{i=1}^{|G1| + K} x_i = N
+\end{equation}
+
+\begin{equation}
+\sum_{i \in F_g} x_i \geq T(g), \quad \forall g \in \{M,F\}
+\end{equation}
+
+\begin{equation}
+\sum_{i \in F_d} x_i \geq T(d), \quad \forall d \in \{1,\ldots,19\}
+\end{equation}
+
+\begin{equation}
+\sum_{i \in F_l} x_i \geq T(l), \quad \forall l \in \{u,g1,g2\}
+\end{equation}
+
+\begin{equation}
+\sum_{i \in F_s} x_i \geq \min(T(s),n_s), \quad \forall s \in \{1,\ldots,50\}
+\end{equation}
+
+\begin{equation}
+x_i \in \{0,1\} \quad \forall i \in G1
+\end{equation}
+}

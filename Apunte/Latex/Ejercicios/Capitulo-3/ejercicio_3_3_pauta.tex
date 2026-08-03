@@ -1,0 +1,212 @@
+% Fuente: Auxiliar 3, sección «Método gráfico y soluciones básicas factibles».
+{\color{MidnightBlue}
+\textbf{(a) Modelado como LP y Forma Estándar}
+\vspace{2mm}
+
+Definamos:
+\[
+x=\text{hectáreas de trigo},\quad y=\text{hectáreas de maíz}.
+\]
+El LP se plantea como:
+\[
+\begin{array}{rl}
+\max & 200x+300y\\[1mm]
+\text{sujeto a} & x+y \le 45,\\[1mm]
+& 3x+2y \le 100,\\[1mm]
+& 2x+4y \le 120,\\[1mm]
+& x,y\ge 0.
+\end{array}
+\]
+Para obtener la forma estándar se introducen variables de holgura \( s_1, s_2, s_3 \):
+\[
+\begin{array}{rl}
+\max & 200x+300y\\[1mm]
+\text{sujeto a} & x+y+s_1 = 45,\\[1mm]
+& 3x+2y+s_2 = 100,\\[1mm]
+& 2x+4y+s_3 = 120,\\[1mm]
+& x,y,s_1,s_2,s_3 \ge 0.
+\end{array}
+\]
+
+\textbf{(b) Resolución Gráfica y Soluciones Básicas Factibles}
+\vspace{2mm}
+
+La región factible está definida por las siguientes restricciones:
+\begin{itemize}
+    \item \( x+y\le 45 \),
+    \item \( 3x+2y\le 100 \),
+    \item \( 2x+4y\le 120 \),
+    \item \( x,y\ge 0 \).
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{ejercicios/Capitulo-3/ejercicio_3_3_region_factible.png}
+    \caption{Región Factible}
+    \label{ex:3:3:region-factible}
+\end{figure}
+
+
+Al resolver gráficamente, los vértices de la región factible se obtienen a partir de las intersecciones entre las restricciones activas. Los puntos extremos factibles son:
+\begin{itemize}
+    \item \((0,0)\): corresponde al origen, donde no se planta trigo ni maíz.
+
+    \item \((0,30)\): al fijar \(x=0\), se tiene
+    \[
+    2(0)+4y\le 120 \quad \Rightarrow \quad y\le 30.
+    \]
+    Por lo tanto, el punto extremo sobre el eje \(y\) es \((0,30)\).
+
+    \item \((20,20)\): intersección de
+    \[
+    3x+2y=100
+    \]
+    y
+    \[
+    2x+4y=120.
+    \]
+    Simplificando la segunda ecuación:
+    \[
+    x+2y=60.
+    \]
+    Luego, resolviendo el sistema:
+    \[
+    \begin{cases}
+    3x+2y=100,\\
+    x+2y=60,
+    \end{cases}
+    \]
+    se obtiene:
+    \[
+    2x=40 \quad \Rightarrow \quad x=20.
+    \]
+    Sustituyendo en \(x+2y=60\):
+    \[
+    20+2y=60 \quad \Rightarrow \quad y=20.
+    \]
+    Por lo tanto, el punto es \((20,20)\).
+
+    \item \(\left(\frac{100}{3},0\right)\): al fijar \(y=0\), se tiene
+    \[
+    3x+2(0)\le 100 \quad \Rightarrow \quad x\le \frac{100}{3}.
+    \]
+    Por lo tanto, el punto extremo sobre el eje \(x\) es
+    \[
+    \left(\frac{100}{3},0\right).
+    \]
+\end{itemize}
+
+Es importante notar que las intersecciones \((10,35)\) y \((30,15)\) no son factibles. En efecto:
+\[
+2(10)+4(35)=160>120,
+\]
+por lo que \((10,35)\) viola la restricción de fertilizante. Además,
+\[
+3(30)+2(15)=120>100,
+\]
+por lo que \((30,15)\) viola la restricción de mano de obra.
+
+Evaluando la función objetivo:
+\[
+\begin{array}{rcl}
+(0,0): & 200(0)+300(0) &= 0,\\[1mm]
+(0,30): & 200(0)+300(30) &= 9\,000,\\[1mm]
+(20,20): & 200(20)+300(20) &= 4\,000+6\,000=10\,000,\\[1mm]
+\left(\frac{100}{3},0\right): 
+& 200\left(\frac{100}{3}\right)+300(0) 
+&= \frac{20\,000}{3}.
+\end{array}
+\]
+Por lo tanto, la solución óptima es
+\[
+(x^*,y^*)=(20,20),
+\]
+con ganancia óptima
+\[
+z^*=10\,000.
+\]
+
+Las soluciones básicas factibles en forma estándar son:
+\[
+\begin{array}{c|ccccc}
+\text{Punto} & x & y & s_1 & s_2 & s_3 \\ \hline
+1 & 0 & 0 & 45 & 100 & 120 \\[1mm]
+2 & 0 & 30 & 15 & 40 & 0 \\[1mm]
+3 & 20 & 20 & 5 & 0 & 0 \\[1mm]
+4 & \frac{100}{3} & 0 & \frac{35}{3} & 0 & \frac{160}{3}
+\end{array}
+\]
+
+\textbf{(c) Restricción Adicional: Mínimo de 25 Hectáreas de Maíz}
+\vspace{2mm}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{ejercicios/Capitulo-3/ejercicio_3_3_reduccion.png}
+    \caption{Reducción de la región factible}
+    \label{ex:3:3:region-reducida}
+\end{figure}
+
+Si se impone la restricción adicional
+\[
+y\ge 25,
+\]
+la región factible se reduce, ya que ahora solo son admisibles los puntos que satisfacen que al menos 25 hectáreas sean plantadas con maíz.
+
+La solución óptima anterior era
+\[
+(x^*,y^*)=(20,20),
+\]
+pero esta ya no es factible, pues
+\[
+20<25.
+\]
+Por lo tanto, el problema cambia y se debe encontrar una nueva solución óptima.
+
+Los nuevos vértices factibles son:
+\begin{itemize}
+    \item \((0,25)\): intersección de \(x=0\) con \(y=25\).
+    
+    \item \((0,30)\): intersección de \(x=0\) con la restricción de fertilizante
+    \[
+    2x+4y=120.
+    \]
+    
+    \item \((10,25)\): intersección de \(y=25\) con la restricción de fertilizante:
+    \[
+    2x+4y=120.
+    \]
+    Sustituyendo \(y=25\):
+    \[
+    2x+4(25)=120,
+    \]
+    \[
+    2x+100=120,
+    \]
+    \[
+    x=10.
+    \]
+    Por lo tanto, el punto es \((10,25)\).
+\end{itemize}
+
+Evaluando la función objetivo:
+\[
+\begin{array}{rcl}
+(0,25): & 200(0)+300(25) &= 7\,500,\\[1mm]
+(0,30): & 200(0)+300(30) &= 9\,000,\\[1mm]
+(10,25): & 200(10)+300(25) &= 2\,000+7\,500=9\,500.
+\end{array}
+\]
+
+Por lo tanto, con la restricción adicional \(y\ge 25\), la nueva solución óptima es
+\[
+(x^*,y^*)=(10,25),
+\]
+con ganancia óptima
+\[
+z^*=9\,500.
+\]
+
+En consecuencia, la restricción adicional modifica la solución óptima del problema. Antes se plantaban 20 hectáreas de trigo y 20 hectáreas de maíz, mientras que ahora se deben plantar 10 hectáreas de trigo y 25 hectáreas de maíz. Además, la ganancia óptima disminuye de $10\,000$
+a $9\,500$
+}
+

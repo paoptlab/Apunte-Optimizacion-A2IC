@@ -1,0 +1,14 @@
+% Fuente: Auxiliar 2, P3.
+Formule el siguiente problema de optimización: \\
+
+Algunas de las becas más prestigiosas para estudiantes de posgrado son las que concede cada año la National Science Foundation (NSF). A estas becas optan solicitantes de todo Estados Unidos en 19 disciplinas. A cada solicitante se le asigna un ranking que refleja sus méritos académicos y su potencial profesional, determinado por grupos de selección y resultados de exámenes. El puesto 1 corresponde al solicitante más fuerte. Además de la clasificación, se tiene en cuenta la siguiente información de cada solicitante: el estado de egreso de la escuela secundaria, el sexo del solicitante, la disciplina del solicitante y el nivel de estudios (licenciatura, primer año de postgrado o segundo año de postgrado). \\
+
+Como organización financiada por el gobierno, la NSF tiene que distribuir los fondos equitativamente entre los estados. Para ello, la NSF asigna un porcentaje fijo de las becas disponibles a los solicitantes con mejor clasificación, independientemente de otras consideraciones. A estos destinatarios los denominamos grupo 1 (G1). Los siguientes $K$ solicitantes de la lista forman el grupo 2 (G2), donde $K$ depende de los fondos disponibles. El problema consiste en asignar las becas entre los solicitantes del grupo 2 equitativamente. A continuación se ofrecen algunas posibles definiciones de equidad:
+
+\begin{itemize}
+    \item[(a)] Calcular un número objetivo, $T(s)$, para cada estado $s \in \{1,2,\dots,50\}$, en función del porcentaje del total de graduados de secundaria de EE.UU. procedentes de ese estado. En 1994, había unos 250{,}000 titulados superiores procedentes de California, lo que representa el $9.3\%$ del total. Si hay 1{,}000 becas disponibles, $T(\text{CA}) = 93$. Es deseable que se cumplan estos objetivos, siempre que haya suficientes solicitantes de cada estado.
+    
+    \item[(b)] Teniendo en cuenta el conjunto de candidatos, determinar los porcentajes para cada sexo, disciplina y grado. Utilizar estos porcentajes para calcular las cifras objetivo $T(g)$ para el sexo $g \in \{M,F\}$, $T(d)$ para la disciplina $d \in \{1,\dots,19\}$, y $T(\ell)$ para el nivel de grado $\ell \in \{\text{u}, \text{g}, \text{gs}\}$. Supongamos que hay suficientes candidatos de cada sexo, disciplina y nivel de grado. Por ejemplo, en 1994, el $61\%$ de los candidatos eran hombres. Por tanto, si hay 1{,}000 becas disponibles, $T(m)=610$.
+\end{itemize}
+
+Existen muchas posibles opciones para definir la función objetivo. En este caso, se propone la siguiente: minimizar el mayor (peor) ranking entre los postulantes de las becas, mientras que todos los solicitantes del grupo 1 reciben una beca.\\

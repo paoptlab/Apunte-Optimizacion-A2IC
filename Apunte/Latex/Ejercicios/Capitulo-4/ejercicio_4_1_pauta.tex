@@ -1,0 +1,782 @@
+% Fuente: Auxiliar 6, Problema 1
+\begingroup
+\color{MidnightBlue}
+\begin{enumerate}
+\item
+Los vértices del conjunto factible son:
+\begin{equation}
+O=(0,0),\qquad
+B=(0,3),\qquad
+E=\left(\frac{10}{3},\frac{4}{3}\right),
+\qquad
+C=(4,0).
+\end{equation}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{ejercicios/Capitulo-4/ejercicio_4_1_conjunto_factible.png}
+    \caption{Conjunto Factible P1}
+    \label{ex:4:1:fig:placeholder}
+\end{figure}
+
+Agregando variables de holgura $s_1,s_2\geq 0$ y pasando a minimización, se obtiene la forma estándar:
+\begin{equation}
+\begin{aligned}
+\min \quad -2x_1-3x_2 \\
+x_1+2x_2+s_1 &= 6,\\
+2x_1+x_2+s_2 &= 8,\\
+x_1,x_2,s_1,s_2 &\geq 0.
+\end{aligned}
+\end{equation}
+
+Así,
+\begin{equation}
+A=
+\begin{pmatrix}
+1 & 2 & 1 & 0\\
+2 & 1 & 0 & 1
+\end{pmatrix},
+\qquad
+b=
+\begin{pmatrix}
+6\\
+8
+\end{pmatrix},
+\qquad
+c=
+\begin{pmatrix}
+-2\\
+-3\\
+0\\
+0
+\end{pmatrix}.
+\end{equation}
+
+Las soluciones básicas se obtienen escogiendo $m=2$ variables básicas entre las $4$ variables
+$\{x_1,x_2,s_1,s_2\}$.
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+Base & Variables no básicas & Solución $(x_1,x_2,s_1,s_2)$ & ¿Factible?\\
+\hline
+$\{s_1,s_2\}$ & $x_1=x_2=0$ & $(0,0,6,8)$ & Sí\\
+$\{x_2,s_2\}$ & $x_1=s_1=0$ & $(0,3,0,5)$ & Sí\\
+$\{x_1,s_1\}$ & $x_2=s_2=0$ & $(4,0,2,0)$ & Sí\\
+$\{x_1,x_2\}$ & $s_1=s_2=0$ & $\left(\frac{10}{3},\frac{4}{3},0,0\right)$ & Sí\\
+$\{x_1,s_2\}$ & $x_2=s_1=0$ & $(6,0,0,-4)$ & No\\
+$\{x_2,s_1\}$ & $x_1=s_2=0$ & $(0,8,-10,0)$ & No
+\end{tabular}
+\end{center}
+
+Por lo tanto, las soluciones básicas factibles son:
+\begin{equation}
+(0,0,6,8),\qquad
+(0,3,0,5),\qquad
+(4,0,2,0),\qquad
+\left(\frac{10}{3},\frac{4}{3},0,0\right).
+\end{equation}
+
+Evaluando la función objetivo original:
+\begin{equation}
+\begin{array}{c|c}
+(x_1,x_2) & z=2x_1+3x_2\\
+\hline
+(0,0) & 0\\
+(0,3) & 9\\
+(4,0) & 8\\
+\left(\frac{10}{3},\frac{4}{3}\right) & \frac{32}{3}
+\end{array}
+\end{equation}
+
+Luego, la solución óptima es:
+\begin{equation}
+x^*=\left(\frac{10}{3},\frac{4}{3}\right),
+\qquad
+z^*=\frac{32}{3}.
+\end{equation}
+
+\item
+\textbf{Iteración 0}
+
+Base inicial:
+\begin{equation}
+B_0=\{s_1,s_2\},
+\qquad
+x_B=
+\begin{pmatrix}
+s_1\\
+s_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+6\\
+8
+\end{pmatrix}.
+\end{equation}
+
+La solución inicial es:
+\begin{equation}
+(x_1,x_2,s_1,s_2)=(0,0,6,8),
+\end{equation}
+que corresponde al punto
+\begin{equation}
+O=(0,0).
+\end{equation}
+
+Como $c_B=(0,0)$, se tiene:
+\begin{equation}
+p^T=c_B^T B^{-1}=(0,0).
+\end{equation}
+
+Los costos reducidos son:
+\begin{equation}
+\bar{c}_{x_1}=c_{x_1}-p^TA_1=-2,
+\qquad
+\bar{c}_{x_2}=c_{x_2}-p^TA_2=-3.
+\end{equation}
+
+ En este caso, buscaremos la direccion de mayor desplazamiento. Como $\bar{c}_{x_2}$ es el más negativo, entra $x_2$ a la base.
+
+La dirección es:
+\begin{equation}
+d_B=-B^{-1}A_2
+=
+-
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+-2\\
+-1
+\end{pmatrix}.
+\end{equation}
+
+Luego:
+\begin{equation}
+d=(0,1,-2,-1).
+\end{equation}
+
+El máximo paso factible es:
+\begin{equation}
+\theta^*
+=
+\min\left\{
+\frac{6}{2},
+\frac{8}{1}
+\right\}
+=
+3.
+\end{equation}
+
+Por lo tanto, sale $s_1$ de la base. La nueva solución es:
+\begin{equation}
+x^{(1)}
+=
+(0,3,0,5),
+\end{equation}
+que corresponde al punto:
+\begin{equation}
+B=(0,3).
+\end{equation}
+
+\textbf{Iteración 1}
+
+La nueva base es:
+\begin{equation}
+B_1=\{x_2,s_2\},
+\qquad
+B=
+\begin{pmatrix}
+2 & 0\\
+1 & 1
+\end{pmatrix},
+\qquad
+B^{-1}
+=
+\begin{pmatrix}
+\frac{1}{2} & 0\\
+-\frac{1}{2} & 1
+\end{pmatrix}.
+\end{equation}
+
+Además,
+\begin{equation}
+x_B=
+\begin{pmatrix}
+x_2\\
+s_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix},
+\qquad
+c_B=
+\begin{pmatrix}
+-3\\
+0
+\end{pmatrix}.
+\end{equation}
+
+Entonces:
+\begin{equation}
+p^T=c_B^T B^{-1}
+=
+\begin{pmatrix}
+-3 & 0
+\end{pmatrix}
+\begin{pmatrix}
+\frac{1}{2} & 0\\
+-\frac{1}{2} & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+-\frac{3}{2} & 0
+\end{pmatrix}.
+\end{equation}
+
+Los costos reducidos de las variables no básicas $x_1$ y $s_1$ son:
+\begin{equation}
+\bar{c}_{x_1}
+=
+-2-
+\begin{pmatrix}
+-\frac{3}{2} & 0
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}
+=
+-\frac{1}{2},
+\end{equation}
+
+\begin{equation}
+\bar{c}_{s_1}
+=
+0-
+\begin{pmatrix}
+-\frac{3}{2} & 0
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\frac{3}{2}.
+\end{equation}
+
+Como $\bar{c}_{x_1}<0$, entra $x_1$ a la base.
+
+La dirección básica se calcula como:
+\begin{equation}
+B^{-1}A_1
+=
+\begin{pmatrix}
+\frac{1}{2} & 0\\
+-\frac{1}{2} & 1
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{1}{2}\\
+\frac{3}{2}
+\end{pmatrix}.
+\end{equation}
+
+El paso máximo factible es:
+\begin{equation}
+\theta^*
+=
+\min\left\{
+\frac{3}{1/2},
+\frac{5}{3/2}
+\right\}
+=
+\min\left\{
+6,\frac{10}{3}
+\right\}
+=
+\frac{10}{3}.
+\end{equation}
+
+Por lo tanto, sale $s_2$ de la base. La nueva solución es:
+\begin{equation}
+x^{(2)}
+=
+\left(
+\frac{10}{3},
+\frac{4}{3},
+0,
+0
+\right),
+\end{equation}
+que corresponde al punto:
+\begin{equation}
+E=\left(\frac{10}{3},\frac{4}{3}\right).
+\end{equation}
+
+\textbf{Iteración 2}
+
+La base óptima es:
+\begin{equation}
+B_2=\{x_2,x_1\}.
+\end{equation}
+
+Se tiene:
+\begin{equation}
+B=
+\begin{pmatrix}
+2 & 1\\
+1 & 2
+\end{pmatrix},
+\qquad
+B^{-1}
+=
+\begin{pmatrix}
+\frac{2}{3} & -\frac{1}{3}\\
+-\frac{1}{3} & \frac{2}{3}
+\end{pmatrix}.
+\end{equation}
+
+Además, como el orden de la base es $\{x_2,x_1\}$, se tiene:
+\begin{equation}
+c_B=
+\begin{pmatrix}
+-3\\
+-2
+\end{pmatrix}.
+\end{equation}
+
+Luego:
+\begin{equation}
+p^T=c_B^T B^{-1}
+=
+\begin{pmatrix}
+-3 & -2
+\end{pmatrix}
+\begin{pmatrix}
+\frac{2}{3} & -\frac{1}{3}\\
+-\frac{1}{3} & \frac{2}{3}
+\end{pmatrix}
+=
+\begin{pmatrix}
+-\frac{4}{3} & -\frac{1}{3}
+\end{pmatrix}.
+\end{equation}
+
+Los costos reducidos de las variables no básicas $s_1$ y $s_2$ son:
+\begin{equation}
+\bar{c}_{s_1}
+=
+0-
+\begin{pmatrix}
+-\frac{4}{3} & -\frac{1}{3}
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\frac{4}{3}>0,
+\end{equation}
+
+\begin{equation}
+\bar{c}_{s_2}
+=
+0-
+\begin{pmatrix}
+-\frac{4}{3} & -\frac{1}{3}
+\end{pmatrix}
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\frac{1}{3}>0.
+\end{equation}
+
+Como todos los costos reducidos son no negativos, la solución es óptima para el problema de minimización equivalente. Por lo tanto, para el problema original de maximización:
+\begin{equation}
+x^*
+=
+\left(
+\frac{10}{3},
+\frac{4}{3}
+\right),
+\qquad
+z^*
+=
+2\cdot \frac{10}{3}
++
+3\cdot \frac{4}{3}
+=
+\frac{32}{3}.
+\end{equation}
+
+La trayectoria del método Simplex fue:
+\begin{equation}
+(0,0)
+\longrightarrow
+(0,3)
+\longrightarrow
+\left(\frac{10}{3},\frac{4}{3}\right).
+\end{equation}
+
+En el método Simplex Revisado no se recalcula toda la base desde cero,
+sino que se actualiza $B^{-1}$ usando la columna entrante. La idea es formar
+la matriz aumentada
+\begin{equation}
+\left[B^{-1}\mid u\right],
+\qquad
+u=B^{-1}A_j,
+\end{equation}
+donde $A_j$ es la columna de la variable que entra a la base.
+
+Luego, mediante operaciones elementales por filas, se transforma $u$ en el
+vector canónico $e_l$, donde $l$ es la posición en el vector base de la variable que sale de la base. El bloque izquierdo
+resultante corresponde a la nueva matriz $B^{-1}$.
+
+\textbf{Iteración 0}
+
+La base inicial es
+\begin{equation}
+B_0=\{s_1,s_2\}.
+\end{equation}
+
+Por lo tanto,
+\begin{equation}
+B_0=
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix},
+\qquad
+B_0^{-1}=
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix}.
+\end{equation}
+
+En esta iteración entra $x_2$, cuya columna es
+\begin{equation}
+A_2=
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}.
+\end{equation}
+
+Entonces,
+\begin{equation}
+u=B_0^{-1}A_2
+=
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}.
+\end{equation}
+
+Como el test de razón mínima indica que sale $s_1$, la fila pivote es la
+primera. Por lo tanto, se debe transformar $u$ en
+\begin{equation}
+e_1=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}.
+\end{equation}
+
+Formamos la matriz aumentada:
+\begin{equation}
+\left[
+B_0^{-1}\mid u
+\right]
+=
+\left[
+\begin{array}{cc|c}
+1 & 0 & 2\\
+0 & 1 & 1
+\end{array}
+\right].
+\end{equation}
+
+Aplicamos operaciones elementales para convertir la última columna en $e_1$.
+
+Primero eliminamos el elemento de la segunda fila:
+\begin{equation}
+F_2 \leftarrow F_2-\frac{1}{2}F_1.
+\end{equation}
+
+Así,
+\begin{equation}
+\left[
+\begin{array}{cc|c}
+1 & 0 & 2\\
+0 & 1 & 1
+\end{array}
+\right]
+\longrightarrow
+\left[
+\begin{array}{cc|c}
+1 & 0 & 2\\
+-\frac{1}{2} & 1 & 0
+\end{array}
+\right].
+\end{equation}
+
+Luego normalizamos la fila pivote:
+\begin{equation}
+F_1 \leftarrow \frac{1}{2}F_1.
+\end{equation}
+
+Entonces,
+\begin{equation}
+\left[
+\begin{array}{cc|c}
+1 & 0 & 2\\
+-\frac{1}{2} & 1 & 0
+\end{array}
+\right]
+\longrightarrow
+\left[
+\begin{array}{cc|c}
+\frac{1}{2} & 0 & 1\\
+-\frac{1}{2} & 1 & 0
+\end{array}
+\right].
+\end{equation}
+
+Como la última columna quedó igual a $e_1$, el bloque izquierdo es la nueva
+inversa de la base:
+\begin{equation}
+B_1^{-1}
+=
+\begin{pmatrix}
+\frac{1}{2} & 0\\
+-\frac{1}{2} & 1
+\end{pmatrix}.
+\end{equation}
+
+La nueva base es
+\begin{equation}
+B_1=\{x_2,s_2\}.
+\end{equation}
+
+\textbf{Iteración 1}
+
+Ahora entra $x_1$, cuya columna es
+\begin{equation}
+A_1=
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}.
+\end{equation}
+
+Calculamos:
+\begin{equation}
+u=B_1^{-1}A_1
+=
+\begin{pmatrix}
+\frac{1}{2} & 0\\
+-\frac{1}{2} & 1
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{1}{2}\\
+\frac{3}{2}
+\end{pmatrix}.
+\end{equation}
+
+El test de razón mínima indica que sale $s_2$, es decir, la fila pivote es la
+segunda. Por lo tanto, ahora se debe transformar $u$ en
+\begin{equation}
+e_2=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}.
+\end{equation}
+
+Formamos la matriz aumentada:
+\begin{equation}
+\left[
+B_1^{-1}\mid u
+\right]
+=
+\left[
+\begin{array}{cc|c}
+\frac{1}{2} & 0 & \frac{1}{2}\\
+-\frac{1}{2} & 1 & \frac{3}{2}
+\end{array}
+\right].
+\end{equation}
+
+Primero normalizamos la fila pivote:
+\begin{equation}
+F_2 \leftarrow \frac{2}{3}F_2.
+\end{equation}
+
+Así,
+\begin{equation}
+\left[
+\begin{array}{cc|c}
+\frac{1}{2} & 0 & \frac{1}{2}\\
+-\frac{1}{2} & 1 & \frac{3}{2}
+\end{array}
+\right]
+\longrightarrow
+\left[
+\begin{array}{cc|c}
+\frac{1}{2} & 0 & \frac{1}{2}\\
+-\frac{1}{3} & \frac{2}{3} & 1
+\end{array}
+\right].
+\end{equation}
+
+Luego eliminamos el elemento de la primera fila:
+\begin{equation}
+F_1 \leftarrow F_1-\frac{1}{2}F_2.
+\end{equation}
+
+Por lo tanto,
+\begin{equation}
+\left[
+\begin{array}{cc|c}
+\frac{1}{2} & 0 & \frac{1}{2}\\
+-\frac{1}{3} & \frac{2}{3} & 1
+\end{array}
+\right]
+\longrightarrow
+\left[
+\begin{array}{cc|c}
+\frac{2}{3} & -\frac{1}{3} & 0\\
+-\frac{1}{3} & \frac{2}{3} & 1
+\end{array}
+\right].
+\end{equation}
+
+Como la última columna quedó igual a $e_2$, el bloque izquierdo corresponde a
+la nueva inversa de la base:
+\begin{equation}
+B_2^{-1}
+=
+\begin{pmatrix}
+\frac{2}{3} & -\frac{1}{3}\\
+-\frac{1}{3} & \frac{2}{3}
+\end{pmatrix}.
+\end{equation}
+
+La nueva base es
+\begin{equation}
+B_2=\{x_2,x_1\}.
+\end{equation}
+
+\textbf{Iteración 2}
+Dado que los costos reducidos de las variables no básicas $s_1$ y $s_2$ son positivas, la solución encontrada es óptima para el problema.
+
+\item
+El primal está en la forma:
+\begin{equation}
+\begin{aligned}
+\max \quad & c^Tx\\
+\text{s.a.}\quad & Ax\leq b,\\
+& x\geq 0.
+\end{aligned}
+\end{equation}
+
+Por lo tanto, el dual es:
+\begin{equation}
+\begin{aligned}
+\min \quad & b^Ty\\
+\text{s.a.}\quad & A^Ty\geq c,\\
+& y\geq 0.
+\end{aligned}
+\end{equation}
+
+En este caso:
+\begin{equation}
+\begin{aligned}
+\min \quad & 6y_1+8y_2\\
+\text{s.a.}\quad
+& y_1+2y_2 \geq 2,\\
+& 2y_1+y_2 \geq 3,\\
+& y_1,y_2 \geq 0.
+\end{aligned}
+\end{equation}
+
+Por Dualidad Fuerte, el óptimo dual de coincidir con el óptimo de modo que:
+\begin{equation}
+    z^*=\frac{32}{3}=b^Ty^* 
+\end{equation}
+
+Durante el auxiliar grabado, me falto mostrar que es posible obtener los valores de $y^*$ mediante las condiciones de holgura complementaria:
+\begin{equation}
+\begin{aligned}
+y_1(6-x_1-2x_2) &= 0,\\
+y_2(8-2x_1-x_2) &= 0,\\
+x_1(y_1+2y_2-2) &= 0,\\
+x_2(2y_1+y_2-3) &= 0.
+\end{aligned}
+\end{equation}
+
+Como en el óptimo primal se tiene:
+\begin{equation}
+x_1^*>0,
+\qquad
+x_2^*>0,
+\end{equation}
+por holgura complementaria las restricciones duales asociadas a $x_1$ y $x_2$ son activas:
+\begin{equation}
+\begin{aligned}
+y_1+2y_2 &= 2,\\
+2y_1+y_2 &= 3.
+\end{aligned}
+\end{equation}
+
+Resolviendo:
+\begin{equation}
+y_1=\frac{4}{3},
+\qquad
+y_2=\frac{1}{3}.
+\end{equation}
+
+El valor óptimo dual es:
+\begin{equation}
+w^*
+=
+6\cdot \frac{4}{3}
++
+8\cdot \frac{1}{3}
+=
+8+\frac{8}{3}
+=
+\frac{32}{3}.
+\end{equation}
+\end{enumerate}
+\endgroup

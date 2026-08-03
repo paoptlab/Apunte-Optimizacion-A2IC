@@ -1,0 +1,111 @@
+% Fuente: Pauta del Auxiliar 3, «Convexidad — Soluciones de una inecuación cuadrática».
+{\color{MidnightBlue}
+\begin{itemize}
+  \item[(a)]
+  \begin{itemize}
+  \item[$\Rightarrow$:] Supongamos que $S$ es convexo. Queremos probar que $S\cap L$ es convexo.
+
+  Sea arbitraria la línea 
+  $L=\{\hat x+t v\mid t\in\mathbb{R}\}$ y tomemos dos puntos 
+  \[
+    y_1 = \hat x + t_1 v,\quad 
+    y_2 = \hat x + t_2 v
+  \]
+  en $S\cap L$. Para cualquier $\lambda\in[0,1]$ tenemos
+  \[
+    \lambda y_1 + (1-\lambda)y_2 
+    = \lambda(\hat x + t_1 v) + (1-\lambda)(\hat x + t_2 v)
+    = \hat x + (\lambda t_1 + (1-\lambda)t_2)\,v,
+  \]
+  que pertenece a $L$. Como además $S$ es convexo, $\lambda y_1+(1-\lambda)y_2\in S$.  
+  Por lo tanto $\lambda y_1 + (1-\lambda)y_2 \in S\cap L$, y $S\cap L$ es convexo.
+  \item[$\Leftarrow$:] Ahora supongamos que para toda línea $L$ la intersección $S\cap L$ es convexa. 
+  Queremos probar que $S$ es convexo en $\mathbb{R}^n$. 
+
+  Tomemos dos puntos arbitrarios $x_1,x_2\in S$. Definimos la línea que los contiene:
+  \[
+    L = \{\,x_1 + t\,(x_2 - x_1)\mid t\in\mathbb{R}\,\}.
+  \]
+  Como $x_1,x_2\in S\cap L$ y por hipótesis $S\cap L$ es convexo, para todo $\lambda\in[0,1]$ se cumple
+  \[
+    \lambda x_1 + (1-\lambda)x_2 
+    \;\in\; S\cap L
+    \;\subseteq\; S.
+  \]
+  Esto demuestra que $S$ es convexo.
+  \end{itemize}
+  \item[(b)] Suponga que
+    \[
+    A\succeq 0.
+    \]
+    Queremos demostrar que \(C\) es convexo.
+
+    Por el resultado anterior, basta estudiar la intersección de \(C\) con una línea arbitraria. Sea
+    \[
+    x=\hat{x}+tv,
+    \]
+    donde \(\hat{x},v\in\mathbb{R}^n\) y \(t\in\mathbb{R}\).
+
+    Reemplazando en la desigualdad cuadrática:
+    \[
+    (\hat{x}+tv)^\top A(\hat{x}+tv)
+    +
+    b^\top(\hat{x}+tv)
+    +
+    c
+    \leq 0.
+    \]
+
+    Expandiendo:
+    \[
+    \hat{x}^\top A\hat{x}
+    +
+    2t v^\top A\hat{x}
+    +
+    t^2 v^\top A v
+    +
+    b^\top \hat{x}
+    +
+    t b^\top v
+    +
+    c
+    \leq 0.
+    \]
+
+    Agrupando en términos de \(t\):
+    \[
+    \phi(t)
+    =
+    (v^\top A v)t^2
+    +
+    \left(2v^\top A\hat{x}+b^\top v\right)t
+    +
+    \hat{x}^\top A\hat{x}
+    +
+    b^\top \hat{x}
+    +
+    c
+    \leq 0.
+    \]
+
+    Como \(A\succeq 0\), se cumple que
+    \[
+    v^\top A v\geq 0
+    \qquad
+    \forall v\in\mathbb{R}^n.
+    \]
+    Por lo tanto, \(\phi(t)\) es una función convexa en \(t\).
+
+    Luego, el conjunto
+    \[
+    \{t\in\mathbb{R}\mid \phi(t)\leq 0\}
+    \]
+    es un subnivel \footnote{es un subconjunto de $\mathbb{R}$ formado por todos los valores de t que cumplen la condición $ϕ(t)≤0$} de una función convexa de una variable, y por tanto es convexo.
+
+    Como esto ocurre para toda línea, se concluye que \(C\) es convexo.
+
+    \[
+    A\succeq 0 \Rightarrow C\text{ es convexo.}
+    \]
+\end{itemize}
+}

@@ -1,0 +1,21 @@
+% Fuente: Auxiliar 1, P4.
+Una empresa produce un conjunto de $K$ productos en $I$ plantas. Luego envía estos productos a $J$ zonas
+de mercados. Para $k=1, ... K$, $i = 1, ... I$ y $j = 1, ... J$ se dan los siguientes datos:
+\begin{itemize}
+    \item $V_{i,k}$: coste variable de producir una unidad del producto $k$ en la planta $i$
+    \item $C_{ijk}$: coste de envío de una unidad del producto $k$ desde la planta $i$ a la zona $j$
+    \item $f_{i,k}$: coste fijo asociado a la producción del producto $k$ en la planta $i$
+    \item $M_{i,k}$: cantidad máxima de producto $k$ producido en la planta $i$
+    \item $m_{ik}$: cantidad mínima del producto k que puede producirse en la planta $i$, si la planta $i$ produce una cantidad distinta de cero.
+    \item $Q_i$: capacidad de la planta $i$
+    \item $d_{j,k}$: demanda del producto $k$ en la zona de mercado $j$
+\end{itemize}
+
+Formule el problema de minimización del coste total de producción y de transporte a los que se enfrenta la empresa, como un MILP.\\
+Indique cómo su modelo puede incorporar las siguientes restricciones adicionales:
+\begin{enumerate}
+    \item Ninguna planta puede producir más de $K_1$ productos.
+    \item Cada producto puede producirse en un máximo de $I_1$ plantas.
+    \item Para un determinado producto $k_0$, la planta 3 debe producirlo si ni la planta 1 ni la planta 2 lo producen.
+    \item Cada zona de mercado debe ser abastecida exactamente por una planta para todos los productos.
+\end{enumerate}

@@ -1,0 +1,284 @@
+% Fuente: Auxiliar 4, Pregunta 3.
+{\color{MidnightBlue}
+Agregamos una variable de holgura \(s_1\geq 0\) para la primera restricción
+y variables de exceso \(s_2,s_3\geq 0\) para la segunda y tercera restricción:
+\[
+2x_1-10x_2+s_1=2,
+\]
+\[
+2x_1+6x_2-s_2=24,
+\]
+\[
+8x_1+4x_2-s_3=28.
+\]
+
+Por lo tanto, la forma estándar es:
+\[
+\begin{aligned}
+\min \quad & 4x_1+15x_2\\
+\text{s.a.}\quad
+& 2x_1-10x_2+s_1=2,\\
+& 2x_1+6x_2-s_2=24,\\
+& 8x_1+4x_2-s_3=28,\\
+& x_1,x_2,s_1,s_2,s_3\geq 0.
+\end{aligned}
+\]
+
+Equivalentemente,
+\[
+x=
+\begin{pmatrix}
+x_1\\
+x_2\\
+s_1\\
+s_2\\
+s_3
+\end{pmatrix},
+\]
+con
+\[
+A=
+\begin{pmatrix}
+2 & -10 & 1 & 0 & 0\\
+2 & 6 & 0 & -1 & 0\\
+8 & 4 & 0 & 0 & -1
+\end{pmatrix},
+\qquad
+b=
+\begin{pmatrix}
+2\\
+24\\
+28
+\end{pmatrix},
+\qquad
+c=
+\begin{pmatrix}
+4\\
+15\\
+0\\
+0\\
+0
+\end{pmatrix}.
+\]
+
+Los vértices factibles son:
+
+\[
+A=\left(\frac{63}{8},\frac{11}{8}\right),
+\]
+obtenido de la intersección entre
+\[
+2x_1-10x_2=2,
+\qquad
+2x_1+6x_2=24.
+\]
+
+\[
+B=\left(\frac{9}{5},\frac{17}{5}\right),
+\]
+obtenido de la intersección entre
+\[
+2x_1+6x_2=24,
+\qquad
+8x_1+4x_2=28.
+\]
+
+\[
+C=(0,7),
+\]
+obtenido de la intersección entre
+\[
+x_1=0,
+\qquad
+8x_1+4x_2=28.
+\]
+
+Evaluamos la función objetivo
+\[
+z=4x_1+15x_2.
+\]
+
+\[
+\begin{array}{c|c}
+\text{Punto} & z=4x_1+15x_2 \\ \hline
+A=\left(\frac{63}{8},\frac{11}{8}\right) 
+& \frac{417}{8} \\[2mm]
+B=\left(\frac{9}{5},\frac{17}{5}\right)
+& \frac{291}{5} \\[2mm]
+C=(0,7)
+& 105
+\end{array}
+\]
+
+El óptimo es
+\[
+(x_1^\star,x_2^\star)
+=
+\left(\frac{63}{8},\frac{11}{8}\right),
+\]
+con valor óptimo
+\[
+z^\star=\frac{417}{8}.
+\]
+
+La matriz \(A\) tiene \(3\) filas, por lo que cada base debe estar formada por
+\(3\) columnas linealmente independientes.
+
+En
+\[
+A=\left(\frac{63}{8},\frac{11}{8}\right),
+\]
+las restricciones activas son la primera y la segunda. Por lo tanto,
+\[
+s_1=0,
+\qquad
+s_2=0.
+\]
+
+Además,
+\[
+s_3=8x_1+4x_2-28.
+\]
+
+Entonces,
+\[
+s_3
+=
+8\left(\frac{63}{8}\right)
++
+4\left(\frac{11}{8}\right)
+-
+28
+=
+\frac{81}{2}.
+\]
+
+Luego,
+\[
+x^A=
+\begin{pmatrix}
+x_1\\
+x_2\\
+s_1\\
+s_2\\
+s_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{63}{8}\\
+\frac{11}{8}\\
+0\\
+0\\
+\frac{81}{2}
+\end{pmatrix}.
+\]
+
+La base asociada es
+\[
+\mathcal{B}_A=\{x_1,x_2,s_3\}.
+\]
+
+En
+\[
+B=\left(\frac{9}{5},\frac{17}{5}\right),
+\]
+las restricciones activas son la segunda y la tercera. Por lo tanto,
+\[
+s_2=0,
+\qquad
+s_3=0.
+\]
+
+Además,
+\[
+s_1=2-2x_1+10x_2.
+\]
+
+Entonces,
+\[
+s_1
+=
+2
+-
+2\left(\frac{9}{5}\right)
++
+10\left(\frac{17}{5}\right)
+=
+\frac{162}{5}.
+\]
+
+Luego,
+\[
+x^B=
+\begin{pmatrix}
+x_1\\
+x_2\\
+s_1\\
+s_2\\
+s_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{9}{5}\\
+\frac{17}{5}\\
+\frac{162}{5}\\
+0\\
+0
+\end{pmatrix}.
+\]
+
+La base asociada es
+\[
+\mathcal{B}_B=\{x_1,x_2,s_1\}.
+\]
+
+En
+\[
+C=(0,7),
+\]
+se activan las restricciones
+\[
+x_1=0,
+\qquad
+8x_1+4x_2=28.
+\]
+
+Por lo tanto,
+\[
+s_3=0.
+\]
+
+Además,
+\[
+s_1=2-2x_1+10x_2=2+70=72,
+\]
+\[
+s_2=2x_1+6x_2-24=42-24=18.
+\]
+
+Luego,
+\[
+x^C=
+\begin{pmatrix}
+x_1\\
+x_2\\
+s_1\\
+s_2\\
+s_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+7\\
+72\\
+18\\
+0
+\end{pmatrix}.
+\]
+
+La base asociada es
+\[
+\mathcal{B}_C=\{x_2,s_1,s_2\}.
+\]
+}
+

@@ -1,0 +1,98 @@
+% Fuente: Auxiliar 6, Pregunta 3.
+{\color{MidnightBlue}
+La matriz A es:
+\[
+\begin{pmatrix}
+    1 & -2 & 5 & 2 & 0 & -3 & 0 \\
+    0 & 1 & -2 & 4 & 1 & -2 & 0 \\
+    0 & 1 & 0 & -3 & 0 & -3 & 1
+\end{pmatrix},
+\]
+
+\textbf{I iteración:}
+\begin{enumerate}
+    \item Se incia con una base formada por $(A_1|\: A_5 | \: A_7)$ y $x_B'=(x_1 \quad x_5 \quad x_7)$.
+
+\[
+B^{-1}=
+\begin{pmatrix}
+    1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1
+\end{pmatrix}, \quad
+x_B=B^{-1}b=\begin{pmatrix}
+    5 \\ 7 \\ 3
+\end{pmatrix}
+\]
+
+\item  Se calculan los costos reducidos $\overline{c_j} =c_j - c_B B^{-1} A_j$. Notar que $c_B'=(0\quad 0 \quad 0)$
+\[
+\begin{aligned}
+    &\overline{c_2}=-3\\
+    &\overline{c_3}=-2 \\
+    &\overline{c_4}=1 \\
+    &\overline{c_6}=0
+\end{aligned}
+\]
+Luego $x_2$ y $x_3$ pueden entrar a la base, ya que mejoran la función objetivo. Se selecciona $x_2$, para entrar a la base.
+\item Cálculo de $u$.
+\[
+u=B^{-1} A_2=\mathbb{I} \begin{pmatrix}
+    -2 \\ 1 \\ 1
+\end{pmatrix}
+\]
+Dado que las componentes $u_2$ y $u_3$ son positivas, $x_5$ y $x_7$ son candidatos a salir de la base.
+
+\item Cálculo de $\theta^*$, para ver la variable que saldrá:
+\[
+\theta^*=\min\left( \frac{x_5}{u_5}, \frac{x_7}{u_7}\right)= \min(7,3)=3
+\]
+luego $x_7$ saldrá de la base; como se ubica en tercera posición de la base, se tiene que $l=3$.
+
+\item  Se calcula el valor de $\overline{x_B}$ para la siguiente iteración.
+\[
+B^+=\{x_1,x_5,x_2\},
+\qquad
+x_B^+
+=
+\begin{pmatrix}
+x_1\\
+x_5\\
+x_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+11\\
+4\\
+3
+\end{pmatrix}.
+\]
+
+\item Se obtiene $\overline{B^{-1}}$ para la siguiente iteración. Para ello se forma $(B^{-1}|u)$ y se debe pivotar utilizando la fila $l=3$.
+    \[
+\left(\begin{array}{ccc|c}
+1 & 0 & 0 & -2 \\
+0 & 1 & 0 & 1 \\
+0 & 0 & 1 & 1
+\end{array}\right)
+\;\rightarrow \;
+\left(\begin{array}{ccc|c}
+1 & 0 & 2 & 0 \\
+0 & 1 & -1 & 0 \\
+0 & 0 & 1 & 1
+\end{array}\right) \; \rightarrow \; \overline{B^{-1}} = \begin{pmatrix}
+    1 & 0 & 2 \\ 0 & 1 & -1 \\ 0 & 0 & 1
+\end{pmatrix}
+\]
+Con los valores de $\overline{B^{-1}}$ y $\overline{x_B}$, se termina la I iteración y se comienza la siguiente.
+\end{enumerate}
+
+En relación con la segunda pregunta, se tiene que la función objetivo:
+\begin{itemize}
+    \item Mejora para $x_2$ y $x_3$
+    \item Empeora para $x_4$
+    \item No cambia para $x_6$
+\end{itemize}
+La función objetivo mejorará al agregar a la base una variable no básica cuyos costos reducidos sean $x_j<0$. Los costos reducidos muestran la tasa de cambio de la función objetivo al moverse de $x$ a $x-\theta^*u$.
+
+Los costos reducidos muestran la tasa de cambio de la función objetivo al moverse desde la solución básica actual en la dirección asociada a la variable entrante.
+}
+

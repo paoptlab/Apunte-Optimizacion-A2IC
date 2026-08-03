@@ -1,0 +1,21 @@
+% Fuente: Auxiliar 8, «Métodos de programación entera».
+Considere el siguiente problema de programación entera:
+\[
+\begin{aligned}
+\max\quad & x_{1} \;+\; 2\,x_{2} \\[0.5em]
+\text{sujeto a}\quad 
+& -\,3\,x_{1} \;+\; 4\,x_{2} \;\le 4\\
+& 3\,x_{1} \;+\; 2\,x_{2} \;\le 11\\
+& 2\,x_{1} \;-\; x_{2} \;\le 5\\
+& x_{1},\,x_{2} \;\ge 0,\quad x_{1},\,x_{2} \in \mathbb{Z}.
+\end{aligned}
+\]
+Usar un gráfico para responder las siguientes preguntas:
+
+\begin{enumerate}
+  \item[(a)] ¿Cuál es el costo óptimo de la relajación lineal? ¿Y cuál es el costo óptimo del problema de programación entera?
+  \item[(b)] ¿Cuál es la envoltura convexa del conjunto de todas las soluciones enteras factibles?
+  \item[(c)] Ilustrar cómo funciona el algoritmo de planos de corte de Gomory. Realizar el primer corte.
+  \item[(d)] Resolver el problema mediante \emph{branch \& bound}, resolviendo gráficamente las relajaciones.
+  \item[(e)] Suponga que se dualiza la restricción \( -\,3\,x_{1} + 4\,x_{2} \le 4 \). ¿Cuál es el valor óptimo \(Z_{D}\) del dual lagrangeano? ¿Cómo cambia el valor de $Z_D$ si se dualiza la restricción \( 2\,x_{1} - x_{2} \le 5 \)? 
+\end{enumerate}
