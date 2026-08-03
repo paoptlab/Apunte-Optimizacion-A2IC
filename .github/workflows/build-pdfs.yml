@@ -1,11 +1,13 @@
-# Compila los documentos LaTeX principales y publica solo los PDFs en la rama
-# pdf-output. Se dispara en push a main (no a pdf-output) para evitar bucles.
+# Compila los documentos LaTeX y guarda los PDFs en main.
+# Evita bucles: ignora cambios solo de PDF y marca el commit con [skip ci].
 name: Build LaTeX PDFs
 
 on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**/*.pdf"
   workflow_dispatch:
 
 permissions:
@@ -21,16 +23,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          # Necesario para poder empujar el commit de PDFs a main.
+          fetch-depth: 0
 
       - name: Compile LaTeX documents
         id: latex
-        # Permite llegar a stage/publish/verify aunque latex-action falle.
         continue-on-error: true
         uses: xu-cheng/latex-action@v4
         with:
-          # Documentos principales (contienen \documentclass). Cada uno vive en
-          # su propio directorio; work_in_root_file_dir respeta rutas relativas
-          # (\input, \graphicspath, ../../Apunte/..., img/, etc.).
+          # Fuentes en Latex/; los PDFs se copian después a las carpetas finales.
           root_file: |
             Apunte/Latex/main.tex
             Auxiliar/Latex-Enunciado/main.tex
@@ -38,80 +41,64 @@ jobs:
             RP-Modelamiento/Latex/main.tex
             RP-Modelos-Avanzados/Latex/main.tex
           work_in_root_file_dir: true
-          # Compilar el resto aunque falle uno; la verificación final falla el job.
           continue_on_error: true
 
-      - name: Stage available PDFs preserving directory structure
-        id: stage
+      - name: Place PDFs in final folders
+        id: place
         run: |
           set -euo pipefail
-
-          EXPECTED_PDFS=(
-            "Apunte/Latex/main.pdf"
-            "Auxiliar/Latex-Enunciado/main.pdf"
-            "Auxiliar/Latex-Pauta/main.pdf"
-            "RP-Modelamiento/Latex/main.pdf"
-            "RP-Modelos-Avanzados/Latex/main.pdf"
-          )
-
-          rm -rf pdf-staging
-          mkdir -p pdf-staging
-          count=0
-
-          for pdf in "${EXPECTED_PDFS[@]}"; do
-            if [[ -f "${pdf}" ]]; then
-              mkdir -p "pdf-staging/$(dirname "${pdf}")"
-              cp "${pdf}" "pdf-staging/${pdf}"
-              echo "Copiado -> pdf-staging/${pdf}"
-              count=$((count + 1))
-            else
-              echo "Aún no disponible: ${pdf}"
-            fi
-          done
-
-          echo "Contenido de pdf-staging:"
-          find pdf-staging -type f -name '*.pdf' | sort || true
-          echo "pdf_count=${count}" >> "${GITHUB_OUTPUT}"
-
-      - name: Publish available PDFs to pdf-output branch
-        if: steps.stage.outputs.pdf_count != '0'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ github.token }}
-          publish_dir: ./pdf-staging
-          publish_branch: pdf-output
-          force_orphan: true
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          commit_message: "Publish compiled LaTeX PDFs from ${{ github.sha }}"
-
-      - name: Verify all expected PDFs were generated
-        run: |
-          set -euo pipefail
-
-          EXPECTED_PDFS=(
-            "Apunte/Latex/main.pdf"
-            "Auxiliar/Latex-Enunciado/main.pdf"
-            "Auxiliar/Latex-Pauta/main.pdf"
-            "RP-Modelamiento/Latex/main.pdf"
-            "RP-Modelos-Avanzados/Latex/main.pdf"
-          )
 
           missing=0
-          echo "Verificando PDFs generados..."
-          for pdf in "${EXPECTED_PDFS[@]}"; do
-            if [[ -f "${pdf}" ]]; then
-              size="$(wc -c < "${pdf}" | tr -d ' ')"
-              echo "OK  ${pdf} (${size} bytes)"
+          copied=0
+
+          place_pdf() {
+            local src="$1"
+            local dst="$2"
+            if [[ -f "${src}" ]]; then
+              mkdir -p "$(dirname "${dst}")"
+              cp "${src}" "${dst}"
+              local size
+              size="$(wc -c < "${dst}" | tr -d ' ')"
+              echo "OK  ${src} -> ${dst} (${size} bytes)"
+              copied=$((copied + 1))
             else
-              echo "::error file=${pdf}::Fallo la generación de ${pdf}"
+              echo "::error file=${src}::Fallo la generación de ${src} (destino esperado: ${dst})"
               missing=1
             fi
-          done
+          }
+
+          place_pdf "Apunte/Latex/main.pdf" "Apunte/main.pdf"
+          place_pdf "Auxiliar/Latex-Enunciado/main.pdf" "Auxiliar/Enunciado.pdf"
+          place_pdf "Auxiliar/Latex-Pauta/main.pdf" "Auxiliar/Pauta.pdf"
+          place_pdf "RP-Modelamiento/Latex/main.pdf" "RP-Modelamiento/main.pdf"
+          place_pdf "RP-Modelos-Avanzados/Latex/main.pdf" "RP-Modelos-Avanzados/main.pdf"
+
+          echo "copied=${copied}" >> "${GITHUB_OUTPUT}"
+          echo "missing=${missing}" >> "${GITHUB_OUTPUT}"
 
           if [[ "${missing}" -ne 0 ]]; then
-            echo "Uno o más PDFs no se generaron. Revisa los logs de Compilación LaTeX."
+            echo "Uno o más PDFs no se generaron."
             exit 1
           fi
 
-          echo "Todos los PDFs esperados están presentes."
+      - name: Commit and push PDFs to main
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            Apunte/main.pdf \
+            Auxiliar/Enunciado.pdf \
+            Auxiliar/Pauta.pdf \
+            RP-Modelamiento/main.pdf \
+            RP-Modelos-Avanzados/main.pdf
+
+          if git diff --cached --quiet; then
+            echo "No hay cambios en los PDFs; nada que publicar."
+            exit 0
+          fi
+
+          git commit -m "docs: update compiled LaTeX PDFs [skip ci]"
+          git push origin HEAD:main
